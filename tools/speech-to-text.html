@@ -3,267 +3,409 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Speech to Text (Voice Typing) - OmniKitHub</title>
-    <meta name="description" content="Convert your voice into accurate text instantly with OmniKitHub Speech to Text tool. Free, fast, and multi-language support directly in browser.">
-    <link rel="stylesheet" href="../style.css">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <title>Free Speech to Text (Voice Typing) - Bangla & English Converter | OmniKitHub</title>
+    <meta name="description" content="Best free online Speech to Text and Voice Typing tool with Banglish to Bangla conversion, PDF download, Print, Formatting, auto punctuation, and multi-language support.">
+    <meta name="keywords" content="speech to text, voice typing bangla, bangla voice typing, banglish to bangla voice converter, online voice typing tool, free speech recognition, bangla audio to text, voice typing to pdf">
+    <meta name="robots" content="index, follow">
+    <link rel="canonical" href="https://omnikithub.com/tools/speech-to-text.html">
+
+    <!-- Open Graph Tags -->
+    <meta property="og:title" content="Free Speech to Text & Voice Typing Tool - OmniKitHub">
+    <meta property="og:description" content="Convert your voice to text instantly in Bangla, Banglish, and English with smart grammar correction, PDF export, formatting and easy sharing.">
+    <meta property="og:url" content="https://omnikithub.com/tools/speech-to-text.html">
+    <meta property="og:type" content="website">
+
+    <!-- html2pdf Library for PDF Export -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
+
+    <!-- Schema.org Markup -->
+    <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@type": "WebApplication",
+      "name": "Speech to Text Voice Typing",
+      "url": "https://omnikithub.com/tools/speech-to-text.html",
+      "applicationCategory": "UtilityApplication",
+      "operatingSystem": "All",
+      "offers": {
+        "@type": "Offer",
+        "price": "0",
+        "priceCurrency": "USD"
+      }
+    }
+    </script>
+
     <style>
-        .tool-container {
-            max-width: 900px;
-            margin: 40px auto;
-            background: var(--bg-surface);
-            border: 1px solid var(--card-border);
-            border-radius: 16px;
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+        body {
+            background-color: #f4f6f9;
+            color: #333;
+            padding: 20px;
+            display: flex;
+            justify-content: center;
+        }
+        .container {
+            max-width: 950px;
+            width: 100%;
+            background: #ffffff;
+            border-radius: 12px;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
             padding: 30px;
-            box-shadow: var(--card-shadow);
+            margin-top: 10px;
         }
-        .tool-controls {
-            display: flex;
-            flex-wrap: wrap;
-            gap: 15px;
-            align-items: center;
-            justify-content: space-between;
+        .header h1 {
+            color: #1a73e8;
+            font-size: 28px;
+            margin-bottom: 8px;
+        }
+        .description {
+            color: #666;
             margin-bottom: 20px;
+            font-size: 15px;
+            line-height: 1.5;
         }
-        .lang-select {
-            padding: 10px 16px;
-            border-radius: 8px;
-            border: 1px solid var(--card-border);
-            background: var(--bg-primary);
-            color: var(--text-primary);
-            font-size: 0.95rem;
-            outline: none;
-        }
-        .btn-group {
+        .controls {
             display: flex;
-            gap: 10px;
             flex-wrap: wrap;
+            gap: 10px;
+            margin-bottom: 15px;
+            align-items: center;
         }
-        .action-btn {
-            padding: 10px 20px;
-            border-radius: 8px;
+        select, button, input[type="color"] {
+            padding: 8px 14px;
+            border-radius: 6px;
+            border: 1px solid #ccc;
+            font-size: 14px;
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+        .btn-primary {
+            background-color: #2563eb;
+            color: white;
             border: none;
             font-weight: 600;
-            cursor: pointer;
-            display: inline-flex;
+        }
+        .btn-primary:hover { background-color: #1d4ed8; }
+        .btn-danger {
+            background-color: #ef4444;
+            color: white;
+            border: none;
+            font-weight: 600;
+        }
+        .btn-danger:hover { background-color: #dc2626; }
+        .btn-secondary {
+            background-color: #f3f4f6;
+            color: #374151;
+            border: 1px solid #d1d5db;
+            font-weight: 500;
+        }
+        .btn-secondary:hover { background-color: #e5e7eb; }
+        .btn-whatsapp {
+            background-color: #25D366;
+            color: white;
+            border: none;
+            font-weight: 600;
+        }
+        .btn-whatsapp:hover { background-color: #1eb854; }
+
+        .formatting-toolbar {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+            background: #f8fafc;
+            padding: 10px 15px;
+            border: 1px solid #e2e8f0;
+            border-radius: 8px 8px 0 0;
             align-items: center;
-            gap: 8px;
-            transition: all var(--transition-speed) ease;
         }
-        .btn-primary { background: var(--accent-color); color: #fff; }
-        .btn-primary:hover { background: var(--accent-hover); }
-        .btn-danger { background: #ef4444; color: #fff; }
-        .btn-danger:hover { background: #dc2626; }
-        .btn-secondary { background: var(--badge-bg); color: var(--text-primary); border: 1px solid var(--card-border); }
-        .btn-secondary:hover { background: var(--card-border); }
+        .formatting-toolbar label {
+            font-size: 13px;
+            font-weight: 600;
+            color: #475569;
+        }
         
-        .textarea-box {
+        #editor {
             width: 100%;
-            height: 280px;
-            padding: 16px;
-            border-radius: 12px;
-            border: 1px solid var(--card-border);
-            background: var(--bg-primary);
-            color: var(--text-primary);
-            font-size: 1.05rem;
-            resize: vertical;
-            outline: none;
+            min-height: 250px;
+            max-height: 500px;
+            overflow-y: auto;
+            padding: 15px;
+            border: 1px solid #e2e8f0;
+            border-top: none;
+            border-radius: 0 0 8px 8px;
+            font-size: 16px;
             line-height: 1.6;
+            outline: none;
+            background: #fff;
         }
-        .textarea-box:focus { border-color: var(--accent-color); }
-        
+        #editor:focus {
+            border-color: #2563eb;
+            box-shadow: 0 0 0 2px rgba(37, 99, 235, 0.1);
+        }
+
+        .options-bar {
+            display: flex;
+            gap: 15px;
+            margin: 15px 0;
+            font-size: 14px;
+            color: #4b5563;
+        }
+        .options-bar label {
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            cursor: pointer;
+        }
+
         .status-bar {
             display: flex;
             justify-content: space-between;
             align-items: center;
-            margin-top: 15px;
-            font-size: 0.9rem;
-            color: var(--text-secondary);
+            margin-top: 12px;
+            font-size: 14px;
+            color: #6b7280;
         }
-        .listening-badge {
+        .recording-indicator {
             display: none;
             align-items: center;
             gap: 8px;
-            color: #10b981;
+            color: #ef4444;
             font-weight: 600;
         }
-        .listening-badge.active { display: flex; }
-        .pulse-dot {
+        .dot {
             width: 10px;
             height: 10px;
-            background-color: #10b981;
+            background-color: #ef4444;
             border-radius: 50%;
-            animation: pulse 1.2s infinite;
+            animation: pulse 1s infinite;
         }
         @keyframes pulse {
-            0% { transform: scale(0.95); box-shadow: 0 0 0 0 rgba(16, 185, 129, 0.7); }
-            70% { transform: scale(1); box-shadow: 0 0 0 8px rgba(16, 185, 129, 0); }
-            100% { transform: scale(0.95); box-shadow: 0 0 0 0 rgba(16, 185, 129, 0); }
+            0% { opacity: 1; }
+            50% { opacity: 0.3; }
+            100% { opacity: 1; }
+        }
+
+        @media print {
+            body * { visibility: hidden; }
+            #editor, #editor * { visibility: visible; }
+            #editor { position: absolute; left: 0; top: 0; width: 100%; border: none; }
         }
     </style>
 </head>
-<body class="light-theme">
+<body>
 
-    <header class="navbar">
-        <div class="container nav-container">
-            <a href="../index.html" class="logo">
-                <i class="fa-solid fa-toolbox logo-icon"></i>
-                <span class="logo-text">OmniKit<span class="highlight">Hub</span></span>
-            </a>
-            <div class="nav-actions">
-                <button id="theme-toggle" class="icon-btn" aria-label="Toggle Theme">
-                    <i class="fa-solid fa-moon"></i>
-                </button>
-            </div>
+<div class="container">
+    <div class="header">
+        <h1>🎙️ Speech to Text (Voice Typing) & Text Editor</h1>
+    </div>
+    <p class="description">Voice typing tool with Bangla, Banglish, and English support. Includes PDF download, printing, text styling, and instant sharing features.</p>
+
+    <div class="controls">
+        <select id="languageSelect">
+            <option value="bn-BD">Bangla (Bangladesh) - বাংলা</option>
+            <option value="bn-IN">Bangla (India) - বাংলা</option>
+            <option value="banglish">Banglish to Bangla (Phonetic)</option>
+            <option value="en-US" selected>English (United States)</option>
+            <option value="en-GB">English (United Kingdom)</option>
+        </select>
+
+        <button id="startBtn" class="btn-primary">🎤 Start Listening</button>
+        <button id="stopBtn" class="btn-danger" disabled>🛑 Stop</button>
+        <button id="clearBtn" class="btn-secondary">🗑️ Clear</button>
+    </div>
+
+    <div class="options-bar">
+        <label><input type="checkbox" id="autoPunctuation" checked> Auto Punctuation & Correction</label>
+    </div>
+
+    <!-- Text Formatting Toolbar (MS Word Style) -->
+    <div class="formatting-toolbar">
+        <button onclick="execCmd('bold')"><b>B</b></button>
+        <button onclick="execCmd('italic')"><i>I</i></button>
+        <button onclick="execCmd('underline')"><u>U</u></button>
+        
+        <label>Size:</label>
+        <select onchange="execCmd('fontSize', this.value)">
+            <option value="3">Normal</option>
+            <option value="4">Medium</option>
+            <option value="5">Large</option>
+            <option value="6">Extra Large</option>
+        </select>
+
+        <label>Color:</label>
+        <input type="color" onchange="execCmd('foreColor', this.value)" value="#000000">
+
+        <button onclick="changeCase('upper')">AA</button>
+        <button onclick="changeCase('lower')">aa</button>
+    </div>
+
+    <!-- Rich Text Editable Area -->
+    <div id="editor" contenteditable="true" placeholder="Your spoken text will appear here automatically..."></div>
+
+    <div class="status-bar">
+        <div>Words: <span id="wordCount">0</span> | Characters: <span id="charCount">0</span></div>
+        <div id="recordingStatus" class="recording-indicator">
+            <span class="dot"></span> Listening...
         </div>
-    </header>
+    </div>
 
-    <main class="container">
-        <div class="tool-container">
-            <h1 style="margin-bottom: 8px; font-size: 1.8rem;">Speech to Text (Voice Typing)</h1>
-            <p style="color: var(--text-secondary); margin-bottom: 24px;">Click 'Start Listening', select your preferred language, and speak naturally to convert voice to text in real time.</p>
+    <!-- Action Toolbar (PDF, Print, Share, Copy) -->
+    <div class="controls" style="margin-top: 20px; border-top: 1px solid #eee; padding-top: 15px;">
+        <button id="copyBtn" class="btn-secondary">📋 Copy Text</button>
+        <button id="downloadTxtBtn" class="btn-secondary">📥 Download .TXT</button>
+        <button id="downloadPdfBtn" class="btn-secondary">📄 Download PDF</button>
+        <button id="printBtn" class="btn-secondary">🖨️ Print</button>
+        <button id="shareWhatsappBtn" class="btn-whatsapp">💬 Share WhatsApp</button>
+    </div>
+</div>
 
-            <div class="tool-controls">
-                <select id="language-select" class="lang-select">
-                    <option value="en-US">English (United States)</option>
-                    <option value="bn-BD">Bangla (Bangladesh)</option>
-                    <option value="bn-IN">Bangla (India)</option>
-                    <option value="en-GB">English (UK)</option>
-                    <option value="hi-IN">Hindi (India)</option>
-                    <option value="ar-SA">Arabic (Saudi Arabia)</option>
-                    <option value="es-ES">Spanish</option>
-                </select>
+<script>
+    const startBtn = document.getElementById('startBtn');
+    const stopBtn = document.getElementById('stopBtn');
+    const clearBtn = document.getElementById('clearBtn');
+    const copyBtn = document.getElementById('copyBtn');
+    const downloadTxtBtn = document.getElementById('downloadTxtBtn');
+    const downloadPdfBtn = document.getElementById('downloadPdfBtn');
+    const printBtn = document.getElementById('printBtn');
+    const shareWhatsappBtn = document.getElementById('shareWhatsappBtn');
+    const editor = document.getElementById('editor');
+    const languageSelect = document.getElementById('languageSelect');
+    const wordCount = document.getElementById('wordCount');
+    const charCount = document.getElementById('charCount');
+    const recordingStatus = document.getElementById('recordingStatus');
+    const autoPunctuation = document.getElementById('autoPunctuation');
 
-                <div class="btn-group">
-                    <button id="start-btn" class="action-btn btn-primary">
-                        <i class="fa-solid fa-microphone"></i> Start Listening
-                    </button>
-                    <button id="stop-btn" class="action-btn btn-danger" disabled>
-                        <i class="fa-solid fa-microphone-slash"></i> Stop
-                    </button>
-                    <button id="copy-btn" class="action-btn btn-secondary">
-                        <i class="fa-solid fa-copy"></i> Copy Text
-                    </button>
-                    <button id="download-btn" class="action-btn btn-secondary">
-                        <i class="fa-solid fa-download"></i> Download .TXT
-                    </button>
-                    <button id="clear-btn" class="action-btn btn-secondary">
-                        <i class="fa-solid fa-trash"></i> Clear
-                    </button>
-                </div>
-            </div>
+    let recognition;
+    let isListening = false;
 
-            <textarea id="speech-output" class="textarea-box" placeholder="Your spoken text will appear here automatically..."></textarea>
-
-            <div class="status-bar">
-                <div id="listening-badge" class="listening-badge">
-                    <span class="pulse-dot"></span> Listening to your voice...
-                </div>
-                <div id="counter-info">Words: 0 | Characters: 0</div>
-            </div>
-        </div>
-    </main>
-
-    <footer class="footer">
-        <div class="footer-bottom">
-            <div class="container">
-                <p>&copy; 2026 OmniKitHub.com. All rights reserved.</p>
-            </div>
-        </div>
-    </footer>
-
-    <script src="../script.js"></script>
-    <script>
-        // Speech Recognition Engine
-        const startBtn = document.getElementById('start-btn');
-        const stopBtn = document.getElementById('stop-btn');
-        const copyBtn = document.getElementById('copy-btn');
-        const downloadBtn = document.getElementById('download-btn');
-        const clearBtn = document.getElementById('clear-btn');
-        const output = document.getElementById('speech-output');
-        const langSelect = document.getElementById('language-select');
-        const listeningBadge = document.getElementById('listening-badge');
-        const counterInfo = document.getElementById('counter-info');
-
+    if ('webkitSpeechRecognition' in window || 'SpeechRecognition' in window) {
         const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
+        recognition = new SpeechRecognition();
+        recognition.continuous = true;
+        recognition.interimResults = true;
 
-        if (!SpeechRecognition) {
-            alert('Speech Recognition is not supported by your current browser. Please use Google Chrome, Edge, or Brave browser.');
-        } else {
-            const recognition = new SpeechRecognition();
-            recognition.continuous = true;
-            recognition.interimResults = true;
+        recognition.onstart = () => {
+            isListening = true;
+            startBtn.disabled = true;
+            stopBtn.disabled = false;
+            recordingStatus.style.display = 'flex';
+        };
 
-            startBtn.addEventListener('click', () => {
-                recognition.lang = langSelect.value;
-                recognition.start();
-                startBtn.disabled = true;
-                stopBtn.disabled = false;
-                listeningBadge.classList.add('active');
-            });
-
-            stopBtn.addEventListener('click', () => {
-                recognition.stop();
-                startBtn.disabled = false;
-                stopBtn.disabled = true;
-                listeningBadge.classList.remove('active');
-            });
-
-            recognition.onresult = (event) => {
-                let transcript = '';
-                for (let i = event.resultIndex; i < event.results.length; i++) {
-                    transcript += event.results[i][0].transcript;
+        recognition.onresult = (event) => {
+            let finalTranscript = '';
+            for (let i = event.resultIndex; i < event.results.length; ++i) {
+                if (event.results[i].isFinal) {
+                    finalTranscript += event.results[i][0].transcript;
                 }
-                output.value = transcript;
-                updateCounter();
-            };
+            }
 
-            recognition.onerror = (event) => {
-                console.error('Speech recognition error:', event.error);
-                recognition.stop();
-                startBtn.disabled = false;
-                stopBtn.disabled = true;
-                listeningBadge.classList.remove('active');
-            };
+            if (finalTranscript !== '') {
+                let formattedText = processText(finalTranscript, languageSelect.value);
+                let currentContent = editor.innerText.trim();
+                editor.innerText = currentContent ? currentContent + ' ' + formattedText : formattedText;
+                updateCounts();
+            }
+        };
 
-            recognition.onend = () => {
-                startBtn.disabled = false;
-                stopBtn.disabled = true;
-                listeningBadge.classList.remove('active');
-            };
+        recognition.onend = () => {
+            isListening = false;
+            startBtn.disabled = false;
+            stopBtn.disabled = true;
+            recordingStatus.style.display = 'none';
+        };
+    } else {
+        alert('Your browser does not support Speech Recognition. Please use Google Chrome or Microsoft Edge.');
+    }
+
+    function banglishToBangla(text) {
+        const map = {
+            'ami': 'আমি', 'tomar': 'তোমার', 'sathe': 'সাথে', 'sate': 'সাথে',
+            'dekha': 'দেখা', 'korte': 'করতে', 'chai': 'চাই', 'kemon': 'কেমন',
+            'acho': 'আছো', 'achho': 'আছো', 'dhanyabad': 'ধন্যবাদ', 'dhonnobad': 'ধন্যবাদ',
+            'bhalo': 'ভালো', 'valo': 'ভালো', 'na': 'না', 'ha': 'হ্যাঁ', 'han': 'হ্যাঁ'
+        };
+        let words = text.toLowerCase().split(' ');
+        let converted = words.map(w => map[w] || w);
+        return converted.join(' ');
+    }
+
+    function processText(text, lang) {
+        let processed = text;
+        if (lang === 'banglish') {
+            processed = banglishToBangla(processed);
         }
-
-        // Action Handlers
-        output.addEventListener('input', updateCounter);
-
-        function updateCounter() {
-            const text = output.value.trim();
-            const words = text ? text.split(/\s+/).length : 0;
-            const chars = text.length;
-            counterInfo.innerText = `Words: ${words} | Characters: ${chars}`;
+        if (autoPunctuation.checked) {
+            processed = processed.trim();
+            if (!/[.?!।]$/.test(processed)) {
+                processed += (lang.startsWith('bn') || lang === 'banglish') ? '।' : '.';
+            }
         }
+        return processed;
+    }
 
-        copyBtn.addEventListener('click', () => {
-            if(!output.value) return;
-            navigator.clipboard.writeText(output.value);
-            alert('Text copied to clipboard!');
-        });
+    startBtn.addEventListener('click', () => {
+        recognition.lang = languageSelect.value === 'banglish' ? 'en-US' : languageSelect.value;
+        recognition.start();
+    });
 
-        downloadBtn.addEventListener('click', () => {
-            if(!output.value) return;
-            const blob = new Blob([output.value], { type: 'text/plain' });
-            const url = URL.createObjectURL(blob);
-            const a = document.createElement('a');
-            a.href = url;
-            a.download = 'OmniKitHub-Voice-Typing.txt';
-            a.click();
-            URL.revokeObjectURL(url);
-        });
+    stopBtn.addEventListener('click', () => recognition.stop());
+    clearBtn.addEventListener('click', () => { editor.innerHTML = ''; updateCounts(); });
 
-        clearBtn.addEventListener('click', () => {
-            output.value = '';
-            updateCounter();
-        });
-    </script>
+    // Formatting Functions
+    function execCmd(command, value = null) {
+        document.execCommand(command, false, value);
+    }
+
+    function changeCase(type) {
+        let text = editor.innerText;
+        editor.innerText = type === 'upper' ? text.toUpperCase() : text.toLowerCase();
+    }
+
+    // Copy, Download, Print & Share
+    copyBtn.addEventListener('click', () => {
+        navigator.clipboard.writeText(editor.innerText);
+        alert('Text copied to clipboard!');
+    });
+
+    downloadTxtBtn.addEventListener('click', () => {
+        const blob = new Blob([editor.innerText], { type: 'text/plain;charset=utf-8' });
+        const a = document.createElement('a');
+        a.href = URL.createObjectURL(blob);
+        a.download = 'voice-typing.txt';
+        a.click();
+    });
+
+    downloadPdfBtn.addEventListener('click', () => {
+        const opt = {
+            margin: 1,
+            filename: 'voice-typing.pdf',
+            image: { type: 'jpeg', quality: 0.98 },
+            html2canvas: { scale: 2 },
+            jsPDF: { unit: 'in', format: 'letter', orientation: 'portrait' }
+        };
+        html2pdf().set(opt).from(editor).save();
+    });
+
+    printBtn.addEventListener('click', () => window.print());
+
+    shareWhatsappBtn.addEventListener('click', () => {
+        const text = encodeURIComponent(editor.innerText);
+        window.open(`https://api.whatsapp.com/send?text=${text}`, '_blank');
+    });
+
+    editor.addEventListener('input', updateCounts);
+
+    function updateCounts() {
+        const text = editor.innerText.trim();
+        wordCount.innerText = text ? text.split(/\s+/).length : 0;
+        charCount.innerText = text.length;
+    }
+</script>
+
 </body>
 </html>
