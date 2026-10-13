@@ -4,14 +4,14 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Pro ATS Resume & CV Builder Online | OmniKitHub</title>
-    <meta name="description" content="Build professional ATS-friendly resumes and CVs online for free. Upload photo, add experience, references, digital signature, and export high-quality PDF.">
+    <meta name="description" content="Build professional ATS-friendly resumes and CVs online for free. Upload photo, add address, LinkedIn, GitHub, experience, references, signature, and export high-quality PDF.">
     <meta name="keywords" content="resume builder, cv maker, free cv builder, ats resume generator, online resume maker with photo, professional cv template, download resume pdf">
     <meta name="robots" content="index, follow">
     <link rel="canonical" href="https://omnikithub.com/tools/resume-builder.html">
 
     <!-- Open Graph Tags -->
     <meta property="og:title" content="Pro ATS Resume & CV Builder - OmniKitHub">
-    <meta property="og:description" content="Create ATS-friendly professional CVs with live photo preview, references, signature, and instant PDF download.">
+    <meta property="og:description" content="Create ATS-friendly professional CVs with live photo preview, address, social links, references, signature, and instant PDF download.">
     <meta property="og:url" content="https://omnikithub.com/tools/resume-builder.html">
     <meta property="og:type" content="website">
 
@@ -58,7 +58,7 @@
         body { background-color: var(--bg-color); color: var(--text-color); padding: 20px; transition: all 0.3s ease; }
 
         .app-container {
-            max-width: 1200px;
+            max-width: 1250px;
             margin: 0 auto;
             display: grid;
             grid-template-columns: 1fr 1fr;
@@ -123,7 +123,7 @@
             padding: 35px;
             border-radius: 4px;
             box-shadow: 0 0 10px rgba(0,0,0,0.1);
-            min-height: 650px;
+            min-height: 700px;
             font-family: 'Arial', sans-serif;
         }
 
@@ -133,7 +133,7 @@
             justify-content: space-between;
             border-bottom: 2px solid #2563eb;
             padding-bottom: 15px;
-            margin-bottom: 20px;
+            margin-bottom: 15px;
         }
 
         .cv-photo {
@@ -147,7 +147,7 @@
 
         .cv-name { font-size: 26px; font-weight: bold; color: #1e293b; text-transform: uppercase; }
         .cv-role { font-size: 15px; color: #2563eb; font-weight: 600; margin-top: 3px; }
-        .cv-contact { font-size: 12px; color: #475569; margin-top: 6px; }
+        .cv-contact { font-size: 12px; color: #475569; margin-top: 5px; line-height: 1.5; }
 
         .cv-section-heading {
             font-size: 14px;
@@ -204,11 +204,11 @@
     <!-- Left Editor -->
     <div class="editor-card">
         <div class="header">
-            <h1>📄 Resume & CV Builder</h1>
+            <h1>📄 Pro Resume Builder</h1>
             <button id="themeToggle" class="theme-btn">🌙 Dark Mode</button>
         </div>
 
-        <div class="section-title">1. Personal Information</div>
+        <div class="section-title">1. Personal & Contact Information</div>
         <div class="form-group">
             <label>Profile Photo:</label>
             <input type="file" id="photoInput" accept="image/*">
@@ -222,8 +222,16 @@
             <input type="text" id="roleInput" value="Software Engineer & Web Developer">
         </div>
         <div class="form-group">
-            <label>Email & Phone & Location:</label>
-            <input type="text" id="contactInput" value="john@email.com | +880 1234 567890 | Dhaka, Bangladesh">
+            <label>Email & Phone Number:</label>
+            <input type="text" id="contactInput" value="john.doe@email.com | +880 1234 567890">
+        </div>
+        <div class="form-group">
+            <label>Present & Permanent Address:</label>
+            <input type="text" id="addressInput" value="House 42, Road 7, Dhanmondi, Dhaka - 1205">
+        </div>
+        <div class="form-group">
+            <label>LinkedIn & GitHub / Portfolio URL:</label>
+            <input type="text" id="socialInput" value="linkedin.com/in/johndoe | github.com/johndoe">
         </div>
 
         <div class="section-title">2. Professional Summary</div>
@@ -274,7 +282,11 @@ Email: alex.morgan@university.edu | Phone: +880 1987 654321</textarea>
                 <div>
                     <div class="cv-name" id="prevName">John Doe</div>
                     <div class="cv-role" id="prevRole">Software Engineer & Web Developer</div>
-                    <div class="cv-contact" id="prevContact">john@email.com | +880 1234 567890 | Dhaka, Bangladesh</div>
+                    <div class="cv-contact" id="prevContact">
+                        📧 john.doe@email.com | 📞 +880 1234 567890<br>
+                        📍 House 42, Road 7, Dhanmondi, Dhaka - 1205<br>
+                        🌐 linkedin.com/in/johndoe | github.com/johndoe
+                    </div>
                 </div>
                 <img id="prevPhoto" class="cv-photo" alt="Profile Photo">
             </div>
@@ -302,6 +314,8 @@ Email: alex.morgan@university.edu | Phone: +880 1987 654321</textarea>
     const nameInput = document.getElementById('nameInput');
     const roleInput = document.getElementById('roleInput');
     const contactInput = document.getElementById('contactInput');
+    const addressInput = document.getElementById('addressInput');
+    const socialInput = document.getElementById('socialInput');
     const summaryInput = document.getElementById('summaryInput');
     const expInput = document.getElementById('expInput');
     const eduInput = document.getElementById('eduInput');
@@ -326,7 +340,12 @@ Email: alex.morgan@university.edu | Phone: +880 1987 654321</textarea>
     function updatePreview() {
         prevName.innerText = nameInput.value || 'YOUR NAME';
         prevRole.innerText = roleInput.value || 'PROFESSIONAL TITLE';
-        prevContact.innerText = contactInput.value || 'Email | Phone | Address';
+        
+        let contactHtml = `📧 ${contactInput.value || 'Email | Phone'}`;
+        if(addressInput.value) contactHtml += `<br>📍 ${addressInput.value}`;
+        if(socialInput.value) contactHtml += `<br>🌐 ${socialInput.value}`;
+        prevContact.innerHTML = contactHtml;
+
         prevSummary.innerText = summaryInput.value || '';
         prevExp.innerText = expInput.value || '';
         prevEdu.innerText = eduInput.value || '';
@@ -334,7 +353,7 @@ Email: alex.morgan@university.edu | Phone: +880 1987 654321</textarea>
         signTextName.innerText = nameInput.value || '';
     }
 
-    [nameInput, roleInput, contactInput, summaryInput, expInput, eduInput, refInput].forEach(inp => {
+    [nameInput, roleInput, contactInput, addressInput, socialInput, summaryInput, expInput, eduInput, refInput].forEach(inp => {
         inp.addEventListener('input', updatePreview);
     });
 
@@ -384,6 +403,7 @@ Email: alex.morgan@university.edu | Phone: +880 1987 654321</textarea>
 
     document.getElementById('clearBtn').addEventListener('click', () => {
         nameInput.value = ''; roleInput.value = ''; contactInput.value = '';
+        addressInput.value = ''; socialInput.value = '';
         summaryInput.value = ''; expInput.value = ''; eduInput.value = ''; refInput.value = '';
         prevPhoto.style.display = 'none'; prevSign.style.display = 'none';
         updatePreview();
