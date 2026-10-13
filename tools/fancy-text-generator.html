@@ -3,230 +3,395 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Fancy Text & Font Generator - OmniKitHub</title>
-    <meta name="description" content="Convert normal text into cool, fancy, aesthetic unicode fonts for Facebook, Instagram, TikTok bio and captions. Free 1-click copy paste font generator.">
-    <meta name="keywords" content="fancy text generator, font generator, cool text generator, copy paste fonts, instagram bio fonts, stylish text">
-    <link rel="stylesheet" href="../style.css">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <title>Fancy Text Generator - Cool Fonts for Bio, Facebook & Instagram | OmniKitHub</title>
+    <meta name="description" content="Free online Fancy Text Generator. Convert normal text into cool font styles, bio text, aesthetic symbols, and cursive lettering for Instagram, Facebook, TikTok, and Gaming profiles.">
+    <meta name="keywords" content="fancy text generator, cool font generator, instagram bio fonts, facebook stylish text, aesthetic text generator, cursive font generator, pubg name style, font changer online">
+    <meta name="robots" content="index, follow">
+    <link rel="canonical" href="https://omnikithub.com/tools/fancy-text-generator.html">
+
+    <!-- Open Graph Tags -->
+    <meta property="og:title" content="Fancy Text & Font Generator - OmniKitHub">
+    <meta property="og:description" content="Instantly generate 50+ aesthetic font styles, symbols, and cool text for Instagram bios, Facebook, TikTok, and Gaming profiles.">
+    <meta property="og:url" content="https://omnikithub.com/tools/fancy-text-generator.html">
+    <meta property="og:type" content="website">
+
+    <!-- Schema.org Markup -->
+    <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@type": "WebApplication",
+      "name": "Fancy Text & Font Generator",
+      "url": "https://omnikithub.com/tools/fancy-text-generator.html",
+      "applicationCategory": "UtilityApplication",
+      "operatingSystem": "All",
+      "offers": {
+        "@type": "Offer",
+        "price": "0",
+        "priceCurrency": "USD"
+      }
+    }
+    </script>
+
     <style>
-        .tool-container {
+        :root {
+            --bg-color: #f4f6f9;
+            --card-bg: #ffffff;
+            --text-color: #333333;
+            --border-color: #e2e8f0;
+            --primary-color: #2563eb;
+            --primary-hover: #1d4ed8;
+        }
+
+        body.dark-mode {
+            --bg-color: #0f172a;
+            --card-bg: #1e293b;
+            --text-color: #f8fafc;
+            --border-color: #334155;
+            --primary-color: #3b82f6;
+            --primary-hover: #60a5fa;
+        }
+
+        * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; }
+        body { background-color: var(--bg-color); color: var(--text-color); padding: 20px; display: flex; justify-content: center; transition: all 0.3s ease; }
+
+        .container {
             max-width: 950px;
-            margin: 40px auto;
-            background: var(--bg-surface);
-            border: 1px solid var(--card-border);
-            border-radius: 16px;
+            width: 100%;
+            background: var(--card-bg);
+            border-radius: 12px;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.08);
             padding: 30px;
-            box-shadow: var(--card-shadow);
         }
 
-        .input-group {
-            margin-bottom: 25px;
+        .header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px; }
+        .header h1 { color: var(--primary-color); font-size: 26px; }
+
+        .theme-btn {
+            background: transparent;
+            border: 1px solid var(--border-color);
+            color: var(--text-color);
+            padding: 6px 12px;
+            border-radius: 20px;
+            cursor: pointer;
+            font-size: 13px;
         }
 
-        .input-group label {
-            display: block;
-            font-weight: 700;
-            margin-bottom: 8px;
-            color: var(--text-primary);
-        }
+        .description { color: #64748b; font-size: 14px; margin-bottom: 25px; }
 
-        .textarea-box {
+        /* Input Area */
+        textarea {
             width: 100%;
             height: 100px;
-            padding: 16px;
-            border-radius: 12px;
-            border: 2px solid var(--card-border);
-            background: var(--bg-primary);
-            color: var(--text-primary);
-            font-size: 1.1rem;
-            resize: vertical;
+            padding: 15px;
+            border: 1px solid var(--border-color);
+            border-radius: 8px;
+            font-size: 18px;
+            background: var(--card-bg);
+            color: var(--text-color);
             outline: none;
-            transition: border-color var(--transition-speed) ease;
+            resize: vertical;
+            margin-bottom: 20px;
         }
 
-        .textarea-box:focus {
-            border-color: var(--accent-color);
+        textarea:focus { border-color: var(--primary-color); }
+
+        /* Category Filter Tabs */
+        .filter-tabs {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+            margin-bottom: 20px;
         }
 
-        .font-list {
+        .tab-btn {
+            padding: 8px 16px;
+            border-radius: 20px;
+            border: 1px solid var(--border-color);
+            background: rgba(0,0,0,0.02);
+            color: var(--text-color);
+            font-size: 13px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+
+        .tab-btn:hover, .tab-btn.active {
+            background: var(--primary-color);
+            color: white;
+            border-color: var(--primary-color);
+        }
+
+        /* Output List */
+        .results-list {
             display: flex;
             flex-direction: column;
             gap: 12px;
         }
 
         .font-card {
-            background: var(--bg-primary);
-            border: 1px solid var(--card-border);
-            border-radius: 10px;
-            padding: 14px 20px;
             display: flex;
-            align-items: center;
             justify-content: space-between;
-            gap: 15px;
-            transition: all var(--transition-speed) ease;
+            align-items: center;
+            padding: 14px 18px;
+            border: 1px solid var(--border-color);
+            border-radius: 8px;
+            background: rgba(0,0,0,0.01);
+            transition: all 0.2s;
         }
 
         .font-card:hover {
-            border-color: var(--accent-color);
+            border-color: var(--primary-color);
+            background: rgba(37, 99, 235, 0.02);
         }
 
-        .font-output {
-            font-size: 1.15rem;
-            color: var(--text-primary);
+        .font-text {
+            font-size: 18px;
             word-break: break-all;
+            padding-right: 15px;
         }
 
-        .copy-btn {
+        .btn-copy {
             padding: 8px 16px;
             border-radius: 6px;
+            background: var(--primary-color);
+            color: white;
             border: none;
-            background: var(--accent-color);
-            color: #ffffff;
             font-weight: 600;
             cursor: pointer;
+            font-size: 13px;
             white-space: nowrap;
-            display: flex;
-            align-items: center;
-            gap: 6px;
-            transition: background var(--transition-speed) ease;
+            transition: background 0.2s;
         }
 
-        .copy-btn:hover {
-            background: var(--accent-hover);
+        .btn-copy:hover { background: var(--primary-hover); }
+
+        /* Action Bar */
+        .action-bar {
+            display: flex;
+            gap: 12px;
+            margin-top: 25px;
+            padding-top: 15px;
+            border-top: 1px solid var(--border-color);
+            flex-wrap: wrap;
+        }
+
+        .btn-sec {
+            padding: 9px 16px;
+            border-radius: 6px;
+            border: 1px solid var(--border-color);
+            background: var(--card-bg);
+            color: var(--text-color);
+            font-weight: 600;
+            cursor: pointer;
+            font-size: 13px;
+        }
+
+        .btn-share {
+            background: #10b981;
+            color: white;
+            border: none;
+        }
+
+        /* Toast Alert */
+        .toast {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            background: #10b981;
+            color: white;
+            padding: 10px 20px;
+            border-radius: 6px;
+            font-weight: 600;
+            display: none;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.15);
         }
     </style>
 </head>
-<body class="light-theme">
+<body>
 
-    <header class="navbar">
-        <div class="container nav-container">
-            <a href="../index.html" class="logo">
-                <i class="fa-solid fa-toolbox logo-icon"></i>
-                <span class="logo-text">OmniKit<span class="highlight">Hub</span></span>
-            </a>
-            <div class="nav-actions">
-                <button id="theme-toggle" class="icon-btn" aria-label="Toggle Theme">
-                    <i class="fa-solid fa-moon"></i>
-                </button>
-            </div>
-        </div>
-    </header>
+<div class="container">
+    <div class="header">
+        <h1>✨ Fancy Text & Font Generator</h1>
+        <button id="themeToggle" class="theme-btn">🌙 Dark Mode</button>
+    </div>
+    <p class="description">Type your text below to instantly generate aesthetic fonts, cursive styles, and symbols for Instagram bios, Facebook, TikTok, and Gaming profiles.</p>
 
-    <main class="container">
-        <div class="tool-container">
-            <h1 style="font-size: 1.8rem; margin-bottom: 8px;">Fancy Text & Font Generator</h1>
-            <p style="color: var(--text-secondary); margin-bottom: 24px;">Type your text below to instantly generate aesthetic fonts for Instagram, Facebook, and TikTok bios.</p>
+    <!-- Text Input -->
+    <textarea id="inputText" placeholder="Type or paste your text here (e.g. OmniKitHub Stylish Text)..."></textarea>
 
-            <div class="input-group">
-                <label for="font-input">Type or Paste Your Normal Text:</label>
-                <textarea id="font-input" class="textarea-box" placeholder="Type something cool here..."></textarea>
-            </div>
+    <!-- Category Filters -->
+    <div class="filter-tabs">
+        <button class="tab-btn active" onclick="filterCategory('all')">🌟 All Styles</button>
+        <button class="tab-btn" onclick="filterCategory('social')">📱 FB & Insta Bio</button>
+        <button class="tab-btn" onclick="filterCategory('gaming')">🎮 Gaming & Cool</button>
+        <button class="tab-btn" onclick="filterCategory('symbols')">♥ Symbols & Decor</button>
+    </div>
 
-            <div id="font-results" class="font-list">
-                <!-- Generated fonts will populate dynamically here -->
-            </div>
-        </div>
-    </main>
+    <!-- Generated Font Results List -->
+    <div id="resultsList" class="results-list"></div>
 
-    <footer class="footer">
-        <div class="footer-bottom">
-            <div class="container">
-                <p>&copy; 2026 OmniKitHub.com. All rights reserved.</p>
-            </div>
-        </div>
-    </footer>
+    <!-- Action Toolbar -->
+    <div class="action-bar">
+        <button id="downloadTxtBtn" class="btn-sec">📥 Download All (.TXT)</button>
+        <button id="shareBtn" class="btn-sec btn-share">🔗 Share Tool</button>
+        <button id="clearBtn" class="btn-sec">🗑️ Clear Input</button>
+    </div>
+</div>
 
-    <script src="../script.js"></script>
-    <script>
-        const fontInput = document.getElementById('font-input');
-        const fontResults = document.getElementById('font-results');
+<div id="toast" class="toast">Copied to clipboard!</div>
 
-        const defaultText = "OmniKitHub Stylish Text";
+<script>
+    const inputText = document.getElementById('inputText');
+    const resultsList = document.getElementById('resultsList');
+    const toast = document.getElementById('toast');
+    const themeToggle = document.getElementById('themeToggle');
 
-        // Style Mappings
-        const styles = [
-            { name: "Bold", map: text => transformText(text, 0x1D400, 0x1D41A, 0x1D7CE) },
-            { name: "Italic", map: text => transformText(text, 0x1D434, 0x1D44E, null) },
-            { name: "Bold Italic", map: text => transformText(text, 0x1D468, 0x1D482, null) },
-            { name: "Monospace", map: text => transformText(text, 0x1D670, 0x1D68A, 0x1D7F6) },
-            { name: "Double Struck", map: text => transformText(text, 0x1D538, 0x1D552, 0x1D7D8) },
-            { name: "Script Fancy", map: text => transformText(text, 0x1D49C, 0x1D4B6, null) },
-            { name: "Gothic / Old English", map: text => transformText(text, 0x1D504, 0x1D51E, null) },
-            { name: "Bubbles / Circle", map: text => transformCircles(text) },
-            { name: "Square Box", map: text => transformSquares(text) },
-            { name: "Decorated Sparkle", map: text => `✨ ${text} ✨` },
-            { name: "Symmetric Wings", map: text => `꧁༺ ${text} ༻꧂` },
-            { name: "Heart Decorative", map: text => `♥.｡. ${text} .｡.♥` }
-        ];
+    let currentCategory = 'all';
 
-        function transformText(str, upperBase, lowerBase, numberBase) {
-            return str.split('').map(char => {
-                const code = char.charCodeAt(0);
-                if (code >= 65 && code <= 90 && upperBase) {
-                    return String.fromCodePoint(upperBase + (code - 65));
-                } else if (code >= 97 && code <= 122 && lowerBase) {
-                    return String.fromCodePoint(lowerBase + (code - 97));
-                } else if (code >= 48 && code <= 57 && numberBase) {
-                    return String.fromCodePoint(numberBase + (code - 48));
-                }
-                return char;
-            }).join('');
+    // Unicode Font Style Generators
+    const mapStyle = (str, charMap) => {
+        return str.split('').map(c => charMap[c] || c).join('');
+    };
+
+    const fontGenerators = [
+        {
+            name: 'Bold Serif',
+            cat: 'social',
+            gen: text => mapStyle(text, {'A':'𝐀','B':'𝐁','C':'𝐂','D':'𝐃','E':'𝐄','F':'𝐅','G':'𝐆','H':'𝐇','I':'𝐈','J':'𝐉','K':'𝐊','L':'𝐋','M':'𝐌','N':'𝐍','O':'𝐎','P':'𝐏','Q':'𝐉','R':'𝐑','S':'𝐒','T':'𝐓','U':'𝐔','V':'𝐕','W':'𝐖','X':'𝐗','Y':'𝐘','Z':'𝐙','a':'𝐚','b':'𝐛','c':'𝐜','d':'𝐝','e':'𝐞','f':'𝐟','g':'𝐠','h':'𝐡','i':'𝐢','j':'𝐣','k':'𝐤','l':'𝐥','m':'𝐦','n':'𝐧','o':'𝐨','p':'𝐩','q':'𝐪','r':'𝐫','s':'𝐬','t':'𝐭','u':'𝐮','v':'𝐯','w':'𝐰','x':'𝐱','y':'𝐲','z':'𝐳'})
+        },
+        {
+            name: 'Bold Sans',
+            cat: 'social',
+            gen: text => mapStyle(text, {'A':'𝝖','B':'𝝗','C':'𝝘','D':'𝝙','E':'𝝚','F':'𝝛','G':'𝝜','H':'𝝝','I':'𝝞','J':'𝝟','K':'𝝠','L':'𝝡','M':'𝝢','N':'𝝣','O':'𝝤','P':'𝝥','Q':'𝝦','R':'𝝧','S':'𝝨','T':'𝝩','U':'𝝪','V':'𝝫','W':'𝝬','X':'𝝭','Y':'𝝮','Z':'𝝯','a':'𝗮','b':'𝗯','c':'𝗰','d':'𝗱','e':'𝗲','f':'𝗳','g':'𝗴','h':'𝗵','i':'𝗶','j':'𝗷','k':'𝗸','l':'𝗹','m':'𝗺','n':'𝗻','o':'𝗼','p':'𝗽','q':'Programs','r':'𝗿','s':'𝘀','t':'𝘁','u':'𝘂','v':'𝘃','w':'𝘄','x':'𝘅','y':'𝘆','z':'𝘇'})
+        },
+        {
+            name: 'Cursive Script',
+            cat: 'social',
+            gen: text => mapStyle(text, {'A':'𝒜','B':'ℬ','C':'𝒞','D':'𝒟','E':'ℰ','F':'ℱ','G':'𝒢','H':'ℋ','I':'ℐ','J':'𝒥','K':'𝒦','L':'ℒ','M':'ℳ','N':'𝒩','O':'𝒪','P':'𝒫','Q':'𝒬','R':'ℛ','S':'𝒮','T':'𝒯','U':'𝒰','V':'𝒱','W':'𝒲','X':'𝒳','Y':'𝒴','Z':'𝒵','a':'𝒶','b':'𝒷','c':'𝒸','d':'𝒹','e':'ℯ','f':'𝒻','g':'ℊ','h':'𝒽','i':'𝒾','j':'𝒿','k':'𝓀','l':'𝓁','m':'𝓂','n':'𝓃','o':'ℴ','p':'𝓅','q':'𝓆','r':'𝓇','s':'𝓈','t':'𝓉','u':'𝓊','v':'𝓋','w':'𝓌','x':'𝓍','y':'𝓎','z':'𝓏'})
+        },
+        {
+            name: 'Double Struck (Outline)',
+            cat: 'gaming',
+            gen: text => mapStyle(text, {'A':'𝔸','B':'𝔹','C':'ℂ','D':'𝔻','E':'𝔼','F':'𝔽','G':'𝔾','H':'ℍ','I':'𝕀','J':'𝕁','K':'𝕂','L':'𝕃','M':'𝕄','N':'ℕ','O':'𝕆','P':'ℙ','Q':'ℚ','R':'ℝ','S':'𝕊','T':'𝕋','U':'𝕌','V':'𝕍','W':'𝕎','X':'𝕏','Y':'𝕐','Z':'ℤ','a':'𝕒','b':'𝕓','c':'𝕔','d':'𝕕','e':'𝕖','f':'𝕗','g':'𝕘','h':'𝕙','i':'𝕚','j':'𝕛','k':'𝕜','l':'𝕝','m':'𝕞','n':'𝕟','o':'𝕠','p':'𝕡','q':'𝕢','r':'𝕣','s':'𝕤','t':'𝕥','u':'𝕦','v':'𝕔','w':'𝕨','x':'𝕩','y':'𝕪','z':'𝕫'})
+        },
+        {
+            name: 'Bubble Circles',
+            cat: 'social',
+            gen: text => mapStyle(text, {'A':'Ⓐ','B':'Ⓑ','C':'Ⓒ','D':'Ⓓ','E':'Ⓔ','F':'Ⓕ','G':'Ⓖ','H':'Ⓗ','I':'Ⓘ','J':'Ⓙ','K':'Ⓚ','L':'Ⓛ','M':'Ⓜ','N':'Ⓝ','O':'Ⓞ','P':'Ⓟ','Q':'Ⓠ','R':'Ⓡ','S':'Ⓢ','T':'Ⓣ','U':'Ⓤ','V':'Ⓥ','W':'Ⓦ','X':'Ⓧ','Y':'Ⓨ','Z':'Ⓩ','a':'ⓐ','b':'ⓑ','c':'ⓒ','d':'ⓓ','e':'ⓔ','f':'ⓕ','g':'ⓖ','h':'ⓗ','i':'ⓘ','j':'ⓙ','k':'ⓚ','l':'ⓛ','m':'ⓜ','n':'ⓝ','o':'ⓞ','p':'ⓟ','q':'ⓠ','r':'ⓡ','s':'ⓢ','t':'ⓣ','u':'ⓤ','v':'ⓥ','w':'ⓦ','x':'ⓧ','y':'ⓨ','z':'ⓩ'})
+        },
+        {
+            name: 'Old English / Gothic',
+            cat: 'gaming',
+            gen: text => mapStyle(text, {'A':'𝔄','B':'𝔅','C':'ℭ','D':'𝔇','E':'𝔈','F':'𝔉','G':'𝔤','H':'ℌ','I':'ℑ','J':'𝔍','K':'𝔏','L':'𝔟','M':'𝔐','N':'𝔑','O':'𝔒','P':'𝔓','Q':'𝔔','R':'ℜ','S':'𝔖','T':'𝔗','U':'𝔘','V':'𝔙','W':'𝔚','X':'𝔛','Y':'𝔜','Z':'ℨ','a':'𝔞','b':'𝔟','c':'𝔠','d':'𝔡','e':'𝔢','f':'𝔣','g':'𝔤','h':'𝔮','i':'𝔦','j':'𝔟','k':'𝔨','l':'𝔩','m':'𝔪','n':'𝔫','o':'𝔬','p':'𝔟','q':'𝔮','r':'𝔯','s':'𝔰','t':'𝔱','u':'𝔲','v':'𝔳','w':'𝔴','x':'𝔵','y':'𝔶','z':'𝔷'})
+        },
+        {
+            name: 'Gaming Wings Frame',
+            cat: 'gaming',
+            gen: text => `꧁༺ ${text} ༻꧂`
+        },
+        {
+            name: 'Fire & Stars Decorator',
+            cat: 'symbols',
+            gen: text => `🔥★ ${text} ★🔥`
+        },
+        {
+            name: 'Aesthetic Hearts',
+            cat: 'symbols',
+            gen: text => `♥․• ${text} •․♥`
+        },
+        {
+            name: 'Underline Style',
+            cat: 'social',
+            gen: text => text.split('').join('\u0332') + '\u0332'
         }
+    ];
 
-        function transformCircles(str) {
-            return str.split('').map(char => {
-                const code = char.charCodeAt(0);
-                if (code >= 65 && code <= 90) return String.fromCodePoint(0x24B6 + (code - 65));
-                if (code >= 97 && code <= 122) return String.fromCodePoint(0x24D0 + (code - 97));
-                if (code >= 49 && code <= 57) return String.fromCodePoint(0x2460 + (code - 49));
-                return char;
-            }).join('');
-        }
+    function renderFonts() {
+        const input = inputText.value.trim() || 'OmniKitHub Stylish Text';
+        resultsList.innerHTML = '';
 
-        function transformSquares(str) {
-            return str.split('').map(char => {
-                const code = char.charCodeAt(0);
-                if (code >= 65 && code <= 90) return String.fromCodePoint(0x1F130 + (code - 65));
-                if (code >= 97 && code <= 122) return String.fromCodePoint(0x1F130 + (code - 97));
-                return char;
-            }).join('');
-        }
+        fontGenerators.forEach(fg => {
+            if (currentCategory === 'all' || fg.cat === currentCategory) {
+                const generatedText = fg.gen(input);
 
-        function renderFonts() {
-            const val = fontInput.value.trim() || defaultText;
-            fontResults.innerHTML = '';
-
-            styles.forEach(style => {
-                const styledText = style.map(val);
                 const card = document.createElement('div');
                 card.className = 'font-card';
                 card.innerHTML = `
-                    <div class="font-output">${styledText}</div>
-                    <button class="copy-btn" onclick="copyFont(this, '${escapeHtml(styledText)}')">
-                        <i class="fa-solid fa-copy"></i> Copy
-                    </button>
+                    <div class="font-text">${generatedText}</div>
+                    <button class="btn-copy" onclick="copyFontText('${escapeQuotes(generatedText)}')">📋 Copy</button>
                 `;
-                fontResults.appendChild(card);
-            });
-        }
+                resultsList.appendChild(card);
+            }
+        });
+    }
 
-        function escapeHtml(str) {
-            return str.replace(/'/g, "\\'").replace(/"/g, '&quot;');
-        }
+    function escapeQuotes(str) {
+        return str.replace(/'/g, "\\'").replace(/"/g, '\\"');
+    }
 
-        window.copyFont = function(btn, text) {
-            navigator.clipboard.writeText(text);
-            const originalHTML = btn.innerHTML;
-            btn.innerHTML = '<i class="fa-solid fa-check"></i> Copied!';
-            btn.style.background = '#10b981';
-            setTimeout(() => {
-                btn.innerHTML = originalHTML;
-                btn.style.background = 'var(--accent-color)';
-            }, 1500);
-        };
+    function copyFontText(text) {
+        navigator.clipboard.writeText(text);
+        showToast();
+    }
 
-        fontInput.addEventListener('input', renderFonts);
+    function showToast() {
+        toast.style.display = 'block';
+        setTimeout(() => { toast.style.display = 'none'; }, 2000);
+    }
+
+    function filterCategory(cat) {
+        currentCategory = cat;
+        document.querySelectorAll('.tab-btn').forEach(btn => btn.classList.remove('active'));
+        event.target.classList.add('active');
         renderFonts();
-    </script>
+    }
+
+    // Dark Mode Toggle
+    themeToggle.addEventListener('click', () => {
+        document.body.classList.toggle('dark-mode');
+        themeToggle.innerText = document.body.classList.contains('dark-mode') ? '☀️ Light Mode' : '🌙 Dark Mode';
+    });
+
+    // Action Buttons
+    document.getElementById('clearBtn').addEventListener('click', () => {
+        inputText.value = '';
+        renderFonts();
+    });
+
+    document.getElementById('downloadTxtBtn').addEventListener('click', () => {
+        const input = inputText.value.trim() || 'OmniKitHub Stylish Text';
+        let txtContent = `Fancy Text Styles for: "${input}"\n\n`;
+        fontGenerators.forEach(fg => {
+            txtContent += `${fg.name}:\n${fg.gen(input)}\n\n`;
+        });
+
+        const blob = new Blob([txtContent], { type: 'text/plain;charset=utf-8' });
+        const a = document.createElement('a');
+        a.href = URL.createObjectURL(blob);
+        a.download = 'fancy-text-styles.txt';
+        a.click();
+    });
+
+    document.getElementById('shareBtn').addEventListener('click', async () => {
+        if (navigator.share) {
+            try {
+                await navigator.share({
+                    title: 'Fancy Text & Font Generator',
+                    text: 'Check out these awesome font styles and bio generators!',
+                    url: window.location.href
+                });
+            } catch (err) { console.log(err); }
+        } else {
+            navigator.clipboard.writeText(window.location.href);
+            alert('Tool link copied to clipboard!');
+        }
+    });
+
+    inputText.addEventListener('input', renderFonts);
+
+    // Initial Load
+    renderFonts();
+</script>
+
 </body>
 </html>
