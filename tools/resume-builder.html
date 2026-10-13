@@ -4,14 +4,14 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Pro ATS Resume & CV Builder Online | OmniKitHub</title>
-    <meta name="description" content="Build professional ATS-friendly resumes and CVs online for free. Upload photo, add address, LinkedIn, GitHub, experience, references, signature, and export high-quality PDF.">
-    <meta name="keywords" content="resume builder, cv maker, free cv builder, ats resume generator, online resume maker with photo, professional cv template, download resume pdf">
+    <meta name="description" content="Build professional ATS-friendly resumes and CVs online for free. Customize colors, fonts, photo shape, separate addresses, experience, references, and export high-quality PDF.">
+    <meta name="keywords" content="resume builder, cv maker, free cv builder, ats resume generator, online resume maker, custom resume styles, download resume pdf">
     <meta name="robots" content="index, follow">
     <link rel="canonical" href="https://omnikithub.com/tools/resume-builder.html">
 
     <!-- Open Graph Tags -->
     <meta property="og:title" content="Pro ATS Resume & CV Builder - OmniKitHub">
-    <meta property="og:description" content="Create ATS-friendly professional CVs with live photo preview, address, social links, references, signature, and instant PDF download.">
+    <meta property="og:description" content="Create customizable professional CVs with live style picker, separate addresses, photo shapes, and instant PDF download.">
     <meta property="og:url" content="https://omnikithub.com/tools/resume-builder.html">
     <meta property="og:type" content="website">
 
@@ -43,6 +43,8 @@
             --border-color: #cbd5e1;
             --primary-color: #2563eb;
             --primary-hover: #1d4ed8;
+            --cv-font: 'Arial', sans-serif;
+            --photo-radius: 50%;
         }
 
         body.dark-mode {
@@ -103,7 +105,7 @@
         .form-group { margin-bottom: 12px; }
         .form-group label { display: block; font-size: 13px; font-weight: 600; margin-bottom: 5px; }
 
-        input[type="text"], input[type="email"], textarea, input[type="file"] {
+        input[type="text"], input[type="email"], textarea, input[type="file"], select {
             width: 100%;
             padding: 10px 12px;
             border: 1px solid var(--border-color);
@@ -114,7 +116,13 @@
             outline: none;
         }
 
-        textarea { height: 80px; resize: vertical; line-height: 1.5; }
+        textarea { height: 75px; resize: vertical; line-height: 1.5; }
+
+        .customizer-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr 1fr;
+            gap: 10px;
+        }
 
         /* CV Live Paper Design */
         .cv-paper {
@@ -124,14 +132,14 @@
             border-radius: 4px;
             box-shadow: 0 0 10px rgba(0,0,0,0.1);
             min-height: 700px;
-            font-family: 'Arial', sans-serif;
+            font-family: var(--cv-font);
         }
 
         .cv-top {
             display: flex;
             align-items: center;
             justify-content: space-between;
-            border-bottom: 2px solid #2563eb;
+            border-bottom: 2px solid var(--primary-color);
             padding-bottom: 15px;
             margin-bottom: 15px;
         }
@@ -139,14 +147,14 @@
         .cv-photo {
             width: 90px;
             height: 90px;
-            border-radius: 50%;
+            border-radius: var(--photo-radius);
             object-fit: cover;
-            border: 2px solid #2563eb;
+            border: 2px solid var(--primary-color);
             display: none;
         }
 
         .cv-name { font-size: 26px; font-weight: bold; color: #1e293b; text-transform: uppercase; }
-        .cv-role { font-size: 15px; color: #2563eb; font-weight: 600; margin-top: 3px; }
+        .cv-role { font-size: 15px; color: var(--primary-color); font-weight: 600; margin-top: 3px; }
         .cv-contact { font-size: 12px; color: #475569; margin-top: 5px; line-height: 1.5; }
 
         .cv-section-heading {
@@ -208,7 +216,37 @@
             <button id="themeToggle" class="theme-btn">🌙 Dark Mode</button>
         </div>
 
-        <div class="section-title">1. Personal & Contact Information</div>
+        <div class="section-title">1. Design & Style Customizer</div>
+        <div class="customizer-grid">
+            <div class="form-group">
+                <label>Theme Color:</label>
+                <select id="colorPicker">
+                    <option value="#2563eb">Classic Blue</option>
+                    <option value="#0f172a">Dark Slate</option>
+                    <option value="#059669">Emerald Green</option>
+                    <option value="#7c3aed">Royal Purple</option>
+                    <option value="#dc2626">Crimson Red</option>
+                </select>
+            </div>
+            <div class="form-group">
+                <label>Font Style:</label>
+                <select id="fontPicker">
+                    <option value="Arial, sans-serif">Arial</option>
+                    <option value="'Times New Roman', serif">Times New Roman</option>
+                    <option value="'Courier New', monospace">Courier New</option>
+                    <option value="Georgia, serif">Georgia</option>
+                </select>
+            </div>
+            <div class="form-group">
+                <label>Photo Shape:</label>
+                <select id="shapePicker">
+                    <option value="50%">Circle (Gol)</option>
+                    <option value="8px">Square (Rounded)</option>
+                </select>
+            </div>
+        </div>
+
+        <div class="section-title">2. Personal & Contact Information</div>
         <div class="form-group">
             <label>Profile Photo:</label>
             <input type="file" id="photoInput" accept="image/*">
@@ -226,20 +264,24 @@
             <input type="text" id="contactInput" value="john.doe@email.com | +880 1234 567890">
         </div>
         <div class="form-group">
-            <label>Present & Permanent Address:</label>
-            <input type="text" id="addressInput" value="House 42, Road 7, Dhanmondi, Dhaka - 1205">
+            <label>Present Address:</label>
+            <input type="text" id="presentAddressInput" value="House 42, Road 7, Dhanmondi, Dhaka - 1205">
+        </div>
+        <div class="form-group">
+            <label>Permanent Address:</label>
+            <input type="text" id="permanentAddressInput" value="Village: Sonapur, PO: Amtali, Barguna">
         </div>
         <div class="form-group">
             <label>LinkedIn & GitHub / Portfolio URL:</label>
             <input type="text" id="socialInput" value="linkedin.com/in/johndoe | github.com/johndoe">
         </div>
 
-        <div class="section-title">2. Professional Summary</div>
+        <div class="section-title">3. Professional Summary</div>
         <div class="form-group">
             <textarea id="summaryInput">Dedicated and results-driven computer science professional with strong expertise in web development, front-end optimization, and software tools.</textarea>
         </div>
 
-        <div class="section-title">3. Work Experience</div>
+        <div class="section-title">4. Work Experience</div>
         <div class="form-group">
             <textarea id="expInput">• Senior Web Developer at TechFirm (2024 - Present)
 - Led front-end design and optimized web tools.
@@ -247,19 +289,18 @@
 - Built interactive web applications and API features.</textarea>
         </div>
 
-        <div class="section-title">4. Education & Technical Skills</div>
+        <div class="section-title">5. Education & Technical Skills</div>
         <div class="form-group">
             <textarea id="eduInput">B.Sc. in Computer Science & Engineering (2022-2026)
 Skills: HTML5, CSS3, JavaScript, WordPress, Git, Vercel, Cloudflare, SEO Optimization.</textarea>
         </div>
 
-        <div class="section-title">5. References</div>
+        <div class="section-title">6. References & Signature</div>
         <div class="form-group">
+            <label>References:</label>
             <textarea id="refInput">Dr. Alex Morgan - Professor, CSE Department
 Email: alex.morgan@university.edu | Phone: +880 1987 654321</textarea>
         </div>
-
-        <div class="section-title">6. Signature</div>
         <div class="form-group">
             <label>Signature Image (Optional):</label>
             <input type="file" id="signInput" accept="image/*">
@@ -275,16 +316,17 @@ Email: alex.morgan@university.edu | Phone: +880 1987 654321</textarea>
 
     <!-- Right Live Preview -->
     <div class="preview-card">
-        <h3 style="margin-bottom: 15px; color: var(--primary-color);">Live CV Preview</h3>
+        <h3 style="margin-bottom: 15px; color: var(--primary-color);">Live CV Preview & Customization</h3>
         
         <div class="cv-paper" id="cvPaper">
-            <div class="cv-top">
+            <div class="cv-top" id="cvTopBorder">
                 <div>
                     <div class="cv-name" id="prevName">John Doe</div>
-                    <div class="cv-role" id="prevRole">Software Engineer & Web Developer</div>
+                    <div class="cv-role" id="prevRole" style="color: var(--primary-color);">Software Engineer & Web Developer</div>
                     <div class="cv-contact" id="prevContact">
                         📧 john.doe@email.com | 📞 +880 1234 567890<br>
-                        📍 House 42, Road 7, Dhanmondi, Dhaka - 1205<br>
+                        🏠 <b>Present:</b> House 42, Road 7, Dhanmondi, Dhaka - 1205<br>
+                        🏡 <b>Permanent:</b> Village: Sonapur, PO: Amtali, Barguna<br>
                         🌐 linkedin.com/in/johndoe | github.com/johndoe
                     </div>
                 </div>
@@ -314,15 +356,23 @@ Email: alex.morgan@university.edu | Phone: +880 1987 654321</textarea>
     const nameInput = document.getElementById('nameInput');
     const roleInput = document.getElementById('roleInput');
     const contactInput = document.getElementById('contactInput');
-    const addressInput = document.getElementById('addressInput');
+    const presentAddressInput = document.getElementById('presentAddressInput');
+    const permanentAddressInput = document.getElementById('permanentAddressInput');
     const socialInput = document.getElementById('socialInput');
     const summaryInput = document.getElementById('summaryInput');
     const expInput = document.getElementById('expInput');
     const eduInput = document.getElementById('eduInput');
     const refInput = document.getElementById('refInput');
 
-    const prevName = document.getElementById('prevName');
+    const colorPicker = document.getElementById('colorPicker');
+    const fontPicker = document.getElementById('fontPicker');
+    const shapePicker = document.getElementById('shapePicker');
+    const cvPaper = document.getElementById('cvPaper');
     const prevRole = document.getElementById('prevRole');
+    const cvTopBorder = document.getElementById('cvTopBorder');
+    const prevPhoto = document.getElementById('prevPhoto');
+
+    const prevName = document.getElementById('prevName');
     const prevContact = document.getElementById('prevContact');
     const prevSummary = document.getElementById('prevSummary');
     const prevExp = document.getElementById('prevExp');
@@ -331,10 +381,8 @@ Email: alex.morgan@university.edu | Phone: +880 1987 654321</textarea>
     const signTextName = document.getElementById('signTextName');
 
     const photoInput = document.getElementById('photoInput');
-    const prevPhoto = document.getElementById('prevPhoto');
     const signInput = document.getElementById('signInput');
     const prevSign = document.getElementById('prevSign');
-
     const themeToggle = document.getElementById('themeToggle');
 
     function updatePreview() {
@@ -342,7 +390,8 @@ Email: alex.morgan@university.edu | Phone: +880 1987 654321</textarea>
         prevRole.innerText = roleInput.value || 'PROFESSIONAL TITLE';
         
         let contactHtml = `📧 ${contactInput.value || 'Email | Phone'}`;
-        if(addressInput.value) contactHtml += `<br>📍 ${addressInput.value}`;
+        if(presentAddressInput.value) contactHtml += `<br>🏠 <b>Present:</b> ${presentAddressInput.value}`;
+        if(permanentAddressInput.value) contactHtml += `<br>🏡 <b>Permanent:</b> ${permanentAddressInput.value}`;
         if(socialInput.value) contactHtml += `<br>🌐 ${socialInput.value}`;
         prevContact.innerHTML = contactHtml;
 
@@ -353,7 +402,24 @@ Email: alex.morgan@university.edu | Phone: +880 1987 654321</textarea>
         signTextName.innerText = nameInput.value || '';
     }
 
-    [nameInput, roleInput, contactInput, addressInput, socialInput, summaryInput, expInput, eduInput, refInput].forEach(inp => {
+    // Customizer Styles
+    colorPicker.addEventListener('change', (e) => {
+        const val = e.target.value;
+        document.documentElement.style.setProperty('--primary-color', val);
+        prevRole.style.color = val;
+        cvTopBorder.style.borderColor = val;
+        prevPhoto.style.borderColor = val;
+    });
+
+    fontPicker.addEventListener('change', (e) => {
+        cvPaper.style.fontFamily = e.target.value;
+    });
+
+    shapePicker.addEventListener('change', (e) => {
+        prevPhoto.style.borderRadius = e.target.value;
+    });
+
+    [nameInput, roleInput, contactInput, presentAddressInput, permanentAddressInput, socialInput, summaryInput, expInput, eduInput, refInput].forEach(inp => {
         inp.addEventListener('input', updatePreview);
     });
 
@@ -396,14 +462,14 @@ Email: alex.morgan@university.edu | Phone: +880 1987 654321</textarea>
             html2canvas: { scale: 2 },
             jsPDF: { unit: 'in', format: 'letter', orientation: 'portrait' }
         };
-        html2pdf().set(opt).from(document.getElementById('cvPaper')).save();
+        html2pdf().set(opt).from(cvPaper).save();
     });
 
     document.getElementById('printBtn').addEventListener('click', () => window.print());
 
     document.getElementById('clearBtn').addEventListener('click', () => {
         nameInput.value = ''; roleInput.value = ''; contactInput.value = '';
-        addressInput.value = ''; socialInput.value = '';
+        presentAddressInput.value = ''; permanentAddressInput.value = ''; socialInput.value = '';
         summaryInput.value = ''; expInput.value = ''; eduInput.value = ''; refInput.value = '';
         prevPhoto.style.display = 'none'; prevSign.style.display = 'none';
         updatePreview();
@@ -414,7 +480,7 @@ Email: alex.morgan@university.edu | Phone: +880 1987 654321</textarea>
             try {
                 await navigator.share({
                     title: 'Pro ATS CV Builder',
-                    text: 'Create a free professional CV online!',
+                    text: 'Create a free professional customizable CV online!',
                     url: window.location.href
                 });
             } catch (err) { console.log(err); }
