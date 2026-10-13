@@ -4,14 +4,14 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Ultimate Pro Assignment & Report Formatter | OmniKitHub</title>
-    <meta name="description" content="Free online Ultimate Assignment Formatter with AI Humanizer, page borders, custom margins, underlines, cover pages, diagrams, and instant PDF export.">
-    <meta name="keywords" content="assignment humanizer, text humanizer for students, assignment formatter, university cover page, lab report generator, academic pdf exporter">
+    <meta name="description" content="Free online Ultimate Assignment Formatter with A4 page limit setup, AI Humanizer, page borders, custom margins, underlines, cover pages, diagrams, and instant PDF export.">
+    <meta name="keywords" content="assignment formatter, page setup word limit, university cover page, lab report generator, academic pdf exporter">
     <meta name="robots" content="index, follow">
     <link rel="canonical" href="https://omnikithub.com/tools/document-formatter.html">
 
     <!-- Open Graph Tags -->
     <meta property="og:title" content="Ultimate Pro Assignment & Report Formatter - OmniKitHub">
-    <meta property="og:description" content="Build professional university assignments with AI Humanizer, page borders, custom underlines, and export clean PDFs instantly.">
+    <meta property="og:description" content="Build professional university assignments with A4 page setup, AI Humanizer, custom margins, and export clean PDFs instantly.">
     <meta property="og:url" content="https://omnikithub.com/tools/document-formatter.html">
     <meta property="og:type" content="website">
 
@@ -120,7 +120,7 @@
             outline: none;
         }
 
-        textarea { height: 120px; resize: vertical; }
+        textarea { height: 110px; resize: vertical; }
 
         .settings-grid {
             display: grid;
@@ -227,6 +227,24 @@
             padding-bottom: 3px;
         }
 
+        .page-break-divider {
+            border-top: 2px dashed #cbd5e1;
+            margin: 30px 0;
+            position: relative;
+            display: none;
+            text-align: center;
+        }
+
+        .page-break-divider span {
+            background: #ffffff;
+            padding: 0 10px;
+            font-size: 11px;
+            color: #64748b;
+            position: relative;
+            top: -9px;
+            font-weight: bold;
+        }
+
         .preview-img-box {
             margin-top: 20px;
             text-align: center;
@@ -268,6 +286,7 @@
             #docPaper, #docPaper * { visibility: visible; }
             #docPaper { position: absolute; left: 0; top: 0; width: 100%; box-shadow: none; }
             .editor-card, .header, .action-bar { display: none; }
+            .page-break-divider { page-break-after: always; border: none; }
         }
     </style>
 </head>
@@ -347,8 +366,17 @@ The development lifecycle followed modular component structures, ensuring cross-
             <input type="file" id="imageInput" accept="image/*">
         </div>
 
-        <div class="section-title">3. Page Borders, Margins & Typography</div>
+        <div class="section-title">3. Page Setup, Margins & Typography</div>
         <div class="settings-grid">
+            <div class="form-group">
+                <label>Words Limit Per A4 Page:</label>
+                <select id="pageLimitPicker">
+                    <option value="200">200 Words / Page (Spacious)</option>
+                    <option value="250" selected>250 Words / Page (Standard)</option>
+                    <option value="350">350 Words / Page (Compact)</option>
+                    <option value="99999">Disable Auto Page Split</option>
+                </select>
+            </div>
             <div class="form-group">
                 <label>Page Border Style:</label>
                 <select id="borderPicker">
@@ -358,6 +386,9 @@ The development lifecycle followed modular component structures, ensuring cross-
                     <option value="none">No Border (Clean)</option>
                 </select>
             </div>
+        </div>
+
+        <div class="settings-grid">
             <div class="form-group">
                 <label>Page Margin / Padding:</label>
                 <select id="paddingPicker">
@@ -366,9 +397,6 @@ The development lifecycle followed modular component structures, ensuring cross-
                     <option value="55px">Wide Margin (55px)</option>
                 </select>
             </div>
-        </div>
-
-        <div class="settings-grid">
             <div class="form-group">
                 <label>Heading Underline:</label>
                 <select id="underlinePicker">
@@ -377,15 +405,16 @@ The development lifecycle followed modular component structures, ensuring cross-
                     <option value="none">No Underline</option>
                 </select>
             </div>
-            <div class="form-group">
-                <label>Typography / Font Style:</label>
-                <select id="fontPicker">
-                    <option value="'Georgia', serif" selected>Georgia (Academic Formal)</option>
-                    <option value="'Courier New', monospace">Courier New (Handwritten/Typewriter)</option>
-                    <option value="'Times New Roman', serif">Times New Roman</option>
-                    <option value="Arial, sans-serif">Arial</option>
-                </select>
-            </div>
+        </div>
+
+        <div class="form-group">
+            <label>Typography / Font Style:</label>
+            <select id="fontPicker">
+                <option value="'Georgia', serif" selected>Georgia (Academic Formal)</option>
+                <option value="'Courier New', monospace">Courier New (Handwritten/Typewriter)</option>
+                <option value="'Times New Roman', serif">Times New Roman</option>
+                <option value="Arial, sans-serif">Arial</option>
+            </select>
         </div>
 
         <div class="action-bar">
@@ -424,7 +453,7 @@ The development lifecycle followed modular component structures, ensuring cross-
                 </table>
             </div>
 
-            <!-- Main Content Preview -->
+            <!-- Main Content Preview with Page Setup -->
             <div class="doc-content" id="prevContent">
                 Assignment body content will appear here...
             </div>
@@ -458,6 +487,7 @@ The development lifecycle followed modular component structures, ensuring cross-
     const imageInput = document.getElementById('imageInput');
     const prevImg = document.getElementById('prevImg');
 
+    const pageLimitPicker = document.getElementById('pageLimitPicker');
     const borderPicker = document.getElementById('borderPicker');
     const paddingPicker = document.getElementById('paddingPicker');
     const underlinePicker = document.getElementById('underlinePicker');
@@ -475,14 +505,37 @@ The development lifecycle followed modular component structures, ensuring cross-
         prevCourse.innerHTML = `Course Name: ${courseNameInput.value}<br>Course Code: ${courseCodeInput.value}`;
         prevSubBy.innerText = subByInput.value;
         prevSubTo.innerText = subToInput.value;
-        prevContent.innerHTML = contentInput.value;
 
-        // Word and Page Calculator
-        const text = contentInput.value.replace(/<[^>]*>/g, '').trim();
-        const words = text ? text.split(/\s+/).length : 0;
-        const pages = Math.max(1, Math.ceil(words / 250));
+        // Word and Page Calculator with Page Break Simulation
+        const rawText = contentInput.value;
+        const cleanText = rawText.replace(/<[^>]*>/g, '').trim();
+        const words = cleanText ? cleanText.split(/\s+/).length : 0;
+        const limitPerNotice = parseInt(pageLimitPicker.value) || 250;
+        const pages = Math.max(1, Math.ceil(words / limitPerNotice));
+        
         wordCount.innerText = `Words: ${words}`;
         pageCount.innerText = `Estimated Pages: ${pages}`;
+
+        // Insert visual page breaks if content is long
+        if (pages > 1 && limitPerNotice !== 99999) {
+            let paragraphs = rawText.split('\n\n');
+            let formattedHtml = '';
+            let currentWordCount = 0;
+
+            paragraphs.forEach((p, index) => {
+                let pWords = p.replace(/<[^>]*>/g, '').split(/\s+/).length;
+                formattedHtml += p + "\n\n";
+                currentWordCount += pWords;
+
+                if (currentWordCount >= limitPerNotice && index < paragraphs.length - 1) {
+                    formattedHtml += `<div class="page-break-divider" style="display: block;"><span>--- Page Break (Print Setup) ---</span></div>`;
+                    currentWordCount = 0;
+                }
+            });
+            prevContent.innerHTML = formattedHtml;
+        } else {
+            prevContent.innerHTML = rawText;
+        }
     }
 
     function insertTag(tag) {
@@ -502,7 +555,6 @@ The development lifecycle followed modular component structures, ensuring cross-
         }
         humanizeBtn.innerText = '✨ Humanizing Text...';
         setTimeout(() => {
-            // Apply natural academic phrasing enhancements
             let humanized = raw
                 .replace(/utilize/gi, 'use')
                 .replace(/encompass/gi, 'include')
@@ -517,8 +569,9 @@ The development lifecycle followed modular component structures, ensuring cross-
         }, 500);
     });
 
-    [uniInput, expNoInput, expNameInput, courseNameInput, courseCodeInput, subByInput, subToInput, contentInput].forEach(inp => {
+    [uniInput, expNoInput, expNameInput, courseNameInput, courseCodeInput, subByInput, subToInput, contentInput, pageLimitPicker].forEach(inp => {
         inp.addEventListener('input', updatePreview);
+        inp.addEventListener('change', updatePreview);
     });
 
     imageInput.addEventListener('change', (e) => {
@@ -581,7 +634,7 @@ The development lifecycle followed modular component structures, ensuring cross-
             try {
                 await navigator.share({
                     title: 'Ultimate Pro Assignment Formatter',
-                    text: 'Create professional university assignments with AI Humanizer and custom page borders!',
+                    text: 'Create professional university assignments with page setup limits and AI Humanizer!',
                     url: window.location.href
                 });
             } catch (err) { console.log(err); }
