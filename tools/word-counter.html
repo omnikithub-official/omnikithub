@@ -3,283 +3,449 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Word, Character & Paragraph Counter - OmniKitHub</title>
-    <meta name="description" content="Free online real-time word counter, character counter, sentence counter, reading time calculator, and keyword density analyzer.">
-    <meta name="keywords" content="word counter, character counter, paragraph counter, reading time calculator, keyword density analyzer, text analytics">
-    <link rel="stylesheet" href="../style.css">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <title>Word Counter & SEO Keyword Density Checker | OmniKitHub</title>
+    <meta name="description" content="Free online Word Counter, Character Counter, Paragraph Counter, and SEO Keyword Density Analysis tool. Check social media limits, reading time, case conversion, and export stats to PDF.">
+    <meta name="keywords" content="word counter, character counter, online word counter, keyword density checker, paragraph counter, reading time calculator, text analyzer, letter counter, word counter for essay">
+    <meta name="robots" content="index, follow">
+    <link rel="canonical" href="https://omnikithub.com/tools/word-counter.html">
+
+    <!-- Open Graph Meta Tags -->
+    <meta property="og:title" content="Word Counter & Keyword Density Checker - OmniKitHub">
+    <meta property="og:description" content="Count words, characters, sentences, check keyword density for SEO, and track social media text limits in real-time.">
+    <meta property="og:url" content="https://omnikithub.com/tools/word-counter.html">
+    <meta property="og:type" content="website">
+
+    <!-- html2pdf Library for PDF Export -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
+
+    <!-- Schema.org Markup -->
+    <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@type": "WebApplication",
+      "name": "Word & Character Counter Tool",
+      "url": "https://omnikithub.com/tools/word-counter.html",
+      "applicationCategory": "UtilityApplication",
+      "operatingSystem": "All",
+      "offers": {
+        "@type": "Offer",
+        "price": "0",
+        "priceCurrency": "USD"
+      }
+    }
+    </script>
+
     <style>
-        .tool-container {
-            max-width: 1000px;
-            margin: 40px auto;
-            background: var(--bg-surface);
-            border: 1px solid var(--card-border);
-            border-radius: 16px;
-            padding: 30px;
-            box-shadow: var(--card-shadow);
+        :root {
+            --bg-color: #f4f6f9;
+            --card-bg: #ffffff;
+            --text-color: #333333;
+            --border-color: #e2e8f0;
+            --primary-color: #2563eb;
+            --primary-hover: #1d4ed8;
         }
 
+        body.dark-mode {
+            --bg-color: #0f172a;
+            --card-bg: #1e293b;
+            --text-color: #f8fafc;
+            --border-color: #334155;
+            --primary-color: #3b82f6;
+            --primary-hover: #60a5fa;
+        }
+
+        * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; }
+        body { background-color: var(--bg-color); color: var(--text-color); padding: 20px; display: flex; justify-content: center; transition: all 0.3s ease; }
+
+        .container {
+            max-width: 1100px;
+            width: 100%;
+            background: var(--card-bg);
+            border-radius: 12px;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.08);
+            padding: 30px;
+        }
+
+        .header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px; }
+        .header h1 { color: var(--primary-color); font-size: 26px; }
+
+        .theme-btn {
+            background: transparent;
+            border: 1px solid var(--border-color);
+            color: var(--text-color);
+            padding: 6px 12px;
+            border-radius: 20px;
+            cursor: pointer;
+            font-size: 13px;
+        }
+
+        .description { color: #64748b; font-size: 14px; margin-bottom: 25px; }
+
+        /* Counter Cards Grid */
         .stats-grid {
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
+            grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
             gap: 15px;
-            margin-bottom: 24px;
+            margin-bottom: 25px;
         }
 
         .stat-card {
-            background: var(--bg-primary);
-            border: 1px solid var(--card-border);
-            border-radius: 12px;
-            padding: 16px;
+            background: rgba(0,0,0,0.02);
+            border: 1px solid var(--border-color);
+            padding: 18px 12px;
+            border-radius: 10px;
             text-align: center;
         }
 
-        .stat-card .number {
-            font-size: 1.8rem;
-            font-weight: 800;
-            color: var(--accent-color);
-            line-height: 1.2;
-        }
+        .stat-card h3 { font-size: 26px; color: var(--primary-color); margin-bottom: 4px; }
+        .stat-card p { font-size: 13px; color: #64748b; font-weight: 600; }
 
-        .stat-card .label {
-            font-size: 0.85rem;
-            color: var(--text-secondary);
-            font-weight: 600;
-            margin-top: 4px;
-        }
-
-        .textarea-box {
+        /* Main Editor */
+        textarea {
             width: 100%;
             height: 250px;
-            padding: 16px;
-            border-radius: 12px;
-            border: 1px solid var(--card-border);
-            background: var(--bg-primary);
-            color: var(--text-primary);
-            font-size: 1.05rem;
-            resize: vertical;
-            outline: none;
-            line-height: 1.6;
-            margin-bottom: 20px;
-        }
-
-        .textarea-box:focus { border-color: var(--accent-color); }
-
-        .btn-controls {
-            display: flex;
-            gap: 12px;
-            justify-content: flex-end;
-            flex-wrap: wrap;
-            margin-bottom: 30px;
-        }
-
-        .action-btn {
-            padding: 10px 20px;
+            padding: 15px;
+            border: 1px solid var(--border-color);
             border-radius: 8px;
-            border: none;
-            font-weight: 600;
-            cursor: pointer;
-            display: inline-flex;
-            align-items: center;
-            gap: 8px;
-            transition: all var(--transition-speed) ease;
+            font-size: 16px;
+            line-height: 1.6;
+            background: var(--card-bg);
+            color: var(--text-color);
+            outline: none;
+            resize: vertical;
+            margin-bottom: 15px;
         }
 
-        .btn-secondary { background: var(--badge-bg); color: var(--text-primary); border: 1px solid var(--card-border); }
-        .btn-secondary:hover { background: var(--card-border); }
+        textarea:focus { border-color: var(--primary-color); }
 
-        .density-section {
-            border-top: 1px solid var(--card-border);
-            padding-top: 20px;
-        }
-
-        .density-list {
+        /* Toolbars */
+        .toolbar {
             display: flex;
             flex-wrap: wrap;
             gap: 10px;
-            margin-top: 12px;
+            margin-bottom: 25px;
         }
 
-        .density-badge {
-            background: var(--bg-primary);
-            border: 1px solid var(--card-border);
-            padding: 6px 14px;
-            border-radius: 20px;
-            font-size: 0.875rem;
-            color: var(--text-primary);
+        .btn {
+            padding: 8px 14px;
+            border-radius: 6px;
+            border: 1px solid var(--border-color);
+            background: var(--card-bg);
+            color: var(--text-color);
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.2s;
+            font-size: 13px;
         }
 
-        .density-badge span {
-            font-weight: 700;
-            color: var(--accent-color);
+        .btn:hover { background: var(--border-color); }
+        .btn-primary { background: var(--primary-color); color: white; border: none; }
+        .btn-primary:hover { background: var(--primary-hover); }
+        .btn-share { background: #10b981; color: white; border: none; }
+        .btn-share:hover { background: #059669; }
+
+        /* Social Media & Density Grid */
+        .details-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 25px;
+            margin-top: 10px;
+        }
+
+        @media (max-width: 800px) {
+            .details-grid { grid-template-columns: 1fr; }
+        }
+
+        .section-box {
+            border: 1px solid var(--border-color);
+            padding: 20px;
+            border-radius: 8px;
+            background: rgba(0,0,0,0.01);
+        }
+
+        .section-box h3 { font-size: 16px; margin-bottom: 15px; color: var(--primary-color); }
+
+        .limit-item { margin-bottom: 12px; }
+        .limit-label { display: flex; justify-content: space-between; font-size: 13px; margin-bottom: 4px; }
+        .progress-bar { height: 6px; background: var(--border-color); border-radius: 3px; overflow: hidden; }
+        .progress-fill { height: 100%; background: var(--primary-color); width: 0%; transition: width 0.3s; }
+
+        /* Density Table */
+        table { width: 100%; border-collapse: collapse; font-size: 13px; }
+        th, td { padding: 8px; text-align: left; border-bottom: 1px solid var(--border-color); }
+        th { color: #64748b; font-weight: 600; }
+
+        @media print {
+            body * { visibility: hidden; }
+            .container, .container * { visibility: visible; }
+            .container { position: absolute; left: 0; top: 0; width: 100%; shadow: none; }
+            .toolbar, .theme-btn { display: none; }
         }
     </style>
 </head>
-<body class="light-theme">
+<body>
 
-    <header class="navbar">
-        <div class="container nav-container">
-            <a href="../index.html" class="logo">
-                <i class="fa-solid fa-toolbox logo-icon"></i>
-                <span class="logo-text">OmniKit<span class="highlight">Hub</span></span>
-            </a>
-            <div class="nav-actions">
-                <button id="theme-toggle" class="icon-btn" aria-label="Toggle Theme">
-                    <i class="fa-solid fa-moon"></i>
-                </button>
+<div class="container" id="reportArea">
+    <div class="header">
+        <h1>📊 Word Counter & Text Analyzer</h1>
+        <button id="themeToggle" class="theme-btn">🌙 Dark Mode</button>
+    </div>
+    <p class="description">Analyze your content length, word count, character limits, reading duration, and SEO keyword density in real-time.</p>
+
+    <!-- Stats Cards Grid -->
+    <div class="stats-grid">
+        <div class="stat-card"><h3 id="wordCount">0</h3><p>WORDS</p></div>
+        <div class="stat-card"><h3 id="charCount">0</h3><p>CHARACTERS</p></div>
+        <div class="stat-card"><h3 id="charNoSpace">0</h3><p>CHARS (NO SPACE)</p></div>
+        <div class="stat-card"><h3 id="sentenceCount">0</h3><p>SENTENCES</p></div>
+        <div class="stat-card"><h3 id="paragraphCount">0</h3><p>PARAGRAPHS</p></div>
+        <div class="stat-card"><h3 id="readingTime">0s</h3><p>READING TIME</p></div>
+        <div class="stat-card"><h3 id="speakingTime">0s</h3><p>SPEAKING TIME</p></div>
+    </div>
+
+    <!-- Main Text Area -->
+    <textarea id="inputText" placeholder="Type or paste your text here to count words, check SEO keywords, and analyze stats..."></textarea>
+
+    <!-- Case Converter & Cleaner Toolbar -->
+    <div class="toolbar">
+        <button class="btn" onclick="convertCase('upper')">UPPERCASE</button>
+        <button class="btn" onclick="convertCase('lower')">lowercase</button>
+        <button class="btn" onclick="convertCase('title')">Title Case</button>
+        <button class="btn" onclick="cleanExtraSpaces()">🧹 Clean Spaces</button>
+        <button class="btn" onclick="clearText()">🗑️ Clear</button>
+    </div>
+
+    <!-- Social Media Tracker & SEO Keyword Density Grid -->
+    <div class="details-grid">
+        <!-- Social Media Limits -->
+        <div class="section-box">
+            <h3>📱 Social Media Character Limits</h3>
+            
+            <div class="limit-item">
+                <div class="limit-label"><span>Twitter / X (280 Chars)</span><span id="twLimit">0/280</span></div>
+                <div class="progress-bar"><div id="twBar" class="progress-fill"></div></div>
+            </div>
+
+            <div class="limit-item">
+                <div class="limit-label"><span>Facebook Post (63,206 Chars)</span><span id="fbLimit">0%</span></div>
+                <div class="progress-bar"><div id="fbBar" class="progress-fill"></div></div>
+            </div>
+
+            <div class="limit-item">
+                <div class="limit-label"><span>Instagram Bio (150 Chars)</span><span id="igLimit">0/150</span></div>
+                <div class="progress-bar"><div id="igBar" class="progress-fill"></div></div>
+            </div>
+
+            <div class="limit-item">
+                <div class="limit-label"><span>Google Meta Title (60 Chars)</span><span id="metaTitleLimit">0/60</span></div>
+                <div class="progress-bar"><div id="metaTitleBar" class="progress-fill"></div></div>
+            </div>
+
+            <div class="limit-item">
+                <div class="limit-label"><span>Google Meta Description (160 Chars)</span><span id="metaDescLimit">0/160</span></div>
+                <div class="progress-bar"><div id="metaDescBar" class="progress-fill"></div></div>
             </div>
         </div>
-    </header>
 
-    <main class="container">
-        <div class="tool-container">
-            <h1 style="font-size: 1.8rem; margin-bottom: 8px;">Word, Character & Paragraph Counter</h1>
-            <p style="color: var(--text-secondary); margin-bottom: 24px;">Type or paste your text below to get instant real-time statistics and keyword density analysis.</p>
-
-            <!-- Real-time Metrics Dashboard -->
-            <div class="stats-grid">
-                <div class="stat-card">
-                    <div class="number" id="val-words">0</div>
-                    <div class="label">Words</div>
-                </div>
-                <div class="stat-card">
-                    <div class="number" id="val-chars">0</div>
-                    <div class="label">Characters</div>
-                </div>
-                <div class="stat-card">
-                    <div class="number" id="val-chars-nospace">0</div>
-                    <div class="label">Chars (No Spaces)</div>
-                </div>
-                <div class="stat-card">
-                    <div class="number" id="val-sentences">0</div>
-                    <div class="label">Sentences</div>
-                </div>
-                <div class="stat-card">
-                    <div class="number" id="val-paragraphs">0</div>
-                    <div class="label">Paragraphs</div>
-                </div>
-                <div class="stat-card">
-                    <div class="number" id="val-reading">0s</div>
-                    <div class="label">Reading Time</div>
-                </div>
-            </div>
-
-            <!-- Input Text Area -->
-            <textarea id="text-input" class="textarea-box" placeholder="Type or paste text here to count..."></textarea>
-
-            <div class="btn-controls">
-                <button id="clean-spaces-btn" class="action-btn btn-secondary"><i class="fa-solid fa-wand-magic"></i> Clean Extra Spaces</button>
-                <button id="copy-btn" class="action-btn btn-secondary"><i class="fa-solid fa-copy"></i> Copy Text</button>
-                <button id="clear-btn" class="action-btn btn-secondary"><i class="fa-solid fa-trash"></i> Clear</button>
-            </div>
-
-            <!-- Keyword Density Section -->
-            <div class="density-section">
-                <h3 style="font-size: 1.1rem; color: var(--text-primary);">Top Word Density (SEO Keywords)</h3>
-                <div id="density-container" class="density-list">
-                    <span style="color: var(--text-secondary); font-size: 0.9rem;">Start typing to display word frequency...</span>
-                </div>
-            </div>
+        <!-- Keyword Density Analysis -->
+        <div class="section-box">
+            <h3>🔍 Top SEO Keyword Density</h3>
+            <table>
+                <thead>
+                    <tr><th>KEYWORD</th><th>COUNT</th><th>DENSITY</th></tr>
+                </thead>
+                <tbody id="densityTable">
+                    <tr><td colspan="3" style="text-align:center; color:#94a3b8;">Type text to display keyword frequency...</td></tr>
+                </tbody>
+            </table>
         </div>
-    </main>
+    </div>
 
-    <footer class="footer">
-        <div class="footer-bottom">
-            <div class="container">
-                <p>&copy; 2026 OmniKitHub.com. All rights reserved.</p>
-            </div>
-        </div>
-    </footer>
+    <!-- Export & Share Action Toolbar -->
+    <div class="toolbar" style="margin-top: 25px; padding-top: 15px; border-top: 1px solid var(--border-color);">
+        <button id="copyBtn" class="btn btn-primary">📋 Copy Text</button>
+        <button id="downloadTxtBtn" class="btn">📥 Download .TXT</button>
+        <button id="downloadPdfBtn" class="btn">📄 Save PDF Report</button>
+        <button id="printBtn" class="btn">🖨️ Print Report</button>
+        <button id="shareBtn" class="btn btn-share">🔗 Share Anywhere</button>
+    </div>
+</div>
 
-    <script src="../script.js"></script>
-    <script>
-        const textInput = document.getElementById('text-input');
-        const valWords = document.getElementById('val-words');
-        const valChars = document.getElementById('val-chars');
-        const valCharsNoSpace = document.getElementById('val-chars-nospace');
-        const valSentences = document.getElementById('val-sentences');
-        const valParagraphs = document.getElementById('val-paragraphs');
-        const valReading = document.getElementById('val-reading');
-        const densityContainer = document.getElementById('density-container');
+<script>
+    const inputText = document.getElementById('inputText');
+    const wordCount = document.getElementById('wordCount');
+    const charCount = document.getElementById('charCount');
+    const charNoSpace = document.getElementById('charNoSpace');
+    const sentenceCount = document.getElementById('sentenceCount');
+    const paragraphCount = document.getElementById('paragraphCount');
+    const readingTime = document.getElementById('readingTime');
+    const speakingTime = document.getElementById('speakingTime');
+    const densityTable = document.getElementById('densityTable');
+    const themeToggle = document.getElementById('themeToggle');
 
-        textInput.addEventListener('input', calculateMetrics);
+    // Real-time Text Analysis Engine
+    function analyzeText() {
+        const text = inputText.value;
+        const trimmed = text.trim();
 
-        function calculateMetrics() {
-            const text = textInput.value;
-            const trimmed = text.trim();
+        // Basic Counts
+        const words = trimmed ? trimmed.split(/\s+/).length : 0;
+        const chars = text.length;
+        const charsNoSp = text.replace(/\s/g, '').length;
+        const sentences = trimmed ? (text.match(/[^.!?]+[.!?]+/g) || [1]).length : 0;
+        const paragraphs = trimmed ? text.split(/\n+/).filter(p => p.trim() !== '').length : 0;
 
-            // Word Count
-            const wordsArr = trimmed ? trimmed.split(/\s+/).filter(w => w.length > 0) : [];
-            const wordCount = wordsArr.length;
-            valWords.innerText = wordCount;
+        wordCount.innerText = words;
+        charCount.innerText = chars;
+        charNoSpace.innerText = charsNoSp;
+        sentenceCount.innerText = sentences;
+        paragraphCount.innerText = paragraphs;
 
-            // Character Counts
-            valChars.innerText = text.length;
-            valCharsNoSpace.innerText = text.replace(/\s+/g, '').length;
+        // Reading & Speaking Time (200 wpm reading, 130 wpm speaking)
+        const readSecs = Math.ceil((words / 200) * 60);
+        const speakSecs = Math.ceil((words / 130) * 60);
+        readingTime.innerText = readSecs < 60 ? readSecs + 's' : Math.ceil(readSecs / 60) + 'm';
+        speakingTime.innerText = speakSecs < 60 ? speakSecs + 's' : Math.ceil(speakSecs / 60) + 'm';
 
-            // Sentence Count
-            const sentences = trimmed ? trimmed.split(/(?<=[.?!])\s+/).filter(s => s.trim().length > 0) : [];
-            valSentences.innerText = sentences.length;
+        // Social Media Limits Update
+        updateSocialLimits(chars);
 
-            // Paragraph Count
-            const paragraphs = trimmed ? trimmed.split(/\n+/).filter(p => p.trim().length > 0) : [];
-            valParagraphs.innerText = paragraphs.length;
+        // Keyword Density Analysis
+        updateKeywordDensity(trimmed);
+    }
 
-            // Reading Time (Average 200 words per minute)
-            const seconds = Math.ceil((wordCount / 200) * 60);
-            if (seconds < 60) {
-                valReading.innerText = `${seconds}s`;
-            } else {
-                valReading.innerText = `${Math.ceil(seconds / 60)}m`;
-            }
+    function updateSocialLimits(chars) {
+        // Twitter
+        document.getElementById('twLimit').innerText = `${chars}/280`;
+        document.getElementById('twBar').style.width = `${Math.min((chars / 280) * 100, 100)}%`;
 
-            // Keyword Density Analysis
-            calculateDensity(wordsArr);
+        // Facebook
+        const fbPct = Math.min((chars / 63206) * 100, 100).toFixed(1);
+        document.getElementById('fbLimit').innerText = `${fbPct}%`;
+        document.getElementById('fbBar').style.width = `${fbPct}%`;
+
+        // Instagram Bio
+        document.getElementById('igLimit').innerText = `${chars}/150`;
+        document.getElementById('igBar').style.width = `${Math.min((chars / 150) * 100, 100)}%`;
+
+        // Google Meta Title
+        document.getElementById('metaTitleLimit').innerText = `${chars}/60`;
+        document.getElementById('metaTitleBar').style.width = `${Math.min((chars / 60) * 100, 100)}%`;
+
+        // Google Meta Description
+        document.getElementById('metaDescLimit').innerText = `${chars}/160`;
+        document.getElementById('metaDescBar').style.width = `${Math.min((chars / 160) * 100, 100)}%`;
+    }
+
+    function updateKeywordDensity(text) {
+        if (!text) {
+            densityTable.innerHTML = '<tr><td colspan="3" style="text-align:center; color:#94a3b8;">Type text to display keyword frequency...</td></tr>';
+            return;
         }
 
-        function calculateDensity(words) {
-            if (words.length === 0) {
-                densityContainer.innerHTML = '<span style="color: var(--text-secondary); font-size: 0.9rem;">Start typing to display word frequency...</span>';
-                return;
+        const words = text.toLowerCase().match(/\b[a-z0-9\u0980-\u09FF]+\b/g) || [];
+        const stopWords = new Set(['the','is','at','which','on','and','a','an','in','to','for','of','or','as','with','is','by','this','that','it','from','are','ami','amr','apni','tomar']);
+        
+        const freqMap = {};
+        let validWordsCount = 0;
+
+        words.forEach(w => {
+            if (!stopWords.has(w) && w.length > 2) {
+                freqMap[w] = (freqMap[w] || 0) + 1;
+                validWordsCount++;
             }
+        });
 
-            const freq = {};
-            words.forEach(w => {
-                const clean = w.toLowerCase().replace(/[^a-zA-Z0-9\u0980-\u09FF]/g, '');
-                if (clean.length > 2) {
-                    freq[clean] = (freq[clean] || 0) + 1;
-                }
-            });
+        const sorted = Object.keys(freqMap).map(key => ({
+            word: key,
+            count: freqMap[key],
+            density: ((freqMap[key] / (words.length || 1)) * 100).toFixed(1)
+        })).sort((a, b) => b.count - a.count).slice(0, 5);
 
-            const sorted = Object.keys(freq).map(key => [key, freq[key]]).sort((a, b) => b[1] - a[1]).slice(0, 8);
-
-            if (sorted.length === 0) {
-                densityContainer.innerHTML = '<span style="color: var(--text-secondary); font-size: 0.9rem;">Type longer words to calculate density...</span>';
-                return;
-            }
-
-            densityContainer.innerHTML = sorted.map(([word, count]) => {
-                const percent = ((count / words.length) * 100).toFixed(1);
-                return `<div class="density-badge">${word}: <span>${count} (${percent}%)</span></div>`;
-            }).join('');
+        if (sorted.length === 0) {
+            densityTable.innerHTML = '<tr><td colspan="3" style="text-align:center; color:#94a3b8;">Keep typing for density analysis...</td></tr>';
+            return;
         }
 
-        // Action Handlers
-        document.getElementById('clean-spaces-btn').addEventListener('click', () => {
-            textInput.value = textInput.value.replace(/\s+/g, ' ').trim();
-            calculateMetrics();
-        });
+        densityTable.innerHTML = sorted.map(item => `
+            <tr>
+                <td><b>${item.word}</b></td>
+                <td>${item.count}</td>
+                <td>${item.density}%</td>
+            </tr>
+        `).join('');
+    }
 
-        document.getElementById('copy-btn').addEventListener('click', () => {
-            if (!textInput.value) return;
-            navigator.clipboard.writeText(textInput.value);
-            alert('Text copied to clipboard!');
-        });
+    // Case Converters
+    function convertCase(type) {
+        let text = inputText.value;
+        if (type === 'upper') inputText.value = text.toUpperCase();
+        else if (type === 'lower') inputText.value = text.toLowerCase();
+        else if (type === 'title') {
+            inputText.value = text.toLowerCase().replace(/\b\w/g, s => s.toUpperCase());
+        }
+        analyzeText();
+    }
 
-        document.getElementById('clear-btn').addEventListener('click', () => {
-            textInput.value = '';
-            calculateMetrics();
-        });
-    </script>
+    function cleanExtraSpaces() {
+        inputText.value = inputText.value.replace(/\s+/g, ' ').trim();
+        analyzeText();
+    }
+
+    function clearText() {
+        inputText.value = '';
+        analyzeText();
+    }
+
+    // Dark Mode Toggle
+    themeToggle.addEventListener('click', () => {
+        document.body.classList.toggle('dark-mode');
+        themeToggle.innerText = document.body.classList.contains('dark-mode') ? '☀️ Light Mode' : '🌙 Dark Mode';
+    });
+
+    // Copy, Download, Print & Share
+    document.getElementById('copyBtn').addEventListener('click', () => {
+        navigator.clipboard.writeText(inputText.value);
+        alert('Text copied to clipboard!');
+    });
+
+    document.getElementById('downloadTxtBtn').addEventListener('click', () => {
+        const blob = new Blob([inputText.value], { type: 'text/plain;charset=utf-8' });
+        const a = document.createElement('a');
+        a.href = URL.createObjectURL(blob);
+        a.download = 'word-counter-text.txt';
+        a.click();
+    });
+
+    document.getElementById('downloadPdfBtn').addEventListener('click', () => {
+        const opt = {
+            margin: 0.5,
+            filename: 'word-counter-report.pdf',
+            html2canvas: { scale: 2 },
+            jsPDF: { unit: 'in', format: 'letter', orientation: 'portrait' }
+        };
+        html2pdf().set(opt).from(document.getElementById('reportArea')).save();
+    });
+
+    document.getElementById('printBtn').addEventListener('click', () => window.print());
+
+    document.getElementById('shareBtn').addEventListener('click', async () => {
+        if (navigator.share) {
+            try {
+                await navigator.share({
+                    title: 'Word Counter Analysis',
+                    text: `Total Words: ${wordCount.innerText} | Characters: ${charCount.innerText}`,
+                    url: window.location.href
+                });
+            } catch (err) { console.log(err); }
+        } else {
+            navigator.clipboard.writeText(window.location.href);
+            alert('Tool link copied to clipboard!');
+        }
+    });
+
+    inputText.addEventListener('input', analyzeText);
+</script>
+
 </body>
 </html>
