@@ -3,15 +3,15 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Free Speech to Text (Voice Typing) - Bangla & English Converter | OmniKitHub</title>
-    <meta name="description" content="Best free online Speech to Text and Voice Typing tool with Banglish to Bangla conversion, PDF download, Print, Formatting, auto punctuation, and multi-language support.">
-    <meta name="keywords" content="speech to text, voice typing bangla, bangla voice typing, banglish to bangla voice converter, online voice typing tool, free speech recognition, bangla audio to text, voice typing to pdf">
+    <title>Free Speech to Text (Voice Typing) - AI Bangla & English Converter | OmniKitHub</title>
+    <meta name="description" content="Advanced free online Speech to Text and Voice Typing tool with Banglish-to-Bangla conversion, smart auto punctuation, PDF/Print options, Text-to-Speech playback, and universal sharing.">
+    <meta name="keywords" content="speech to text, voice typing bangla, bangla voice typing, banglish to bangla converter, voice to pdf, smart bangla punctuation, text to speech bangla, online dictation tool">
     <meta name="robots" content="index, follow">
     <link rel="canonical" href="https://omnikithub.com/tools/speech-to-text.html">
 
     <!-- Open Graph Tags -->
-    <meta property="og:title" content="Free Speech to Text & Voice Typing Tool - OmniKitHub">
-    <meta property="og:description" content="Convert your voice to text instantly in Bangla, Banglish, and English with smart grammar correction, PDF export, formatting and easy sharing.">
+    <meta property="og:title" content="Advanced Voice Typing & Text Editor - OmniKitHub">
+    <meta property="og:description" content="Convert speech to text with smart punctuation, Banglish support, PDF export, audio playback, and instant multi-platform sharing.">
     <meta property="og:url" content="https://omnikithub.com/tools/speech-to-text.html">
     <meta property="og:type" content="website">
 
@@ -36,39 +36,79 @@
     </script>
 
     <style>
+        :root {
+            --bg-color: #f4f6f9;
+            --card-bg: #ffffff;
+            --text-color: #333333;
+            --border-color: #e2e8f0;
+            --primary-color: #2563eb;
+            --primary-hover: #1d4ed8;
+        }
+
+        body.dark-mode {
+            --bg-color: #0f172a;
+            --card-bg: #1e293b;
+            --text-color: #f8fafc;
+            --border-color: #334155;
+            --primary-color: #3b82f6;
+            --primary-hover: #60a5fa;
+        }
+
         * {
             box-sizing: border-box;
             margin: 0;
             padding: 0;
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
         }
+
         body {
-            background-color: #f4f6f9;
-            color: #333;
+            background-color: var(--bg-color);
+            color: var(--text-color);
             padding: 20px;
             display: flex;
             justify-content: center;
+            transition: background-color 0.3s, color 0.3s;
         }
+
         .container {
             max-width: 950px;
             width: 100%;
-            background: #ffffff;
+            background: var(--card-bg);
             border-radius: 12px;
             box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
             padding: 30px;
             margin-top: 10px;
         }
-        .header h1 {
-            color: #1a73e8;
-            font-size: 28px;
-            margin-bottom: 8px;
+
+        .header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 12px;
         }
+
+        .header h1 {
+            color: var(--primary-color);
+            font-size: 26px;
+        }
+
+        .theme-toggle-btn {
+            background: transparent;
+            border: 1px solid var(--border-color);
+            color: var(--text-color);
+            padding: 6px 12px;
+            border-radius: 20px;
+            cursor: pointer;
+            font-size: 13px;
+        }
+
         .description {
-            color: #666;
+            color: #64748b;
             margin-bottom: 20px;
-            font-size: 15px;
+            font-size: 14px;
             line-height: 1.5;
         }
+
         .controls {
             display: flex;
             flex-wrap: wrap;
@@ -76,76 +116,57 @@
             margin-bottom: 15px;
             align-items: center;
         }
+
         select, button, input[type="color"] {
             padding: 8px 14px;
             border-radius: 6px;
-            border: 1px solid #ccc;
+            border: 1px solid var(--border-color);
             font-size: 14px;
             cursor: pointer;
             transition: all 0.2s ease;
+            background: var(--card-bg);
+            color: var(--text-color);
         }
-        .btn-primary {
-            background-color: #2563eb;
-            color: white;
-            border: none;
-            font-weight: 600;
-        }
-        .btn-primary:hover { background-color: #1d4ed8; }
-        .btn-danger {
-            background-color: #ef4444;
-            color: white;
-            border: none;
-            font-weight: 600;
-        }
+
+        .btn-primary { background-color: var(--primary-color); color: white; border: none; font-weight: 600; }
+        .btn-primary:hover { background-color: var(--primary-hover); }
+
+        .btn-danger { background-color: #ef4444; color: white; border: none; font-weight: 600; }
         .btn-danger:hover { background-color: #dc2626; }
-        .btn-secondary {
-            background-color: #f3f4f6;
-            color: #374151;
-            border: 1px solid #d1d5db;
-            font-weight: 500;
-        }
-        .btn-secondary:hover { background-color: #e5e7eb; }
-        .btn-whatsapp {
-            background-color: #25D366;
-            color: white;
-            border: none;
-            font-weight: 600;
-        }
-        .btn-whatsapp:hover { background-color: #1eb854; }
+
+        .btn-secondary { background-color: var(--border-color); font-weight: 500; }
+        .btn-share { background-color: #10b981; color: white; border: none; font-weight: 600; }
+        .btn-share:hover { background-color: #059669; }
 
         .formatting-toolbar {
             display: flex;
             flex-wrap: wrap;
-            gap: 10px;
-            background: #f8fafc;
+            gap: 8px;
+            background: rgba(0, 0, 0, 0.03);
             padding: 10px 15px;
-            border: 1px solid #e2e8f0;
+            border: 1px solid var(--border-color);
             border-radius: 8px 8px 0 0;
             align-items: center;
         }
-        .formatting-toolbar label {
-            font-size: 13px;
-            font-weight: 600;
-            color: #475569;
-        }
-        
+
         #editor {
             width: 100%;
-            min-height: 250px;
+            min-height: 260px;
             max-height: 500px;
             overflow-y: auto;
             padding: 15px;
-            border: 1px solid #e2e8f0;
+            border: 1px solid var(--border-color);
             border-top: none;
             border-radius: 0 0 8px 8px;
             font-size: 16px;
             line-height: 1.6;
             outline: none;
-            background: #fff;
+            background: var(--card-bg);
+            color: var(--text-color);
         }
+
         #editor:focus {
-            border-color: #2563eb;
-            box-shadow: 0 0 0 2px rgba(37, 99, 235, 0.1);
+            border-color: var(--primary-color);
         }
 
         .options-bar {
@@ -153,8 +174,10 @@
             gap: 15px;
             margin: 15px 0;
             font-size: 14px;
-            color: #4b5563;
+            color: var(--text-color);
+            flex-wrap: wrap;
         }
+
         .options-bar label {
             display: flex;
             align-items: center;
@@ -168,8 +191,9 @@
             align-items: center;
             margin-top: 12px;
             font-size: 14px;
-            color: #6b7280;
+            color: #64748b;
         }
+
         .recording-indicator {
             display: none;
             align-items: center;
@@ -177,6 +201,7 @@
             color: #ef4444;
             font-weight: 600;
         }
+
         .dot {
             width: 10px;
             height: 10px;
@@ -184,6 +209,7 @@
             border-radius: 50%;
             animation: pulse 1s infinite;
         }
+
         @keyframes pulse {
             0% { opacity: 1; }
             50% { opacity: 0.3; }
@@ -201,9 +227,10 @@
 
 <div class="container">
     <div class="header">
-        <h1>🎙️ Speech to Text (Voice Typing) & Text Editor</h1>
+        <h1>🎙️ Speech to Text (Voice Typing)</h1>
+        <button id="themeToggle" class="theme-toggle-btn">🌙 Dark Mode</button>
     </div>
-    <p class="description">Voice typing tool with Bangla, Banglish, and English support. Includes PDF download, printing, text styling, and instant sharing features.</p>
+    <p class="description">AI-powered Voice Typing with automatic punctuation, Banglish-to-Bangla conversion, text-to-speech playback, PDF generation, and universal sharing.</p>
 
     <div class="controls">
         <select id="languageSelect">
@@ -220,47 +247,48 @@
     </div>
 
     <div class="options-bar">
-        <label><input type="checkbox" id="autoPunctuation" checked> Auto Punctuation & Correction</label>
+        <label><input type="checkbox" id="autoPunctuation" checked> Smart Auto Punctuation (। , ?)</label>
+        <label><input type="checkbox" id="autoSpaces" checked> Clean Extra Spaces</label>
     </div>
 
-    <!-- Text Formatting Toolbar (MS Word Style) -->
+    <!-- Formatting Toolbar -->
     <div class="formatting-toolbar">
         <button onclick="execCmd('bold')"><b>B</b></button>
         <button onclick="execCmd('italic')"><i>I</i></button>
         <button onclick="execCmd('underline')"><u>U</u></button>
         
-        <label>Size:</label>
         <select onchange="execCmd('fontSize', this.value)">
-            <option value="3">Normal</option>
+            <option value="3">Normal Size</option>
             <option value="4">Medium</option>
             <option value="5">Large</option>
             <option value="6">Extra Large</option>
         </select>
 
-        <label>Color:</label>
-        <input type="color" onchange="execCmd('foreColor', this.value)" value="#000000">
+        <input type="color" onchange="execCmd('foreColor', this.value)" value="#2563eb" title="Text Color">
 
         <button onclick="changeCase('upper')">AA</button>
         <button onclick="changeCase('lower')">aa</button>
+        <button onclick="cleanFormatting()" title="Remove Extra Spaces">🧹 Clean Space</button>
     </div>
 
-    <!-- Rich Text Editable Area -->
-    <div id="editor" contenteditable="true" placeholder="Your spoken text will appear here automatically..."></div>
+    <!-- Editable Editor -->
+    <div id="editor" contenteditable="true" placeholder="Your spoken text will appear here in real-time..."></div>
 
     <div class="status-bar">
         <div>Words: <span id="wordCount">0</span> | Characters: <span id="charCount">0</span></div>
         <div id="recordingStatus" class="recording-indicator">
-            <span class="dot"></span> Listening...
+            <span class="dot"></span> Listening & Processing...
         </div>
     </div>
 
-    <!-- Action Toolbar (PDF, Print, Share, Copy) -->
-    <div class="controls" style="margin-top: 20px; border-top: 1px solid #eee; padding-top: 15px;">
+    <!-- Export & Share Actions -->
+    <div class="controls" style="margin-top: 20px; border-top: 1px solid var(--border-color); padding-top: 15px;">
+        <button id="speakBtn" class="btn-secondary">🔊 Read Aloud (Listen)</button>
         <button id="copyBtn" class="btn-secondary">📋 Copy Text</button>
         <button id="downloadTxtBtn" class="btn-secondary">📥 Download .TXT</button>
         <button id="downloadPdfBtn" class="btn-secondary">📄 Download PDF</button>
         <button id="printBtn" class="btn-secondary">🖨️ Print</button>
-        <button id="shareWhatsappBtn" class="btn-whatsapp">💬 Share WhatsApp</button>
+        <button id="shareBtn" class="btn-share">🔗 Share Anywhere</button>
     </div>
 </div>
 
@@ -272,7 +300,9 @@
     const downloadTxtBtn = document.getElementById('downloadTxtBtn');
     const downloadPdfBtn = document.getElementById('downloadPdfBtn');
     const printBtn = document.getElementById('printBtn');
-    const shareWhatsappBtn = document.getElementById('shareWhatsappBtn');
+    const shareBtn = document.getElementById('shareBtn');
+    const speakBtn = document.getElementById('speakBtn');
+    const themeToggle = document.getElementById('themeToggle');
     const editor = document.getElementById('editor');
     const languageSelect = document.getElementById('languageSelect');
     const wordCount = document.getElementById('wordCount');
@@ -281,7 +311,13 @@
     const autoPunctuation = document.getElementById('autoPunctuation');
 
     let recognition;
-    let isListening = false;
+    let lastSpeechTime = Date.now();
+
+    // Dark Mode Toggle
+    themeToggle.addEventListener('click', () => {
+        document.body.classList.toggle('dark-mode');
+        themeToggle.innerText = document.body.classList.contains('dark-mode') ? '☀️ Light Mode' : '🌙 Dark Mode';
+    });
 
     if ('webkitSpeechRecognition' in window || 'SpeechRecognition' in window) {
         const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
@@ -290,7 +326,6 @@
         recognition.interimResults = true;
 
         recognition.onstart = () => {
-            isListening = true;
             startBtn.disabled = true;
             stopBtn.disabled = false;
             recordingStatus.style.display = 'flex';
@@ -298,6 +333,10 @@
 
         recognition.onresult = (event) => {
             let finalTranscript = '';
+            const now = Date.now();
+            const pauseDuration = now - lastSpeechTime;
+            lastSpeechTime = now;
+
             for (let i = event.resultIndex; i < event.results.length; ++i) {
                 if (event.results[i].isFinal) {
                     finalTranscript += event.results[i][0].transcript;
@@ -305,44 +344,46 @@
             }
 
             if (finalTranscript !== '') {
-                let formattedText = processText(finalTranscript, languageSelect.value);
-                let currentContent = editor.innerText.trim();
-                editor.innerText = currentContent ? currentContent + ' ' + formattedText : formattedText;
+                let formattedText = processTextWithPunctuation(finalTranscript, languageSelect.value, pauseDuration);
+                let currentText = editor.innerText.trim();
+                editor.innerText = currentText ? currentText + ' ' + formattedText : formattedText;
                 updateCounts();
             }
         };
 
         recognition.onend = () => {
-            isListening = false;
             startBtn.disabled = false;
             stopBtn.disabled = true;
             recordingStatus.style.display = 'none';
         };
     } else {
-        alert('Your browser does not support Speech Recognition. Please use Google Chrome or Microsoft Edge.');
+        alert('Speech recognition is not supported in this browser. Please use Chrome or Edge.');
     }
 
+    // Banglish to Bangla Dictionary Map
     function banglishToBangla(text) {
         const map = {
             'ami': 'আমি', 'tomar': 'তোমার', 'sathe': 'সাথে', 'sate': 'সাথে',
             'dekha': 'দেখা', 'korte': 'করতে', 'chai': 'চাই', 'kemon': 'কেমন',
             'acho': 'আছো', 'achho': 'আছো', 'dhanyabad': 'ধন্যবাদ', 'dhonnobad': 'ধন্যবাদ',
-            'bhalo': 'ভালো', 'valo': 'ভালো', 'na': 'না', 'ha': 'হ্যাঁ', 'han': 'হ্যাঁ'
+            'bhalo': 'ভালো', 'valo': 'ভালো', 'na': 'না', 'ha': 'হ্যাঁ', 'han': 'হ্যাঁ',
+            'ki': 'কী', 'kore': 'করে', 'amra': 'আমরা', 'kothay': 'কোথায়'
         };
-        let words = text.toLowerCase().split(' ');
-        let converted = words.map(w => map[w] || w);
-        return converted.join(' ');
+        return text.toLowerCase().split(' ').map(w => map[w] || w).join(' ');
     }
 
-    function processText(text, lang) {
-        let processed = text;
-        if (lang === 'banglish') {
-            processed = banglishToBangla(processed);
-        }
+    // Smart Auto Punctuation Engine
+    function processTextWithPunctuation(text, lang, pauseTime) {
+        let processed = text.trim();
+        if (lang === 'banglish') processed = banglishToBangla(processed);
+
         if (autoPunctuation.checked) {
-            processed = processed.trim();
+            const isQuestion = /^(kemon|ki|kothay|keno|karon|how|what|where|why|who)\b/i.test(processed);
+            let endingMark = (lang.startsWith('bn') || lang === 'banglish') ? '।' : '.';
+            if (isQuestion) endingMark = '?';
+
             if (!/[.?!।]$/.test(processed)) {
-                processed += (lang.startsWith('bn') || lang === 'banglish') ? '।' : '.';
+                processed += endingMark;
             }
         }
         return processed;
@@ -356,17 +397,25 @@
     stopBtn.addEventListener('click', () => recognition.stop());
     clearBtn.addEventListener('click', () => { editor.innerHTML = ''; updateCounts(); });
 
-    // Formatting Functions
-    function execCmd(command, value = null) {
-        document.execCommand(command, false, value);
-    }
-
+    // Formatting Tools
+    function execCmd(cmd, val = null) { document.execCommand(cmd, false, val); }
     function changeCase(type) {
-        let text = editor.innerText;
-        editor.innerText = type === 'upper' ? text.toUpperCase() : text.toLowerCase();
+        editor.innerText = type === 'upper' ? editor.innerText.toUpperCase() : editor.innerText.toLowerCase();
+    }
+    function cleanFormatting() {
+        editor.innerText = editor.innerText.replace(/\s+/g, ' ').trim();
+        updateCounts();
     }
 
-    // Copy, Download, Print & Share
+    // Text to Speech (Listen Feature)
+    speakBtn.addEventListener('click', () => {
+        if (!editor.innerText.trim()) return;
+        const utterance = new SpeechSynthesisUtterance(editor.innerText);
+        utterance.lang = languageSelect.value === 'banglish' ? 'bn-BD' : languageSelect.value;
+        window.speechSynthesis.speak(utterance);
+    });
+
+    // Copy, Download, Print
     copyBtn.addEventListener('click', () => {
         navigator.clipboard.writeText(editor.innerText);
         alert('Text copied to clipboard!');
@@ -384,7 +433,6 @@
         const opt = {
             margin: 1,
             filename: 'voice-typing.pdf',
-            image: { type: 'jpeg', quality: 0.98 },
             html2canvas: { scale: 2 },
             jsPDF: { unit: 'in', format: 'letter', orientation: 'portrait' }
         };
@@ -393,9 +441,22 @@
 
     printBtn.addEventListener('click', () => window.print());
 
-    shareWhatsappBtn.addEventListener('click', () => {
-        const text = encodeURIComponent(editor.innerText);
-        window.open(`https://api.whatsapp.com/send?text=${text}`, '_blank');
+    // Universal Native Share API
+    shareBtn.addEventListener('click', async () => {
+        if (!editor.innerText.trim()) return;
+        if (navigator.share) {
+            try {
+                await navigator.share({
+                    title: 'Voice Typing Document',
+                    text: editor.innerText,
+                });
+            } catch (err) {
+                console.log('Error sharing:', err);
+            }
+        } else {
+            navigator.clipboard.writeText(editor.innerText);
+            alert('Sharing is not supported on this browser. Text copied to clipboard instead!');
+        }
     });
 
     editor.addEventListener('input', updateCounts);
