@@ -1,0 +1,208 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>JSON Formatter & Validator - OmniKitHub</title>
+    <meta name="description" content="Free online JSON formatter, beautifier, minifier, and syntax validator for developers. Format JSON data instantly.">
+    <meta name="keywords" content="json formatter online, json beautifier, json validator, json minifier, developer tools, format json">
+    <link rel="stylesheet" href="../style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        .tool-container {
+            max-width: 1050px;
+            margin: 40px auto;
+            background: var(--bg-surface);
+            border: 1px solid var(--card-border);
+            border-radius: 16px;
+            padding: 30px;
+            box-shadow: var(--card-shadow);
+        }
+
+        .editor-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 20px;
+            margin-bottom: 20px;
+        }
+
+        .editor-box {
+            display: flex;
+            flex-direction: column;
+        }
+
+        .editor-box label {
+            font-weight: 600;
+            font-size: 0.9rem;
+            margin-bottom: 8px;
+            color: var(--text-primary);
+            display: flex;
+            justify-content: space-between;
+        }
+
+        textarea {
+            width: 100%;
+            height: 350px;
+            padding: 15px;
+            border-radius: 12px;
+            border: 1px solid var(--card-border);
+            background: var(--bg-primary);
+            color: var(--text-primary);
+            font-family: monospace;
+            font-size: 0.9rem;
+            resize: vertical;
+            outline: none;
+        }
+
+        textarea:focus { border-color: var(--accent-color); }
+
+        .btn-toolbar {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 20px;
+            flex-wrap: wrap;
+        }
+
+        .action-btn {
+            padding: 10px 20px;
+            border-radius: 8px;
+            border: none;
+            background: var(--accent-color);
+            color: #fff;
+            font-weight: 700;
+            cursor: pointer;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            transition: background var(--transition-speed) ease;
+        }
+
+        .action-btn:hover { background: var(--accent-hover); }
+
+        .btn-secondary {
+            background: var(--bg-primary);
+            color: var(--text-primary);
+            border: 1px solid var(--card-border);
+        }
+        .btn-secondary:hover { background: var(--card-border); }
+
+        .status-badge {
+            font-size: 0.85rem;
+            font-weight: 600;
+            padding: 4px 10px;
+            border-radius: 20px;
+        }
+        .status-valid { background: #d1fae5; color: #065f46; }
+        .status-invalid { background: #fee2e2; color: #991b1b; }
+
+        @media (max-width: 768px) {
+            .editor-grid { grid-template-columns: 1fr; }
+        }
+    </style>
+</head>
+<body class="light-theme">
+
+    <header class="navbar">
+        <div class="container nav-container">
+            <a href="../index.html" class="logo">
+                <i class="fa-solid fa-toolbox logo-icon"></i>
+                <span class="logo-text">OmniKit<span class="highlight">Hub</span></span>
+            </a>
+            <div class="nav-actions">
+                <button id="theme-toggle" class="icon-btn" aria-label="Toggle Theme">
+                    <i class="fa-solid fa-moon"></i>
+                </button>
+            </div>
+        </div>
+    </header>
+
+    <main class="container">
+        <div class="tool-container">
+            <h1 style="font-size: 1.8rem; margin-bottom: 8px;">JSON Formatter, Minifier & Validator</h1>
+            <p style="color: var(--text-secondary); margin-bottom: 20px;">Format, beautify, validate, and minify JSON data instantly with syntax checking.</p>
+
+            <div class="btn-toolbar">
+                <button class="action-btn" onclick="formatJSON()"><i class="fa-solid fa-wand-magic-sparkles"></i> Format / Beautify</button>
+                <button class="action-btn btn-secondary" onclick="minifyJSON()"><i class="fa-solid fa-compress"></i> Minify</button>
+                <button class="action-btn btn-secondary" onclick="copyOutput()"><i class="fa-solid fa-copy"></i> Copy Output</button>
+                <button class="action-btn btn-secondary" onclick="clearAll()"><i class="fa-solid fa-trash"></i> Clear</button>
+            </div>
+
+            <div class="editor-grid">
+                <div class="editor-box">
+                    <label>Input JSON:</label>
+                    <textarea id="json-input" placeholder="Paste your raw JSON here...">{ "name": "OmniKitHub", "version": 1.0, "active": true }</textarea>
+                </div>
+                <div class="editor-box">
+                    <label>
+                        Formatted Output:
+                        <span id="validation-status"></span>
+                    </label>
+                    <textarea id="json-output" placeholder="Formatted result will appear here..." readonly></textarea>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <footer class="footer">
+        <div class="footer-bottom">
+            <div class="container">
+                <p>&copy; 2026 OmniKitHub.com. All rights reserved.</p>
+            </div>
+        </div>
+    </footer>
+
+    <script src="../script.js"></script>
+    <script>
+        const jsonInput = document.getElementById('json-input');
+        const jsonOutput = document.getElementById('json-output');
+        const validationStatus = document.getElementById('validation-status');
+
+        function formatJSON() {
+            const raw = jsonInput.value.trim();
+            if (!raw) {
+                jsonOutput.value = '';
+                validationStatus.innerHTML = '';
+                return;
+            }
+
+            try {
+                const parsed = JSON.parse(raw);
+                jsonOutput.value = JSON.stringify(parsed, null, 4);
+                validationStatus.innerHTML = '<span class="status-badge status-valid"><i class="fa-solid fa-check"></i> Valid JSON</span>';
+            } catch (err) {
+                jsonOutput.value = '';
+                validationStatus.innerHTML = `<span class="status-badge status-invalid"><i class="fa-solid fa-xmark"></i> Invalid: ${err.message.split('at')[0]}</span>`;
+            }
+        }
+
+        function minifyJSON() {
+            const raw = jsonInput.value.trim();
+            if (!raw) return;
+
+            try {
+                const parsed = JSON.parse(raw);
+                jsonOutput.value = JSON.stringify(parsed);
+                validationStatus.innerHTML = '<span class="status-badge status-valid"><i class="fa-solid fa-check"></i> Valid Minified JSON</span>';
+            } catch (err) {
+                validationStatus.innerHTML = `<span class="status-badge status-invalid"><i class="fa-solid fa-xmark"></i> Syntax Error</span>`;
+            }
+        }
+
+        function copyOutput() {
+            if (!jsonOutput.value) return;
+            navigator.clipboard.writeText(jsonOutput.value);
+            alert('Formatted JSON copied to clipboard!');
+        }
+
+        function clearAll() {
+            jsonInput.value = '';
+            jsonOutput.value = '';
+            validationStatus.innerHTML = '';
+        }
+
+        // Run initial format
+        formatJSON();
+    </script>
+</body>
+</html>

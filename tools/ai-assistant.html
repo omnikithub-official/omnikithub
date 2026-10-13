@@ -1,0 +1,250 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Smart AI Assistant & Humanizer - OmniKitHub</title>
+    <meta name="description" content="Humanize AI text, summarize documents, fix grammar, and adjust writing tone instantly with OmniKitHub Smart AI Assistant. Free online tool.">
+    <meta name="keywords" content="ai humanizer, humanize chatgpt text, ai text converter, text summarizer, grammar checker, omnikithub ai">
+    <link rel="stylesheet" href="../style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        .tool-container {
+            max-width: 1000px;
+            margin: 40px auto;
+            background: var(--bg-surface);
+            border: 1px solid var(--card-border);
+            border-radius: 16px;
+            padding: 30px;
+            box-shadow: var(--card-shadow);
+        }
+
+        .action-selector {
+            display: flex;
+            gap: 10px;
+            flex-wrap: wrap;
+            margin-bottom: 20px;
+        }
+
+        .mode-btn {
+            padding: 10px 18px;
+            border-radius: 30px;
+            border: 1px solid var(--card-border);
+            background: var(--bg-primary);
+            color: var(--text-secondary);
+            font-weight: 600;
+            cursor: pointer;
+            transition: all var(--transition-speed) ease;
+        }
+
+        .mode-btn.active, .mode-btn:hover {
+            background: var(--accent-color);
+            color: #ffffff;
+            border-color: var(--accent-color);
+        }
+
+        .io-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 20px;
+            margin-bottom: 20px;
+        }
+
+        .box-wrapper {
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+        }
+
+        .box-wrapper label {
+            font-weight: 600;
+            font-size: 0.95rem;
+            color: var(--text-primary);
+        }
+
+        .text-box {
+            width: 100%;
+            height: 260px;
+            padding: 16px;
+            border-radius: 12px;
+            border: 1px solid var(--card-border);
+            background: var(--bg-primary);
+            color: var(--text-primary);
+            font-size: 1rem;
+            outline: none;
+            resize: vertical;
+            line-height: 1.6;
+        }
+
+        .text-box:focus { border-color: var(--accent-color); }
+
+        .btn-controls {
+            display: flex;
+            gap: 12px;
+            justify-content: flex-end;
+            flex-wrap: wrap;
+        }
+
+        .action-btn {
+            padding: 12px 24px;
+            border-radius: 8px;
+            border: none;
+            font-weight: 600;
+            cursor: pointer;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            transition: all var(--transition-speed) ease;
+        }
+
+        .btn-primary { background: var(--accent-color); color: #fff; }
+        .btn-primary:hover { background: var(--accent-hover); }
+        .btn-secondary { background: var(--badge-bg); color: var(--text-primary); border: 1px solid var(--card-border); }
+        .btn-secondary:hover { background: var(--card-border); }
+
+        @media (max-width: 768px) {
+            .io-grid { grid-template-columns: 1fr; }
+        }
+    </style>
+</head>
+<body class="light-theme">
+
+    <header class="navbar">
+        <div class="container nav-container">
+            <a href="../index.html" class="logo">
+                <i class="fa-solid fa-toolbox logo-icon"></i>
+                <span class="logo-text">OmniKit<span class="highlight">Hub</span></span>
+            </a>
+            <div class="nav-actions">
+                <button id="theme-toggle" class="icon-btn" aria-label="Toggle Theme">
+                    <i class="fa-solid fa-moon"></i>
+                </button>
+            </div>
+        </div>
+    </header>
+
+    <main class="container">
+        <div class="tool-container">
+            <h1 style="font-size: 1.8rem; margin-bottom: 8px;">Smart AI Assistant & Humanizer</h1>
+            <p style="color: var(--text-secondary); margin-bottom: 20px;">Refine AI content into natural human style, summarize text, or fix grammar instantly.</p>
+
+            <!-- Mode Selection Buttons -->
+            <div class="action-selector">
+                <button class="mode-btn active" data-mode="humanize"><i class="fa-solid fa-user-check"></i> Humanize AI Text</button>
+                <button class="mode-btn" data-mode="summarize"><i class="fa-solid fa-compress"></i> Summarize Text</button>
+                <button class="mode-btn" data-mode="grammar"><i class="fa-solid fa-spell-check"></i> Fix Grammar & Tone</button>
+            </div>
+
+            <!-- Input / Output Grid -->
+            <div class="io-grid">
+                <div class="box-wrapper">
+                    <label for="input-text">Input Text / AI Content:</label>
+                    <textarea id="input-text" class="text-box" placeholder="Paste your text or AI-generated output here..."></textarea>
+                </div>
+                <div class="box-wrapper">
+                    <label for="output-text">Output / Humanized Result:</label>
+                    <textarea id="output-text" class="text-box" placeholder="Your processed text will appear here..." readonly></textarea>
+                </div>
+            </div>
+
+            <div class="btn-controls">
+                <button id="clear-btn" class="action-btn btn-secondary"><i class="fa-solid fa-trash"></i> Clear</button>
+                <button id="copy-btn" class="action-btn btn-secondary"><i class="fa-solid fa-copy"></i> Copy Output</button>
+                <button id="process-btn" class="action-btn btn-primary"><i class="fa-solid fa-wand-magic-sparkles"></i> Process Text</button>
+            </div>
+        </div>
+    </main>
+
+    <footer class="footer">
+        <div class="footer-bottom">
+            <div class="container">
+                <p>&copy; 2026 OmniKitHub.com. All rights reserved.</p>
+            </div>
+        </div>
+    </footer>
+
+    <script src="../script.js"></script>
+    <script>
+        let currentMode = 'humanize';
+        const modeBtns = document.querySelectorAll('.mode-btn');
+        const inputText = document.getElementById('input-text');
+        const outputText = document.getElementById('output-text');
+        const processBtn = document.getElementById('process-btn');
+        const copyBtn = document.getElementById('copy-btn');
+        const clearBtn = document.getElementById('clear-btn');
+
+        // Mode Switching
+        modeBtns.forEach(btn => {
+            btn.addEventListener('click', () => {
+                modeBtns.forEach(b => b.classList.remove('active'));
+                btn.classList.add('active');
+                currentMode = btn.getAttribute('data-mode');
+            });
+        });
+
+        // Processing Logic
+        processBtn.addEventListener('click', () => {
+            const text = inputText.value.trim();
+            if (!text) {
+                alert('Please enter some text to process!');
+                return;
+            }
+
+            processBtn.innerHTML = '<i class="fa-solid fa-spinner fa-spin"></i> Processing...';
+
+            setTimeout(() => {
+                if (currentMode === 'humanize') {
+                    outputText.value = humanizeTextEngine(text);
+                } else if (currentMode === 'summarize') {
+                    outputText.value = summarizeTextEngine(text);
+                } else if (currentMode === 'grammar') {
+                    outputText.value = grammarFixEngine(text);
+                }
+                processBtn.innerHTML = '<i class="fa-solid fa-wand-magic-sparkles"></i> Process Text';
+            }, 600);
+        });
+
+        // Humanizer Processing Engine
+        function humanizeTextEngine(str) {
+            let result = str
+                .replace(/\bfurthermore\b/gi, 'also')
+                .replace(/\bmoreover\b/gi, 'in addition')
+                .replace(/\bconsequently\b/gi, 'so')
+                .replace(/\butilize\b/gi, 'use')
+                .replace(/\bnevertheless\b/gi, 'still')
+                .replace(/\bin conclusion\b/gi, 'to wrap it up')
+                .replace(/\bit is important to note that\b/gi, 'keep in mind that');
+            return result;
+        }
+
+        // Summarizer Processing Engine
+        function summarizeTextEngine(str) {
+            const sentences = str.split(/(?<=[.?!])\s+/);
+            if (sentences.length <= 2) return str;
+            return sentences.slice(0, Math.ceil(sentences.length / 2)).join(' ');
+        }
+
+        // Grammar Processing Engine
+        function grammarFixEngine(str) {
+            let result = str
+                .replace(/\s+/g, ' ')
+                .replace(/\s([,.?!])/g, '$1')
+                .replace(/(^\w|\.\s*\w)/g, c => c.toUpperCase());
+            return result;
+        }
+
+        // Copy Handler
+        copyBtn.addEventListener('click', () => {
+            if (!outputText.value) return;
+            navigator.clipboard.writeText(outputText.value);
+            alert('Output copied to clipboard!');
+        });
+
+        // Clear Handler
+        clearBtn.addEventListener('click', () => {
+            inputText.value = '';
+            outputText.value = '';
+        });
+    </script>
+</body>
+</html>

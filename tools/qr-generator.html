@@ -1,0 +1,200 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Interactive QR Code Generator & Stylist - OmniKitHub</title>
+    <meta name="description" content="Generate custom QR codes online for free. Customize colors, add logos, and download high-resolution QR codes instantly.">
+    <meta name="keywords" content="qr code generator online, custom qr code creator, free qr code maker, dynamic qr code styler">
+    <link rel="stylesheet" href="../style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <!-- QRCode.js library -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
+
+    <style>
+        .tool-container {
+            max-width: 900px;
+            margin: 40px auto;
+            background: var(--bg-surface);
+            border: 1px solid var(--card-border);
+            border-radius: 16px;
+            padding: 30px;
+            box-shadow: var(--card-shadow);
+        }
+
+        .generator-grid {
+            display: grid;
+            grid-template-columns: 1fr auto;
+            gap: 30px;
+            align-items: center;
+        }
+
+        .form-group {
+            margin-bottom: 20px;
+        }
+
+        .form-group label {
+            display: block;
+            font-weight: 600;
+            font-size: 0.9rem;
+            margin-bottom: 8px;
+            color: var(--text-primary);
+        }
+
+        .form-control {
+            width: 100%;
+            padding: 12px 15px;
+            border-radius: 8px;
+            border: 1px solid var(--card-border);
+            background: var(--bg-primary);
+            color: var(--text-primary);
+            font-size: 1rem;
+            outline: none;
+        }
+
+        .form-control:focus { border-color: var(--accent-color); }
+
+        .preview-box {
+            background: var(--bg-primary);
+            border: 1px solid var(--card-border);
+            border-radius: 16px;
+            padding: 30px;
+            text-align: center;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            min-width: 280px;
+        }
+
+        #qrcode {
+            background: #ffffff;
+            padding: 15px;
+            border-radius: 12px;
+            display: inline-block;
+            margin-bottom: 20px;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.05);
+        }
+
+        .action-btn {
+            padding: 12px 24px;
+            border-radius: 30px;
+            border: none;
+            background: var(--accent-color);
+            color: #fff;
+            font-weight: 700;
+            font-size: 1rem;
+            cursor: pointer;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            transition: background var(--transition-speed) ease;
+            width: 100%;
+            justify-content: center;
+        }
+
+        .action-btn:hover { background: var(--accent-hover); }
+
+        @media (max-width: 768px) {
+            .generator-grid { grid-template-columns: 1fr; }
+        }
+    </style>
+</head>
+<body class="light-theme">
+
+    <header class="navbar">
+        <div class="container nav-container">
+            <a href="../index.html" class="logo">
+                <i class="fa-solid fa-toolbox logo-icon"></i>
+                <span class="logo-text">OmniKit<span class="highlight">Hub</span></span>
+            </a>
+            <div class="nav-actions">
+                <button id="theme-toggle" class="icon-btn" aria-label="Toggle Theme">
+                    <i class="fa-solid fa-moon"></i>
+                </button>
+            </div>
+        </div>
+    </header>
+
+    <main class="container">
+        <div class="tool-container">
+            <h1 style="font-size: 1.8rem; margin-bottom: 8px;">Interactive QR Code Generator & Stylist</h1>
+            <p style="color: var(--text-secondary); margin-bottom: 24px;">Create custom QR codes for websites, text, and contact information instantly.</p>
+
+            <div class="generator-grid">
+                <div>
+                    <div class="form-group">
+                        <label>Enter URL or Text Content:</label>
+                        <input type="text" id="qr-text" class="form-control" value="https://omnikithub.com" placeholder="https://example.com" oninput="generateQR()">
+                    </div>
+
+                    <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 15px;">
+                        <div class="form-group">
+                            <label>QR Code Color:</label>
+                            <input type="color" id="qr-color" class="form-control" value="#000000" onchange="generateQR()" style="height: 45px; cursor: pointer;">
+                        </div>
+                        <div class="form-group">
+                            <label>Background Color:</label>
+                            <input type="color" id="qr-bg" class="form-control" value="#ffffff" onchange="generateQR()" style="height: 45px; cursor: pointer;">
+                        </div>
+                    </div>
+                </div>
+
+                <div class="preview-box">
+                    <div id="qrcode"></div>
+                    <button class="action-btn" onclick="downloadQR()"><i class="fa-solid fa-download"></i> Download QR Code</button>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <footer class="footer">
+        <div class="footer-bottom">
+            <div class="container">
+                <p>&copy; 2026 OmniKitHub.com. All rights reserved.</p>
+            </div>
+        </div>
+    </footer>
+
+    <script src="../script.js"></script>
+    <script>
+        let qrInstance = null;
+
+        function generateQR() {
+            const text = document.getElementById('qr-text').value.trim();
+            const colorDark = document.getElementById('qr-color').value;
+            const colorLight = document.getElementById('qr-bg').value;
+
+            const qrContainer = document.getElementById('qrcode');
+            qrContainer.innerHTML = '';
+
+            if (!text) return;
+
+            qrInstance = new QRCode(qrContainer, {
+                text: text,
+                width: 180,
+                height: 180,
+                colorDark: colorDark,
+                colorLight: colorLight,
+                correctLevel: QRCode.CorrectLevel.H
+            });
+        }
+
+        function downloadQR() {
+            const qrImg = document.querySelector('#qrcode img');
+            if (!qrImg) {
+                alert('Please generate a QR code first!');
+                return;
+            }
+            const a = document.createElement('a');
+            a.href = qrImg.src;
+            a.download = 'OmniKitHub-QRCode.png';
+            a.click();
+        }
+
+        // Initial generation
+        generateQR();
+    </script>
+</body>
+</html>

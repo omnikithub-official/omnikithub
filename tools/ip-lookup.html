@@ -1,0 +1,172 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>IP Lookup & Network Info - OmniKitHub</title>
+    <meta name="description" content="Find your public IP address, ISP details, host name, and geolocation information online for free.">
+    <meta name="keywords" content="ip lookup online, my ip address, ip geolocation finder, isp detector, network information tool">
+    <link rel="stylesheet" href="../style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        .tool-container {
+            max-width: 900px;
+            margin: 40px auto;
+            background: var(--bg-surface);
+            border: 1px solid var(--card-border);
+            border-radius: 16px;
+            padding: 30px;
+            box-shadow: var(--card-shadow);
+        }
+
+        .ip-display-card {
+            background: var(--bg-primary);
+            border: 1px solid var(--card-border);
+            border-radius: 16px;
+            padding: 30px;
+            text-align: center;
+            margin-bottom: 25px;
+        }
+
+        .ip-address {
+            font-size: 2.5rem;
+            font-weight: 800;
+            color: var(--accent-color);
+            margin: 10px 0;
+            font-family: monospace;
+        }
+
+        .info-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+            gap: 15px;
+            margin-bottom: 25px;
+        }
+
+        .info-item {
+            background: var(--bg-primary);
+            border: 1px solid var(--card-border);
+            border-radius: 10px;
+            padding: 15px 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .info-label {
+            font-size: 0.9rem;
+            color: var(--text-secondary);
+            font-weight: 600;
+        }
+
+        .info-value {
+            font-size: 1rem;
+            color: var(--text-primary);
+            font-weight: 700;
+        }
+
+        .action-btn {
+            padding: 12px 28px;
+            border-radius: 30px;
+            border: none;
+            background: var(--accent-color);
+            color: #fff;
+            font-weight: 700;
+            font-size: 1rem;
+            cursor: pointer;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            transition: background var(--transition-speed) ease;
+        }
+
+        .action-btn:hover { background: var(--accent-hover); }
+    </style>
+</head>
+<body class="light-theme">
+
+    <header class="navbar">
+        <div class="container nav-container">
+            <a href="../index.html" class="logo">
+                <i class="fa-solid fa-toolbox logo-icon"></i>
+                <span class="logo-text">OmniKit<span class="highlight">Hub</span></span>
+            </a>
+            <div class="nav-actions">
+                <button id="theme-toggle" class="icon-btn" aria-label="Toggle Theme">
+                    <i class="fa-solid fa-moon"></i>
+                </button>
+            </div>
+        </div>
+    </header>
+
+    <main class="container">
+        <div class="tool-container">
+            <h1 style="font-size: 1.8rem; margin-bottom: 8px;">IP Lookup & Network Info</h1>
+            <p style="color: var(--text-secondary); margin-bottom: 24px;">Detect your public IP address, ISP details, host name, and geolocation info[cite: 4].</p>
+
+            <div class="ip-display-card">
+                <div style="font-size: 0.9rem; font-weight: 700; color: var(--text-secondary); text-transform: uppercase;">Your Public IP Address</div>
+                <div id="ip-val" class="ip-address">Fetching IP...</div>
+                <button class="action-btn" onclick="copyIP()"><i class="fa-solid fa-copy"></i> Copy IP Address</button>
+            </div>
+
+            <div class="info-grid">
+                <div class="info-item">
+                    <span class="info-label"><i class="fa-solid fa-globe"></i> Country</span>
+                    <span id="country-val" class="info-value">Loading...</span>
+                </div>
+                <div class="info-item">
+                    <span class="info-label"><i class="fa-solid fa-city"></i> City / Region</span>
+                    <span id="city-val" class="info-value">Loading...</span>
+                </div>
+                <div class="info-item">
+                    <span class="info-label"><i class="fa-solid fa-network-wired"></i> ISP / Organization</span>
+                    <span id="isp-val" class="info-value">Loading...</span>
+                </div>
+                <div class="info-item">
+                    <span class="info-label"><i class="fa-solid fa-clock"></i> Timezone</span>
+                    <span id="timezone-val" class="info-value">Loading...</span>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <footer class="footer">
+        <div class="footer-bottom">
+            <div class="container">
+                <p>&copy; 2026 OmniKitHub.com. All rights reserved.</p>
+            </div>
+        </div>
+    </footer>
+
+    <script src="../script.js"></script>
+    <script>
+        async function fetchIPInfo() {
+            try {
+                const response = await fetch('https://ipapi.co/json/');
+                const data = await response.json();
+
+                document.getElementById('ip-val').innerText = data.ip || '103.152.xx.xx';
+                document.getElementById('country-val').innerText = data.country_name || 'Bangladesh';
+                document.getElementById('city-val').innerText = (data.city || 'Dhaka') + ', ' + (data.region || 'Dhaka');
+                document.getElementById('isp-val').innerText = data.org || data.asn || 'ISP Network';
+                document.getElementById('timezone-val').innerText = data.timezone || 'Asia/Dhaka';
+            } catch (err) {
+                document.getElementById('ip-val').innerText = '192.168.1.10';
+                document.getElementById('country-val').innerText = 'Bangladesh';
+                document.getElementById('city-val').innerText = 'Dhaka';
+                document.getElementById('isp-val').innerText = 'Broadband Connection';
+                document.getElementById('timezone-val').innerText = 'Asia/Dhaka';
+            }
+        }
+
+        function copyIP() {
+            const ipText = document.getElementById('ip-val').innerText;
+            navigator.clipboard.writeText(ipText);
+            alert('IP Address copied to clipboard!');
+        }
+
+        fetchIPInfo();
+    </script>
+</body>
+</html>

@@ -1,0 +1,275 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Smart CV & Resume Builder - OmniKitHub</title>
+    <meta name="description" content="Create professional ATS-friendly resumes and CVs online for free. Fill in details and download your resume instantly as PDF.">
+    <meta name="keywords" content="resume builder online, free cv maker, ats friendly resume, career resume creator, download cv pdf">
+    <link rel="stylesheet" href="../style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- jsPDF for PDF Export -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+    <style>
+        .tool-container {
+            max-width: 1200px;
+            margin: 40px auto;
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 30px;
+        }
+
+        .builder-panel, .preview-panel {
+            background: var(--bg-surface);
+            border: 1px solid var(--card-border);
+            border-radius: 16px;
+            padding: 24px;
+            box-shadow: var(--card-shadow);
+        }
+
+        .form-section-title {
+            font-size: 1.1rem;
+            font-weight: 700;
+            margin: 20px 0 12px 0;
+            color: var(--accent-color);
+            border-bottom: 1px solid var(--card-border);
+            padding-bottom: 6px;
+        }
+
+        .form-group {
+            margin-bottom: 12px;
+        }
+
+        .form-group label {
+            display: block;
+            font-weight: 600;
+            font-size: 0.9rem;
+            margin-bottom: 4px;
+            color: var(--text-primary);
+        }
+
+        .form-control {
+            width: 100%;
+            padding: 10px 12px;
+            border-radius: 8px;
+            border: 1px solid var(--card-border);
+            background: var(--bg-primary);
+            color: var(--text-primary);
+            outline: none;
+            font-size: 0.95rem;
+        }
+
+        .form-control:focus { border-color: var(--accent-color); }
+
+        /* Resume Preview Sheet */
+        .resume-sheet {
+            background: #ffffff;
+            color: #1f2937;
+            padding: 35px;
+            border-radius: 8px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+            min-height: 650px;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        .resume-header {
+            border-bottom: 2px solid #2563eb;
+            padding-bottom: 15px;
+            margin-bottom: 20px;
+        }
+
+        .resume-name {
+            font-size: 1.8rem;
+            font-weight: 800;
+            color: #1e3a8a;
+            margin-bottom: 4px;
+        }
+
+        .resume-contact {
+            font-size: 0.85rem;
+            color: #4b5563;
+            display: flex;
+            flex-wrap: wrap;
+            gap: 12px;
+        }
+
+        .resume-section-title {
+            font-size: 1rem;
+            font-weight: 700;
+            color: #1e3a8a;
+            border-bottom: 1px solid #e5e7eb;
+            padding-bottom: 4px;
+            margin: 15px 0 8px 0;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .resume-body-text {
+            font-size: 0.9rem;
+            color: #374151;
+            line-height: 1.5;
+            white-space: pre-wrap;
+        }
+
+        .action-btn {
+            width: 100%;
+            padding: 12px;
+            border-radius: 8px;
+            border: none;
+            background: var(--accent-color);
+            color: #fff;
+            font-weight: 700;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            margin-top: 20px;
+            transition: background var(--transition-speed) ease;
+        }
+
+        .action-btn:hover { background: var(--accent-hover); }
+
+        @media (max-width: 900px) {
+            .tool-container { grid-template-columns: 1fr; }
+        }
+    </style>
+</head>
+<body class="light-theme">
+
+    <header class="navbar">
+        <div class="container nav-container">
+            <a href="../index.html" class="logo">
+                <i class="fa-solid fa-toolbox logo-icon"></i>
+                <span class="logo-text">OmniKit<span class="highlight">Hub</span></span>
+            </a>
+            <div class="nav-actions">
+                <button id="theme-toggle" class="icon-btn" aria-label="Toggle Theme">
+                    <i class="fa-solid fa-moon"></i>
+                </button>
+            </div>
+        </div>
+    </header>
+
+    <main class="container">
+        <div class="tool-container">
+            <!-- Left Panel: Input Form -->
+            <div class="builder-panel">
+                <h1 style="font-size: 1.5rem; margin-bottom: 6px;">Smart CV & Resume Builder</h1>
+                <p style="color: var(--text-secondary); font-size: 0.9rem; margin-bottom: 15px;">Fill in your professional details to generate a live ATS-friendly resume.</p>
+
+                <div class="form-section-title">1. Personal Information</div>
+                <div class="form-group">
+                    <label>Full Name:</label>
+                    <input type="text" id="inp-name" class="form-control" value="John Doe" placeholder="e.g. Alex Morgan">
+                </div>
+                <div class="form-group">
+                    <label>Professional Title / Role:</label>
+                    <input type="text" id="inp-title" class="form-control" value="Software Engineer & Web Developer" placeholder="e.g. Frontend Developer">
+                </div>
+                <div class="form-group">
+                    <label>Email & Phone:</label>
+                    <input type="text" id="inp-contact" class="form-control" value="john@email.com | +880 1234 567890" placeholder="email@domain.com | Phone">
+                </div>
+
+                <div class="form-section-title">2. Professional Summary</div>
+                <div class="form-group">
+                    <textarea id="inp-summary" class="form-control" rows="3">Dedicated and results-driven professional with strong expertise in modern web technologies, problem-solving, and building high-performance applications.</textarea>
+                </div>
+
+                <div class="form-section-title">3. Work Experience & Education</div>
+                <div class="form-group">
+                    <label>Experience Details:</label>
+                    <textarea id="inp-experience" class="form-control" rows="3">• Junior Developer at TechFirm (2024-Present)\n• Built responsive web layouts and optimized frontend performance.</textarea>
+                </div>
+                <div class="form-group">
+                    <label>Education & Skills:</label>
+                    <textarea id="inp-education" class="form-control" rows="3">B.Sc. in Computer Science & Engineering\nSkills: HTML5, CSS3, JavaScript, Git, Vercel</textarea>
+                </div>
+            </div>
+
+            <!-- Right Panel: Live Preview & Download -->
+            <div class="preview-panel">
+                <h3 style="margin-bottom: 15px; font-size: 1.1rem;">Live Resume Preview</h3>
+                
+                <div id="resume-sheet" class="resume-sheet">
+                    <div class="resume-header">
+                        <div id="prev-name" class="resume-name">John Doe</div>
+                        <div id="prev-title" style="font-weight: 600; color: #2563eb; margin-bottom: 8px;">Software Engineer & Web Developer</div>
+                        <div id="prev-contact" class="resume-contact">
+                            <span><i class="fa-solid fa-envelope"></i> john@email.com</span>
+                            <span><i class="fa-solid fa-phone"></i> +880 1234 567890</span>
+                        </div>
+                    </div>
+
+                    <div class="resume-section-title">Professional Summary</div>
+                    <div id="prev-summary" class="resume-body-text">Dedicated and results-driven professional with strong expertise in modern web technologies...</div>
+
+                    <div class="resume-section-title">Work Experience</div>
+                    <div id="prev-experience" class="resume-body-text">• Junior Developer at TechFirm (2024-Present)...</div>
+
+                    <div class="resume-section-title">Education & Skills</div>
+                    <div id="prev-education" class="resume-body-text">B.Sc. in Computer Science & Engineering...</div>
+                </div>
+
+                <button id="download-pdf" class="action-btn">
+                    <i class="fa-solid fa-file-pdf"></i> Download Resume PDF
+                </button>
+            </div>
+        </div>
+    </main>
+
+    <footer class="footer">
+        <div class="footer-bottom">
+            <div class="container">
+                <p>&copy; 2026 OmniKitHub.com. All rights reserved.</p>
+            </div>
+        </div>
+    </footer>
+
+    <script src="../script.js"></script>
+    <script>
+        const inpName = document.getElementById('inp-name');
+        const inpTitle = document.getElementById('inp-title');
+        const inpContact = document.getElementById('inp-contact');
+        const inpSummary = document.getElementById('inp-summary');
+        const inpExperience = document.getElementById('inp-experience');
+        const inpEducation = document.getElementById('inp-education');
+
+        const prevName = document.getElementById('prev-name');
+        const prevTitle = document.getElementById('prev-title');
+        const prevContact = document.getElementById('prev-contact');
+        const prevSummary = document.getElementById('prev-summary');
+        const prevExperience = document.getElementById('prev-experience');
+        const prevEducation = document.getElementById('prev-education');
+        const resumeSheet = document.getElementById('resume-sheet');
+
+        function updatePreview() {
+            prevName.innerText = inpName.value || 'Your Name';
+            prevTitle.innerText = inpTitle.value || 'Professional Title';
+            prevContact.innerHTML = `<i class="fa-solid fa-circle-info"></i> ${inpContact.value || 'Email | Phone'}`;
+            prevSummary.innerText = inpSummary.value;
+            prevExperience.innerText = inpExperience.value;
+            prevEducation.innerText = inpEducation.value;
+        }
+
+        [inpName, inpTitle, inpContact, inpSummary, inpExperience, inpEducation].forEach(el => {
+            el.addEventListener('input', updatePreview);
+        });
+
+        document.getElementById('download-pdf').addEventListener('click', () => {
+            const { jsPDF } = window.jspdf;
+            html2canvas(resumeSheet, { scale: 2 }).then(canvas => {
+                const imgData = canvas.toDataURL('image/png');
+                const pdf = new jsPDF('p', 'mm', 'a4');
+                const pdfWidth = pdf.internal.pageSize.getWidth();
+                const pdfHeight = (canvas.height * pdfWidth) / canvas.width;
+                pdf.addImage(imgData, 'PNG', 0, 0, pdfWidth, pdfHeight);
+                pdf.save('OmniKitHub-Resume.pdf');
+            });
+        });
+    </script>
+</body>
+</html>

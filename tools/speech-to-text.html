@@ -1,0 +1,269 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Speech to Text (Voice Typing) - OmniKitHub</title>
+    <meta name="description" content="Convert your voice into accurate text instantly with OmniKitHub Speech to Text tool. Free, fast, and multi-language support directly in browser.">
+    <link rel="stylesheet" href="../style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        .tool-container {
+            max-width: 900px;
+            margin: 40px auto;
+            background: var(--bg-surface);
+            border: 1px solid var(--card-border);
+            border-radius: 16px;
+            padding: 30px;
+            box-shadow: var(--card-shadow);
+        }
+        .tool-controls {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 15px;
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: 20px;
+        }
+        .lang-select {
+            padding: 10px 16px;
+            border-radius: 8px;
+            border: 1px solid var(--card-border);
+            background: var(--bg-primary);
+            color: var(--text-primary);
+            font-size: 0.95rem;
+            outline: none;
+        }
+        .btn-group {
+            display: flex;
+            gap: 10px;
+            flex-wrap: wrap;
+        }
+        .action-btn {
+            padding: 10px 20px;
+            border-radius: 8px;
+            border: none;
+            font-weight: 600;
+            cursor: pointer;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            transition: all var(--transition-speed) ease;
+        }
+        .btn-primary { background: var(--accent-color); color: #fff; }
+        .btn-primary:hover { background: var(--accent-hover); }
+        .btn-danger { background: #ef4444; color: #fff; }
+        .btn-danger:hover { background: #dc2626; }
+        .btn-secondary { background: var(--badge-bg); color: var(--text-primary); border: 1px solid var(--card-border); }
+        .btn-secondary:hover { background: var(--card-border); }
+        
+        .textarea-box {
+            width: 100%;
+            height: 280px;
+            padding: 16px;
+            border-radius: 12px;
+            border: 1px solid var(--card-border);
+            background: var(--bg-primary);
+            color: var(--text-primary);
+            font-size: 1.05rem;
+            resize: vertical;
+            outline: none;
+            line-height: 1.6;
+        }
+        .textarea-box:focus { border-color: var(--accent-color); }
+        
+        .status-bar {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-top: 15px;
+            font-size: 0.9rem;
+            color: var(--text-secondary);
+        }
+        .listening-badge {
+            display: none;
+            align-items: center;
+            gap: 8px;
+            color: #10b981;
+            font-weight: 600;
+        }
+        .listening-badge.active { display: flex; }
+        .pulse-dot {
+            width: 10px;
+            height: 10px;
+            background-color: #10b981;
+            border-radius: 50%;
+            animation: pulse 1.2s infinite;
+        }
+        @keyframes pulse {
+            0% { transform: scale(0.95); box-shadow: 0 0 0 0 rgba(16, 185, 129, 0.7); }
+            70% { transform: scale(1); box-shadow: 0 0 0 8px rgba(16, 185, 129, 0); }
+            100% { transform: scale(0.95); box-shadow: 0 0 0 0 rgba(16, 185, 129, 0); }
+        }
+    </style>
+</head>
+<body class="light-theme">
+
+    <header class="navbar">
+        <div class="container nav-container">
+            <a href="../index.html" class="logo">
+                <i class="fa-solid fa-toolbox logo-icon"></i>
+                <span class="logo-text">OmniKit<span class="highlight">Hub</span></span>
+            </a>
+            <div class="nav-actions">
+                <button id="theme-toggle" class="icon-btn" aria-label="Toggle Theme">
+                    <i class="fa-solid fa-moon"></i>
+                </button>
+            </div>
+        </div>
+    </header>
+
+    <main class="container">
+        <div class="tool-container">
+            <h1 style="margin-bottom: 8px; font-size: 1.8rem;">Speech to Text (Voice Typing)</h1>
+            <p style="color: var(--text-secondary); margin-bottom: 24px;">Click 'Start Listening', select your preferred language, and speak naturally to convert voice to text in real time.</p>
+
+            <div class="tool-controls">
+                <select id="language-select" class="lang-select">
+                    <option value="en-US">English (United States)</option>
+                    <option value="bn-BD">Bangla (Bangladesh)</option>
+                    <option value="bn-IN">Bangla (India)</option>
+                    <option value="en-GB">English (UK)</option>
+                    <option value="hi-IN">Hindi (India)</option>
+                    <option value="ar-SA">Arabic (Saudi Arabia)</option>
+                    <option value="es-ES">Spanish</option>
+                </select>
+
+                <div class="btn-group">
+                    <button id="start-btn" class="action-btn btn-primary">
+                        <i class="fa-solid fa-microphone"></i> Start Listening
+                    </button>
+                    <button id="stop-btn" class="action-btn btn-danger" disabled>
+                        <i class="fa-solid fa-microphone-slash"></i> Stop
+                    </button>
+                    <button id="copy-btn" class="action-btn btn-secondary">
+                        <i class="fa-solid fa-copy"></i> Copy Text
+                    </button>
+                    <button id="download-btn" class="action-btn btn-secondary">
+                        <i class="fa-solid fa-download"></i> Download .TXT
+                    </button>
+                    <button id="clear-btn" class="action-btn btn-secondary">
+                        <i class="fa-solid fa-trash"></i> Clear
+                    </button>
+                </div>
+            </div>
+
+            <textarea id="speech-output" class="textarea-box" placeholder="Your spoken text will appear here automatically..."></textarea>
+
+            <div class="status-bar">
+                <div id="listening-badge" class="listening-badge">
+                    <span class="pulse-dot"></span> Listening to your voice...
+                </div>
+                <div id="counter-info">Words: 0 | Characters: 0</div>
+            </div>
+        </div>
+    </main>
+
+    <footer class="footer">
+        <div class="footer-bottom">
+            <div class="container">
+                <p>&copy; 2026 OmniKitHub.com. All rights reserved.</p>
+            </div>
+        </div>
+    </footer>
+
+    <script src="../script.js"></script>
+    <script>
+        // Speech Recognition Engine
+        const startBtn = document.getElementById('start-btn');
+        const stopBtn = document.getElementById('stop-btn');
+        const copyBtn = document.getElementById('copy-btn');
+        const downloadBtn = document.getElementById('download-btn');
+        const clearBtn = document.getElementById('clear-btn');
+        const output = document.getElementById('speech-output');
+        const langSelect = document.getElementById('language-select');
+        const listeningBadge = document.getElementById('listening-badge');
+        const counterInfo = document.getElementById('counter-info');
+
+        const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
+
+        if (!SpeechRecognition) {
+            alert('Speech Recognition is not supported by your current browser. Please use Google Chrome, Edge, or Brave browser.');
+        } else {
+            const recognition = new SpeechRecognition();
+            recognition.continuous = true;
+            recognition.interimResults = true;
+
+            startBtn.addEventListener('click', () => {
+                recognition.lang = langSelect.value;
+                recognition.start();
+                startBtn.disabled = true;
+                stopBtn.disabled = false;
+                listeningBadge.classList.add('active');
+            });
+
+            stopBtn.addEventListener('click', () => {
+                recognition.stop();
+                startBtn.disabled = false;
+                stopBtn.disabled = true;
+                listeningBadge.classList.remove('active');
+            });
+
+            recognition.onresult = (event) => {
+                let transcript = '';
+                for (let i = event.resultIndex; i < event.results.length; i++) {
+                    transcript += event.results[i][0].transcript;
+                }
+                output.value = transcript;
+                updateCounter();
+            };
+
+            recognition.onerror = (event) => {
+                console.error('Speech recognition error:', event.error);
+                recognition.stop();
+                startBtn.disabled = false;
+                stopBtn.disabled = true;
+                listeningBadge.classList.remove('active');
+            };
+
+            recognition.onend = () => {
+                startBtn.disabled = false;
+                stopBtn.disabled = true;
+                listeningBadge.classList.remove('active');
+            };
+        }
+
+        // Action Handlers
+        output.addEventListener('input', updateCounter);
+
+        function updateCounter() {
+            const text = output.value.trim();
+            const words = text ? text.split(/\s+/).length : 0;
+            const chars = text.length;
+            counterInfo.innerText = `Words: ${words} | Characters: ${chars}`;
+        }
+
+        copyBtn.addEventListener('click', () => {
+            if(!output.value) return;
+            navigator.clipboard.writeText(output.value);
+            alert('Text copied to clipboard!');
+        });
+
+        downloadBtn.addEventListener('click', () => {
+            if(!output.value) return;
+            const blob = new Blob([output.value], { type: 'text/plain' });
+            const url = URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = 'OmniKitHub-Voice-Typing.txt';
+            a.click();
+            URL.revokeObjectURL(url);
+        });
+
+        clearBtn.addEventListener('click', () => {
+            output.value = '';
+            updateCounter();
+        });
+    </script>
+</body>
+</html>

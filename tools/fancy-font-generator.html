@@ -1,0 +1,232 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Fancy Text & Font Generator - OmniKitHub</title>
+    <meta name="description" content="Convert normal text into cool, fancy, aesthetic unicode fonts for Facebook, Instagram, TikTok bio and captions. Free 1-click copy paste font generator.">
+    <meta name="keywords" content="fancy text generator, font generator, cool text generator, copy paste fonts, instagram bio fonts, stylish text">
+    <link rel="stylesheet" href="../style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        .tool-container {
+            max-width: 950px;
+            margin: 40px auto;
+            background: var(--bg-surface);
+            border: 1px solid var(--card-border);
+            border-radius: 16px;
+            padding: 30px;
+            box-shadow: var(--card-shadow);
+        }
+
+        .input-group {
+            margin-bottom: 25px;
+        }
+
+        .input-group label {
+            display: block;
+            font-weight: 700;
+            margin-bottom: 8px;
+            color: var(--text-primary);
+        }
+
+        .textarea-box {
+            width: 100%;
+            height: 100px;
+            padding: 16px;
+            border-radius: 12px;
+            border: 2px solid var(--card-border);
+            background: var(--bg-primary);
+            color: var(--text-primary);
+            font-size: 1.1rem;
+            resize: vertical;
+            outline: none;
+            transition: border-color var(--transition-speed) ease;
+        }
+
+        .textarea-box:focus {
+            border-color: var(--accent-color);
+        }
+
+        .font-list {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+        }
+
+        .font-card {
+            background: var(--bg-primary);
+            border: 1px solid var(--card-border);
+            border-radius: 10px;
+            padding: 14px 20px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 15px;
+            transition: all var(--transition-speed) ease;
+        }
+
+        .font-card:hover {
+            border-color: var(--accent-color);
+        }
+
+        .font-output {
+            font-size: 1.15rem;
+            color: var(--text-primary);
+            word-break: break-all;
+        }
+
+        .copy-btn {
+            padding: 8px 16px;
+            border-radius: 6px;
+            border: none;
+            background: var(--accent-color);
+            color: #ffffff;
+            font-weight: 600;
+            cursor: pointer;
+            white-space: nowrap;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            transition: background var(--transition-speed) ease;
+        }
+
+        .copy-btn:hover {
+            background: var(--accent-hover);
+        }
+    </style>
+</head>
+<body class="light-theme">
+
+    <header class="navbar">
+        <div class="container nav-container">
+            <a href="../index.html" class="logo">
+                <i class="fa-solid fa-toolbox logo-icon"></i>
+                <span class="logo-text">OmniKit<span class="highlight">Hub</span></span>
+            </a>
+            <div class="nav-actions">
+                <button id="theme-toggle" class="icon-btn" aria-label="Toggle Theme">
+                    <i class="fa-solid fa-moon"></i>
+                </button>
+            </div>
+        </div>
+    </header>
+
+    <main class="container">
+        <div class="tool-container">
+            <h1 style="font-size: 1.8rem; margin-bottom: 8px;">Fancy Text & Font Generator</h1>
+            <p style="color: var(--text-secondary); margin-bottom: 24px;">Type your text below to instantly generate aesthetic fonts for Instagram, Facebook, and TikTok bios.</p>
+
+            <div class="input-group">
+                <label for="font-input">Type or Paste Your Normal Text:</label>
+                <textarea id="font-input" class="textarea-box" placeholder="Type something cool here..."></textarea>
+            </div>
+
+            <div id="font-results" class="font-list">
+                <!-- Generated fonts will populate dynamically here -->
+            </div>
+        </div>
+    </main>
+
+    <footer class="footer">
+        <div class="footer-bottom">
+            <div class="container">
+                <p>&copy; 2026 OmniKitHub.com. All rights reserved.</p>
+            </div>
+        </div>
+    </footer>
+
+    <script src="../script.js"></script>
+    <script>
+        const fontInput = document.getElementById('font-input');
+        const fontResults = document.getElementById('font-results');
+
+        const defaultText = "OmniKitHub Stylish Text";
+
+        // Style Mappings
+        const styles = [
+            { name: "Bold", map: text => transformText(text, 0x1D400, 0x1D41A, 0x1D7CE) },
+            { name: "Italic", map: text => transformText(text, 0x1D434, 0x1D44E, null) },
+            { name: "Bold Italic", map: text => transformText(text, 0x1D468, 0x1D482, null) },
+            { name: "Monospace", map: text => transformText(text, 0x1D670, 0x1D68A, 0x1D7F6) },
+            { name: "Double Struck", map: text => transformText(text, 0x1D538, 0x1D552, 0x1D7D8) },
+            { name: "Script Fancy", map: text => transformText(text, 0x1D49C, 0x1D4B6, null) },
+            { name: "Gothic / Old English", map: text => transformText(text, 0x1D504, 0x1D51E, null) },
+            { name: "Bubbles / Circle", map: text => transformCircles(text) },
+            { name: "Square Box", map: text => transformSquares(text) },
+            { name: "Decorated Sparkle", map: text => `✨ ${text} ✨` },
+            { name: "Symmetric Wings", map: text => `꧁༺ ${text} ༻꧂` },
+            { name: "Heart Decorative", map: text => `♥.｡. ${text} .｡.♥` }
+        ];
+
+        function transformText(str, upperBase, lowerBase, numberBase) {
+            return str.split('').map(char => {
+                const code = char.charCodeAt(0);
+                if (code >= 65 && code <= 90 && upperBase) {
+                    return String.fromCodePoint(upperBase + (code - 65));
+                } else if (code >= 97 && code <= 122 && lowerBase) {
+                    return String.fromCodePoint(lowerBase + (code - 97));
+                } else if (code >= 48 && code <= 57 && numberBase) {
+                    return String.fromCodePoint(numberBase + (code - 48));
+                }
+                return char;
+            }).join('');
+        }
+
+        function transformCircles(str) {
+            return str.split('').map(char => {
+                const code = char.charCodeAt(0);
+                if (code >= 65 && code <= 90) return String.fromCodePoint(0x24B6 + (code - 65));
+                if (code >= 97 && code <= 122) return String.fromCodePoint(0x24D0 + (code - 97));
+                if (code >= 49 && code <= 57) return String.fromCodePoint(0x2460 + (code - 49));
+                return char;
+            }).join('');
+        }
+
+        function transformSquares(str) {
+            return str.split('').map(char => {
+                const code = char.charCodeAt(0);
+                if (code >= 65 && code <= 90) return String.fromCodePoint(0x1F130 + (code - 65));
+                if (code >= 97 && code <= 122) return String.fromCodePoint(0x1F130 + (code - 97));
+                return char;
+            }).join('');
+        }
+
+        function renderFonts() {
+            const val = fontInput.value.trim() || defaultText;
+            fontResults.innerHTML = '';
+
+            styles.forEach(style => {
+                const styledText = style.map(val);
+                const card = document.createElement('div');
+                card.className = 'font-card';
+                card.innerHTML = `
+                    <div class="font-output">${styledText}</div>
+                    <button class="copy-btn" onclick="copyFont(this, '${escapeHtml(styledText)}')">
+                        <i class="fa-solid fa-copy"></i> Copy
+                    </button>
+                `;
+                fontResults.appendChild(card);
+            });
+        }
+
+        function escapeHtml(str) {
+            return str.replace(/'/g, "\\'").replace(/"/g, '&quot;');
+        }
+
+        window.copyFont = function(btn, text) {
+            navigator.clipboard.writeText(text);
+            const originalHTML = btn.innerHTML;
+            btn.innerHTML = '<i class="fa-solid fa-check"></i> Copied!';
+            btn.style.background = '#10b981';
+            setTimeout(() => {
+                btn.innerHTML = originalHTML;
+                btn.style.background = 'var(--accent-color)';
+            }, 1500);
+        };
+
+        fontInput.addEventListener('input', renderFonts);
+        renderFonts();
+    </script>
+</body>
+</html>

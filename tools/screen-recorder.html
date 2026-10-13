@@ -1,0 +1,209 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Online Screen & Window Recorder - OmniKitHub</title>
+    <meta name="description" content="Record your computer screen, browser tab, or application window online for free directly from your browser without extensions.">
+    <meta name="keywords" content="screen recorder online, record screen free, browser screen capture, video recorder web app">
+    <link rel="stylesheet" href="../style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        .tool-container {
+            max-width: 900px;
+            margin: 40px auto;
+            background: var(--bg-surface);
+            border: 1px solid var(--card-border);
+            border-radius: 16px;
+            padding: 30px;
+            box-shadow: var(--card-shadow);
+            text-align: center;
+        }
+
+        .recorder-box {
+            background: var(--bg-primary);
+            border: 1px solid var(--card-border);
+            border-radius: 16px;
+            padding: 30px 20px;
+            margin-bottom: 25px;
+        }
+
+        .timer-display {
+            font-size: 3rem;
+            font-weight: 800;
+            color: var(--accent-color);
+            margin: 15px 0;
+            font-family: monospace;
+        }
+
+        .control-btns {
+            display: flex;
+            justify-content: center;
+            gap: 15px;
+            margin-top: 20px;
+            flex-wrap: wrap;
+        }
+
+        .record-btn {
+            padding: 14px 28px;
+            border-radius: 30px;
+            border: none;
+            font-weight: 700;
+            font-size: 1rem;
+            cursor: pointer;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            transition: all var(--transition-speed) ease;
+        }
+
+        .btn-start { background: #2563eb; color: #fff; }
+        .btn-start:hover { background: #1d4ed8; }
+        .btn-stop { background: #ef4444; color: #fff; }
+        .btn-stop:hover { background: #dc2626; }
+        .btn-download { background: var(--accent-color); color: #fff; }
+        .btn-download:hover { background: var(--accent-hover); }
+
+        video {
+            width: 100%;
+            max-height: 400px;
+            border-radius: 12px;
+            margin-top: 20px;
+            background: #000;
+            display: none;
+        }
+    </style>
+</head>
+<body class="light-theme">
+
+    <header class="navbar">
+        <div class="container nav-container">
+            <a href="../index.html" class="logo">
+                <i class="fa-solid fa-toolbox logo-icon"></i>
+                <span class="logo-text">OmniKit<span class="highlight">Hub</span></span>
+            </a>
+            <div class="nav-actions">
+                <button id="theme-toggle" class="icon-btn" aria-label="Toggle Theme">
+                    <i class="fa-solid fa-moon"></i>
+                </button>
+            </div>
+        </div>
+    </header>
+
+    <main class="container">
+        <div class="tool-container">
+            <h1 style="font-size: 1.8rem; margin-bottom: 8px;">Online Screen & Window Recorder</h1>
+            <p style="color: var(--text-secondary); margin-bottom: 24px;">Record your computer screen or application window instantly with high quality.</p>
+
+            <div class="recorder-box">
+                <div style="font-weight: 600; color: var(--text-primary);">Screen Recording Monitor</div>
+                <div id="timer" class="timer-display">00:00</div>
+                <div id="status-text" style="color: var(--text-secondary); font-size: 0.95rem;">Ready to record your screen</div>
+
+                <video id="video-playback" controls></video>
+            </div>
+
+            <div class="control-btns">
+                <button id="start-btn" class="record-btn btn-start" onclick="startScreenRecording()"><i class="fa-solid fa-desktop"></i> Start Screen Recording</button>
+                <button id="stop-btn" class="record-btn btn-stop" onclick="stopScreenRecording()" disabled><i class="fa-solid fa-stop"></i> Stop Recording</button>
+                <button id="download-btn" class="record-btn btn-download" style="display: none;" onclick="downloadVideo()"><i class="fa-solid fa-download"></i> Download Video</button>
+            </div>
+        </div>
+    </main>
+
+    <footer class="footer">
+        <div class="footer-bottom">
+            <div class="container">
+                <p>&copy; 2026 OmniKitHub.com. All rights reserved.</p>
+            </div>
+        </div>
+    </footer>
+
+    <script src="../script.js"></script>
+    <script>
+        let mediaRecorder;
+        let recordedChunks = [];
+        let videoBlob = null;
+        let timerInterval;
+        let secondsElapsed = 0;
+
+        const startBtn = document.getElementById('start-btn');
+        const stopBtn = document.getElementById('stop-btn');
+        const downloadBtn = document.getElementById('download-btn');
+        const timerEl = document.getElementById('timer');
+        const statusText = document.getElementById('status-text');
+        const videoPlayback = document.getElementById('video-playback');
+
+        async function startScreenRecording() {
+            recordedChunks = [];
+            try {
+                const stream = await navigator.mediaDevices.getDisplayMedia({ video: true, audio: true });
+                mediaRecorder = new MediaRecorder(stream);
+
+                mediaRecorder.ondataavailable = e => {
+                    if (e.data.size > 0) recordedChunks.push(e.data);
+                };
+
+                mediaRecorder.onstop = () => {
+                    videoBlob = new Blob(recordedChunks, { type: 'video/webm' });
+                    const videoUrl = URL.createObjectURL(videoBlob);
+                    videoPlayback.src = videoUrl;
+                    videoPlayback.style.display = 'block';
+                    downloadBtn.style.display = 'inline-flex';
+                };
+
+                // Stop recording if user clicks browser's built-in "Stop sharing" button
+                stream.getVideoTracks()[0].onended = () => {
+                    if (mediaRecorder && mediaRecorder.state !== 'inactive') {
+                        stopScreenRecording();
+                    }
+                };
+
+                mediaRecorder.start();
+                startBtn.disabled = true;
+                stopBtn.disabled = false;
+                downloadBtn.style.display = 'none';
+                videoPlayback.style.display = 'none';
+                statusText.innerHTML = '<span style="color: #ef4444;"><i class="fa-solid fa-circle fa-beat"></i> Recording screen...</span>';
+
+                secondsElapsed = 0;
+                timerInterval = setInterval(() => {
+                    secondsElapsed++;
+                    const mins = String(Math.floor(secondsElapsed / 60)).padStart(2, '0');
+                    const secs = String(secondsElapsed % 60).padStart(2, '0');
+                    timerEl.innerText = `${mins}:${secs}`;
+                }, 1000);
+
+            } catch (err) {
+                alert('Screen recording permission denied or cancelled!');
+            }
+        }
+
+        function stopScreenRecording() {
+            if (mediaRecorder && mediaRecorder.state !== 'inactive') {
+                mediaRecorder.stop();
+                mediaRecorder.stream.getTracks().forEach(track => track.stop());
+            }
+            clearInterval(timerInterval);
+            startBtn.disabled = false;
+            stopBtn.disabled = true;
+            statusText.innerText = 'Screen recording completed successfully!';
+        }
+
+        function downloadVideo() {
+            if (!videoBlob) return;
+            const url = URL.createObjectURL(videoBlob);
+            const a = document.createElement('a');
+            a.style.display = 'none';
+            a.href = url;
+            a.download = 'OmniKitHub-ScreenRecord.webm';
+            document.body.appendChild(a);
+            a.click();
+            setTimeout(() => {
+                document.body.removeChild(a);
+                window.URL.revokeObjectURL(url);
+            }, 100);
+        }
+    </script>
+</body>
+</html>

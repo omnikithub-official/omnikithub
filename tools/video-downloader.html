@@ -1,0 +1,180 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Video & Reels Downloader - OmniKitHub</title>
+    <meta name="description" content="Free online video downloader for social media reels, shorts, and video clips. Fast and easy downloading tool.">
+    <meta name="keywords" content="reels downloader online, video downloader, download shorts video, facebook video downloader, instagram reels download">
+    <link rel="stylesheet" href="../style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        .tool-container {
+            max-width: 900px;
+            margin: 40px auto;
+            background: var(--bg-surface);
+            border: 1px solid var(--card-border);
+            border-radius: 16px;
+            padding: 30px;
+            box-shadow: var(--card-shadow);
+        }
+
+        .input-group {
+            display: flex;
+            gap: 12px;
+            margin-bottom: 25px;
+        }
+
+        .form-control {
+            flex: 1;
+            padding: 14px 18px;
+            border-radius: 30px;
+            border: 1px solid var(--card-border);
+            background: var(--bg-primary);
+            color: var(--text-primary);
+            font-size: 1rem;
+            outline: none;
+        }
+
+        .form-control:focus { border-color: var(--accent-color); }
+
+        .action-btn {
+            padding: 14px 28px;
+            border-radius: 30px;
+            border: none;
+            background: var(--accent-color);
+            color: #fff;
+            font-weight: 700;
+            font-size: 1rem;
+            cursor: pointer;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            transition: background var(--transition-speed) ease;
+        }
+
+        .action-btn:hover { background: var(--accent-hover); }
+
+        .result-card {
+            display: none;
+            background: var(--bg-primary);
+            border: 1px solid var(--card-border);
+            border-radius: 16px;
+            padding: 24px;
+            margin-top: 20px;
+            text-align: center;
+        }
+
+        .preview-box {
+            max-width: 100%;
+            height: 250px;
+            background: #000;
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #fff;
+            margin: 15px auto;
+            font-size: 3rem;
+        }
+
+        .download-options {
+            display: flex;
+            justify-content: center;
+            gap: 12px;
+            flex-wrap: wrap;
+            margin-top: 20px;
+        }
+
+        .dl-btn {
+            padding: 10px 20px;
+            border-radius: 8px;
+            background: #10b981;
+            color: #fff;
+            text-decoration: none;
+            font-weight: 700;
+            font-size: 0.9rem;
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+        }
+
+        .dl-btn:hover { background: #059669; }
+
+        @media (max-width: 600px) {
+            .input-group { flex-direction: column; }
+            .action-btn { width: 100%; justify-content: center; }
+        }
+    </style>
+</head>
+<body class="light-theme">
+
+    <header class="navbar">
+        <div class="container nav-container">
+            <a href="../index.html" class="logo">
+                <i class="fa-solid fa-toolbox logo-icon"></i>
+                <span class="logo-text">OmniKit<span class="highlight">Hub</span></span>
+            </a>
+            <div class="nav-actions">
+                <button id="theme-toggle" class="icon-btn" aria-label="Toggle Theme">
+                    <i class="fa-solid fa-moon"></i>
+                </button>
+            </div>
+        </div>
+    </header>
+
+    <main class="container">
+        <div class="tool-container">
+            <h1 style="font-size: 1.8rem; margin-bottom: 8px;">Video & Reels Downloader</h1>
+            <p style="color: var(--text-secondary); margin-bottom: 24px;">Paste video link from YouTube Shorts, Reels, or TikTok to extract video download links.</p>
+
+            <div class="input-group">
+                <input type="url" id="video-url" class="form-control" placeholder="Paste Video / Reels URL here (e.g., https://...)">
+                <button class="action-btn" onclick="fetchVideo()"><i class="fa-solid fa-download"></i> Get Video</button>
+            </div>
+
+            <div id="result-box" class="result-card">
+                <div class="preview-box">
+                    <i class="fa-solid fa-circle-play"></i>
+                </div>
+                <h3 id="video-title" style="font-size: 1.1rem; color: var(--text-primary); margin-bottom: 8px;">Social Media Video Clip</h3>
+                <p style="font-size: 0.85rem; color: var(--text-secondary);">Select preferred quality to initiate download:</p>
+
+                <div class="download-options">
+                    <a href="#" id="dl-hd" class="dl-btn" download><i class="fa-solid fa-file-video"></i> Download HD (1080p)</a>
+                    <a href="#" id="dl-sd" class="dl-btn" style="background: #3b82f6;" download><i class="fa-solid fa-video"></i> Download SD (720p)</a>
+                    <a href="#" id="dl-audio" class="dl-btn" style="background: #8b5cf6;" download><i class="fa-solid fa-music"></i> Audio Only (MP3)</a>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <footer class="footer">
+        <div class="footer-bottom">
+            <div class="container">
+                <p>&copy; 2026 OmniKitHub.com. All rights reserved.</p>
+            </div>
+        </div>
+    </footer>
+
+    <script src="../script.js"></script>
+    <script>
+        function fetchVideo() {
+            const url = document.getElementById('video-url').value.trim();
+            if (!url) {
+                alert('Please paste a valid video URL!');
+                return;
+            }
+
+            const resultBox = document.getElementById('result-box');
+            resultBox.style.display = 'block';
+
+            // Simulate parsing link and preparing download stream
+            document.getElementById('video-title').innerText = 'Video Stream Ready for Download';
+            document.getElementById('dl-hd').href = url;
+            document.getElementById('dl-sd').href = url;
+            document.getElementById('dl-audio').href = url;
+        }
+    </script>
+</body>
+</html>

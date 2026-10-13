@@ -1,0 +1,250 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>BMI & Calorie Calculator - OmniKitHub</title>
+    <meta name="description" content="Calculate Body Mass Index (BMI), Daily Calorie Maintenance (TDEE), and ideal body weight online for free.">
+    <meta name="keywords" content="bmi calculator online, calorie calculator, tdee calculator, ideal weight finder, fitness calculator">
+    <link rel="stylesheet" href="../style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        .tool-container {
+            max-width: 900px;
+            margin: 40px auto;
+            background: var(--bg-surface);
+            border: 1px solid var(--card-border);
+            border-radius: 16px;
+            padding: 30px;
+            box-shadow: var(--card-shadow);
+        }
+
+        .calc-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 25px;
+        }
+
+        .form-group {
+            margin-bottom: 18px;
+        }
+
+        .form-group label {
+            display: block;
+            font-weight: 600;
+            font-size: 0.9rem;
+            margin-bottom: 6px;
+            color: var(--text-primary);
+        }
+
+        .form-control {
+            width: 100%;
+            padding: 10px 14px;
+            border-radius: 8px;
+            border: 1px solid var(--card-border);
+            background: var(--bg-primary);
+            color: var(--text-primary);
+            font-size: 0.95rem;
+            outline: none;
+        }
+
+        .action-btn {
+            width: 100%;
+            padding: 12px;
+            border-radius: 8px;
+            border: none;
+            background: var(--accent-color);
+            color: #fff;
+            font-weight: 700;
+            font-size: 1rem;
+            cursor: pointer;
+            transition: background var(--transition-speed) ease;
+            margin-top: 10px;
+        }
+
+        .action-btn:hover { background: var(--accent-hover); }
+
+        .result-box {
+            background: var(--bg-primary);
+            border: 1px solid var(--card-border);
+            border-radius: 12px;
+            padding: 20px;
+            text-align: center;
+        }
+
+        .bmi-val {
+            font-size: 3rem;
+            font-weight: 800;
+            color: var(--accent-color);
+            line-height: 1;
+            margin: 10px 0;
+        }
+
+        .status-badge {
+            display: inline-block;
+            padding: 6px 16px;
+            border-radius: 20px;
+            font-weight: 700;
+            font-size: 0.9rem;
+            color: #fff;
+            background: #10b981;
+            margin-bottom: 15px;
+        }
+
+        .calorie-card {
+            background: var(--bg-surface);
+            border: 1px solid var(--card-border);
+            border-radius: 8px;
+            padding: 12px;
+            margin-top: 10px;
+            text-align: left;
+            font-size: 0.88rem;
+        }
+
+        @media (max-width: 768px) {
+            .calc-grid { grid-template-columns: 1fr; }
+        }
+    </style>
+</head>
+<body class="light-theme">
+
+    <header class="navbar">
+        <div class="container nav-container">
+            <a href="../index.html" class="logo">
+                <i class="fa-solid fa-toolbox logo-icon"></i>
+                <span class="logo-text">OmniKit<span class="highlight">Hub</span></span>
+            </a>
+            <div class="nav-actions">
+                <button id="theme-toggle" class="icon-btn" aria-label="Toggle Theme">
+                    <i class="fa-solid fa-moon"></i>
+                </button>
+            </div>
+        </div>
+    </header>
+
+    <main class="container">
+        <div class="tool-container">
+            <h1 style="font-size: 1.8rem; margin-bottom: 8px;">BMI & Calorie Calculator</h1>
+            <p style="color: var(--text-secondary); margin-bottom: 24px;">Calculate Body Mass Index (BMI) and daily maintenance calorie burn targets.</p>
+
+            <div class="calc-grid">
+                <div>
+                    <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 15px;">
+                        <div class="form-group">
+                            <label>Gender:</label>
+                            <select id="gender" class="form-control">
+                                <option value="male">Male</option>
+                                <option value="female">Female</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label>Age:</label>
+                            <input type="number" id="age" class="form-control" value="25">
+                        </div>
+                    </div>
+
+                    <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 15px;">
+                        <div class="form-group">
+                            <label>Height (cm):</label>
+                            <input type="number" id="height" class="form-control" value="175">
+                        </div>
+                        <div class="form-group">
+                            <label>Weight (kg):</label>
+                            <input type="number" id="weight" class="form-control" value="70">
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label>Activity Level:</label>
+                        <select id="activity" class="form-control">
+                            <option value="1.2">Sedentary (Little/no exercise)</option>
+                            <option value="1.375">Lightly Active (1-3 days/week)</option>
+                            <option value="1.55" selected>Moderately Active (3-5 days/week)</option>
+                            <option value="1.725">Very Active (6-7 days/week)</option>
+                        </select>
+                    </div>
+
+                    <button class="action-btn" onclick="calculateHealth()"><i class="fa-solid fa-heart-pulse"></i> Calculate Results</button>
+                </div>
+
+                <div class="result-box">
+                    <div style="font-size: 0.9rem; color: var(--text-secondary); font-weight: 600;">YOUR BODY MASS INDEX (BMI)</div>
+                    <div id="bmi-val" class="bmi-val">22.9</div>
+                    <div id="status-badge" class="status-badge">Normal Weight</div>
+
+                    <div style="font-size: 0.9rem; color: var(--text-secondary); font-weight: 600; margin-top: 15px;">DAILY CALORIE NEEDS (TDEE)</div>
+                    
+                    <div class="calorie-card">
+                        <div style="display:flex; justify-shadow:space-between; justify-content: space-between;">
+                            <span>Maintain Weight:</span>
+                            <strong id="cal-maintain" style="color: var(--accent-color);">2,250 kcal/day</strong>
+                        </div>
+                    </div>
+                    <div class="calorie-card">
+                        <div style="display:flex; justify-content: space-between;">
+                            <span>Weight Loss (-0.5kg/wk):</span>
+                            <strong id="cal-loss" style="color: #10b981;">1,750 kcal/day</strong>
+                        </div>
+                    </div>
+                    <div class="calorie-card">
+                        <div style="display:flex; justify-content: space-between;">
+                            <span>Weight Gain (+0.5kg/wk):</span>
+                            <strong id="cal-gain" style="color: #f59e0b;">2,750 kcal/day</strong>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <footer class="footer">
+        <div class="footer-bottom">
+            <div class="container">
+                <p>&copy; 2026 OmniKitHub.com. All rights reserved.</p>
+            </div>
+        </div>
+    </footer>
+
+    <script src="../script.js"></script>
+    <script>
+        function calculateHealth() {
+            const gender = document.getElementById('gender').value;
+            const age = parseFloat(document.getElementById('age').value) || 25;
+            const height = parseFloat(document.getElementById('height').value) || 170;
+            const weight = parseFloat(document.getElementById('weight').value) || 65;
+            const activity = parseFloat(document.getElementById('activity').value) || 1.55;
+
+            // BMI Calc
+            const heightInMeters = height / 100;
+            const bmi = weight / (heightInMeters * heightInMeters);
+            document.getElementById('bmi-val').innerText = bmi.toFixed(1);
+
+            const badge = document.getElementById('status-badge');
+            if (bmi < 18.5) {
+                badge.innerText = 'Underweight';
+                badge.style.background = '#f59e0b';
+            } else if (bmi <= 24.9) {
+                badge.innerText = 'Normal Weight';
+                badge.style.background = '#10b981';
+            } else if (bmi <= 29.9) {
+                badge.innerText = 'Overweight';
+                badge.style.background = '#f97316';
+            } else {
+                badge.innerText = 'Obese';
+                badge.style.background = '#ef4444';
+            }
+
+            // BMR Calc (Mifflin-St Jeor)
+            let bmr = (10 * weight) + (6.25 * height) - (5 * age);
+            bmr = gender === 'male' ? bmr + 5 : bmr - 161;
+
+            const tdee = Math.round(bmr * activity);
+            document.getElementById('cal-maintain').innerText = tdee.toLocaleString() + ' kcal/day';
+            document.getElementById('cal-loss').innerText = Math.max(1200, tdee - 500).toLocaleString() + ' kcal/day';
+            document.getElementById('cal-gain').innerText = (tdee + 500).toLocaleString() + ' kcal/day';
+        }
+
+        calculateHealth();
+    </script>
+</body>
+</html>

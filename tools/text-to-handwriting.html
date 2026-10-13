@@ -1,0 +1,297 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Text to Handwriting Assignment Maker - OmniKitHub</title>
+    <meta name="description" content="Convert digital typed text into realistic handwritten paper sheets. Export as image or PDF for school/college assignments online for free.">
+    <meta name="keywords" content="text to handwriting, assignment maker, typed to handwritten, handwriting generator, online assignment creator">
+    <link rel="stylesheet" href="../style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <!-- Google Fonts for Realistic Handwriting -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Caveat:wght@500;700&family=Dancing+Script:wght@600&family=Kalam:wght@400;700&display=swap" rel="stylesheet">
+
+    <!-- jsPDF & html2canvas for Download support -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+
+    <style>
+        .tool-container {
+            max-width: 1100px;
+            margin: 40px auto;
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 30px;
+        }
+
+        .editor-panel {
+            background: var(--bg-surface);
+            border: 1px solid var(--card-border);
+            border-radius: 16px;
+            padding: 24px;
+            box-shadow: var(--card-shadow);
+        }
+
+        .preview-panel {
+            background: var(--bg-surface);
+            border: 1px solid var(--card-border);
+            border-radius: 16px;
+            padding: 24px;
+            box-shadow: var(--card-shadow);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        .form-group {
+            margin-bottom: 18px;
+        }
+
+        .form-group label {
+            display: block;
+            font-weight: 600;
+            margin-bottom: 8px;
+            color: var(--text-primary);
+        }
+
+        .form-control {
+            width: 100%;
+            padding: 10px 14px;
+            border-radius: 8px;
+            border: 1px solid var(--card-border);
+            background: var(--bg-primary);
+            color: var(--text-primary);
+            outline: none;
+        }
+
+        textarea.form-control {
+            height: 200px;
+            resize: vertical;
+            line-height: 1.5;
+        }
+
+        .controls-row {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 15px;
+        }
+
+        /* Paper Styling */
+        .paper-sheet {
+            width: 100%;
+            max-width: 450px;
+            min-height: 550px;
+            background-color: #fdfbf7;
+            padding: 40px 30px 30px 50px;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.15);
+            border-radius: 4px;
+            position: relative;
+            box-sizing: border-box;
+            overflow: hidden;
+            word-wrap: break-word;
+        }
+
+        .paper-sheet.ruled {
+            background-image: repeating-linear-gradient(#fdfbf7, #fdfbf7 27px, #91b5de 28px);
+            border-left: 2px solid #ef4444;
+        }
+
+        .handwritten-content {
+            font-family: 'Caveat', cursive;
+            font-size: 22px;
+            color: #000080; /* Default Royal Blue Ink */
+            line-height: 28px;
+            white-space: pre-wrap;
+        }
+
+        .btn-group {
+            display: flex;
+            gap: 12px;
+            margin-top: 20px;
+            width: 100%;
+        }
+
+        .action-btn {
+            flex: 1;
+            padding: 12px;
+            border-radius: 8px;
+            border: none;
+            font-weight: 600;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            transition: all var(--transition-speed) ease;
+        }
+
+        .btn-primary { background: var(--accent-color); color: #fff; }
+        .btn-primary:hover { background: var(--accent-hover); }
+        .btn-secondary { background: var(--badge-bg); color: var(--text-primary); border: 1px solid var(--card-border); }
+
+        @media (max-width: 900px) {
+            .tool-container { grid-template-columns: 1fr; }
+        }
+    </style>
+</head>
+<body class="light-theme">
+
+    <header class="navbar">
+        <div class="container nav-container">
+            <a href="../index.html" class="logo">
+                <i class="fa-solid fa-toolbox logo-icon"></i>
+                <span class="logo-text">OmniKit<span class="highlight">Hub</span></span>
+            </a>
+            <div class="nav-actions">
+                <button id="theme-toggle" class="icon-btn" aria-label="Toggle Theme">
+                    <i class="fa-solid fa-moon"></i>
+                </button>
+            </div>
+        </div>
+    </header>
+
+    <main class="container">
+        <div class="tool-container">
+            <!-- Left Panel: Text Input & Settings -->
+            <div class="editor-panel">
+                <h1 style="font-size: 1.6rem; margin-bottom: 8px;">Text to Handwriting Maker</h1>
+                <p style="color: var(--text-secondary); margin-bottom: 20px; font-size: 0.95rem;">Type or paste your text below to generate realistic handwritten pages for assignments.</p>
+
+                <div class="form-group">
+                    <label for="text-input">Enter Text / Assignment Content:</label>
+                    <textarea id="text-input" class="form-control" placeholder="Write or paste your text here..."></textarea>
+                </div>
+
+                <div class="controls-row">
+                    <div class="form-group">
+                        <label for="font-select">Handwriting Style:</label>
+                        <select id="font-select" class="form-control">
+                            <option value="'Caveat', cursive">Natural Cursive</option>
+                            <option value="'Kalam', cursive">Student Neat</option>
+                            <option value="'Dancing Script', cursive">Elegant Script</option>
+                        </select>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="ink-select">Ink Color:</label>
+                        <select id="ink-select" class="form-control">
+                            <option value="#000080">Blue Ink</option>
+                            <option value="#111827">Black Ink</option>
+                            <option value="#1d4ed8">Dark Royal Blue</option>
+                        </select>
+                    </div>
+                </div>
+
+                <div class="controls-row">
+                    <div class="form-group">
+                        <label for="paper-select">Paper Type:</label>
+                        <select id="paper-select" class="form-control">
+                            <option value="ruled">Ruled Line Paper</option>
+                            <option value="plain">Plain White Paper</option>
+                        </select>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="size-select">Font Size:</label>
+                        <select id="size-select" class="form-control">
+                            <option value="20px">Small (20px)</option>
+                            <option value="22px" selected>Medium (22px)</option>
+                            <option value="25px">Large (25px)</option>
+                        </select>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Right Panel: Live Preview & Export -->
+            <div class="preview-panel">
+                <h3 style="margin-bottom: 16px; width: 100%; text-align: left;">Live Page Preview</h3>
+                
+                <div id="paper-sheet" class="paper-sheet ruled">
+                    <div id="handwritten-content" class="handwritten-content">Your handwritten assignment text will preview here live...</div>
+                </div>
+
+                <div class="btn-group">
+                    <button id="download-png" class="action-btn btn-primary">
+                        <i class="fa-solid fa-image"></i> Save Image
+                    </button>
+                    <button id="download-pdf" class="action-btn btn-secondary">
+                        <i class="fa-solid fa-file-pdf"></i> Save PDF
+                    </button>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <footer class="footer">
+        <div class="footer-bottom">
+            <div class="container">
+                <p>&copy; 2026 OmniKitHub.com. All rights reserved.</p>
+            </div>
+        </div>
+    </footer>
+
+    <script src="../script.js"></script>
+    <script>
+        const textInput = document.getElementById('text-input');
+        const handwrittenContent = document.getElementById('handwritten-content');
+        const fontSelect = document.getElementById('font-select');
+        const inkSelect = document.getElementById('ink-select');
+        const paperSelect = document.getElementById('paper-select');
+        const sizeSelect = document.getElementById('size-select');
+        const paperSheet = document.getElementById('paper-sheet');
+
+        // Dynamic Preview Listener
+        textInput.addEventListener('input', () => {
+            handwrittenContent.innerText = textInput.value || 'Your handwritten assignment text will preview here live...';
+        });
+
+        fontSelect.addEventListener('change', () => {
+            handwrittenContent.style.fontFamily = fontSelect.value;
+        });
+
+        inkSelect.addEventListener('change', () => {
+            handwrittenContent.style.color = inkSelect.value;
+        });
+
+        sizeSelect.addEventListener('change', () => {
+            handwrittenContent.style.fontSize = sizeSelect.value;
+        });
+
+        paperSelect.addEventListener('change', () => {
+            if (paperSelect.value === 'ruled') {
+                paperSheet.classList.add('ruled');
+            } else {
+                paperSheet.classList.remove('ruled');
+            }
+        });
+
+        // Export as Image (PNG)
+        document.getElementById('download-png').addEventListener('click', () => {
+            html2canvas(paperSheet, { scale: 2 }).then(canvas => {
+                const link = document.createElement('a');
+                link.download = 'OmniKitHub-Handwriting.png';
+                link.href = canvas.toDataURL();
+                link.click();
+            });
+        });
+
+        // Export as PDF
+        document.getElementById('download-pdf').addEventListener('click', () => {
+            const { jsPDF } = window.jspdf;
+            html2canvas(paperSheet, { scale: 2 }).then(canvas => {
+                const imgData = canvas.toDataURL('image/png');
+                const pdf = new jsPDF('p', 'mm', 'a4');
+                const imgProps = pdf.getImageProperties(imgData);
+                const pdfWidth = pdf.internal.pageSize.getWidth();
+                const pdfHeight = (imgProps.height * pdfWidth) / imgProps.width;
+                
+                pdf.addImage(imgData, 'PNG', 0, 0, pdfWidth, pdfHeight);
+                pdf.save('OmniKitHub-Assignment.pdf');
+            });
+        });
+    </script>
+</body>
+</html>

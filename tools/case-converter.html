@@ -1,0 +1,199 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Text Case Converter & Cleaner - OmniKitHub</title>
+    <meta name="description" content="Free online text case converter and cleaner. Easily convert text to uppercase, lowercase, title case, camelCase, slug, and remove extra spaces instantly.">
+    <meta name="keywords" content="case converter, uppercase to lowercase, title case converter, camelcase generator, text cleaner, remove extra spaces">
+    <link rel="stylesheet" href="../style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        .tool-container {
+            max-width: 1000px;
+            margin: 40px auto;
+            background: var(--bg-surface);
+            border: 1px solid var(--card-border);
+            border-radius: 16px;
+            padding: 30px;
+            box-shadow: var(--card-shadow);
+        }
+
+        .textarea-box {
+            width: 100%;
+            height: 240px;
+            padding: 16px;
+            border-radius: 12px;
+            border: 1px solid var(--card-border);
+            background: var(--bg-primary);
+            color: var(--text-primary);
+            font-size: 1.05rem;
+            resize: vertical;
+            outline: none;
+            line-height: 1.6;
+            margin-bottom: 20px;
+        }
+
+        .textarea-box:focus { border-color: var(--accent-color); }
+
+        .btn-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(170px, 1fr));
+            gap: 12px;
+            margin-bottom: 24px;
+        }
+
+        .action-btn {
+            padding: 10px 16px;
+            border-radius: 8px;
+            border: 1px solid var(--card-border);
+            background: var(--bg-primary);
+            color: var(--text-primary);
+            font-weight: 600;
+            cursor: pointer;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            transition: all var(--transition-speed) ease;
+        }
+
+        .action-btn:hover {
+            background: var(--accent-color);
+            color: #ffffff;
+            border-color: var(--accent-color);
+        }
+
+        .bottom-actions {
+            display: flex;
+            gap: 12px;
+            justify-content: flex-end;
+            border-top: 1px solid var(--card-border);
+            padding-top: 20px;
+            flex-wrap: wrap;
+        }
+
+        .btn-primary { background: var(--accent-color); color: #fff; border: none; }
+        .btn-primary:hover { background: var(--accent-hover); }
+    </style>
+</head>
+<body class="light-theme">
+
+    <header class="navbar">
+        <div class="container nav-container">
+            <a href="../index.html" class="logo">
+                <i class="fa-solid fa-toolbox logo-icon"></i>
+                <span class="logo-text">OmniKit<span class="highlight">Hub</span></span>
+            </a>
+            <div class="nav-actions">
+                <button id="theme-toggle" class="icon-btn" aria-label="Toggle Theme">
+                    <i class="fa-solid fa-moon"></i>
+                </button>
+            </div>
+        </div>
+    </header>
+
+    <main class="container">
+        <div class="tool-container">
+            <h1 style="font-size: 1.8rem; margin-bottom: 8px;">Text Case Converter & Cleaner</h1>
+            <p style="color: var(--text-secondary); margin-bottom: 24px;">Type or paste text below, then choose a conversion or cleaning action with 1 click.</p>
+
+            <textarea id="text-input" class="textarea-box" placeholder="Type or paste your text here..."></textarea>
+
+            <h3 style="font-size: 1.05rem; margin-bottom: 12px; color: var(--text-primary);">Convert Case:</h3>
+            <div class="btn-grid">
+                <button class="action-btn" onclick="convertCase('upper')">UPPERCASE</button>
+                <button class="action-btn" onclick="convertCase('lower')">lowercase</button>
+                <button class="action-btn" onclick="convertCase('title')">Title Case</button>
+                <button class="action-btn" onclick="convertCase('sentence')">Sentence case</button>
+                <button class="action-btn" onclick="convertCase('camel')">camelCase</button>
+                <button class="action-btn" onclick="convertCase('pascal')">PascalCase</button>
+                <button class="action-btn" onclick="convertCase('slug')">URL Slug-case</button>
+            </div>
+
+            <h3 style="font-size: 1.05rem; margin-bottom: 12px; color: var(--text-primary);">Text Cleaners:</h3>
+            <div class="btn-grid" style="margin-bottom: 20px;">
+                <button class="action-btn" onclick="cleanText('spaces')"><i class="fa-solid fa-broom"></i> Remove Spaces</button>
+                <button class="action-btn" onclick="cleanText('lines')"><i class="fa-solid fa-align-left"></i> Remove Blank Lines</button>
+                <button class="action-btn" onclick="cleanText('duplicates')"><i class="fa-solid fa-clone"></i> Remove Duplicates</button>
+            </div>
+
+            <div class="bottom-actions">
+                <button class="action-btn" onclick="clearText()"><i class="fa-solid fa-trash"></i> Clear</button>
+                <button class="action-btn btn-primary" onclick="copyText()"><i class="fa-solid fa-copy"></i> Copy Output</button>
+            </div>
+        </div>
+    </main>
+
+    <footer class="footer">
+        <div class="footer-bottom">
+            <div class="container">
+                <p>&copy; 2026 OmniKitHub.com. All rights reserved.</p>
+            </div>
+        </div>
+    </footer>
+
+    <script src="../script.js"></script>
+    <script>
+        const input = document.getElementById('text-input');
+
+        function convertCase(type) {
+            let str = input.value;
+            if (!str) return;
+
+            switch(type) {
+                case 'upper':
+                    input.value = str.toUpperCase();
+                    break;
+                case 'lower':
+                    input.value = str.toLowerCase();
+                    break;
+                case 'title':
+                    input.value = str.toLowerCase().replace(/(?:^|\s|-)\S/g, c => c.toUpperCase());
+                    break;
+                case 'sentence':
+                    input.value = str.toLowerCase().replace(/(^\w|\.\s*\w)/g, c => c.toUpperCase());
+                    break;
+                case 'camel':
+                    input.value = str.toLowerCase().replace(/[^a-zA-Z0-9]+(.)/g, (m, chr) => chr.toUpperCase());
+                    break;
+                case 'pascal':
+                    let camel = str.toLowerCase().replace(/[^a-zA-Z0-9]+(.)/g, (m, chr) => chr.toUpperCase());
+                    input.value = camel.charAt(0).toUpperCase() + camel.slice(1);
+                    break;
+                case 'slug':
+                    input.value = str.toLowerCase().trim().replace(/[^a-z0-9 -]/g, '').replace(/\s+/g, '-').replace(/-+/g, '-');
+                    break;
+            }
+        }
+
+        function cleanText(action) {
+            let str = input.value;
+            if (!str) return;
+
+            switch(action) {
+                case 'spaces':
+                    input.value = str.replace(/\s+/g, ' ').trim();
+                    break;
+                case 'lines':
+                    input.value = str.split('\n').filter(line => line.trim() !== '').join('\n');
+                    break;
+                case 'duplicates':
+                    let lines = str.split('\n');
+                    input.value = [...new Set(lines)].join('\n');
+                    break;
+            }
+        }
+
+        function clearText() {
+            input.value = '';
+        }
+
+        function copyText() {
+            if (!input.value) return;
+            navigator.clipboard.writeText(input.value);
+            alert('Text copied to clipboard!');
+        }
+    </script>
+</body>
+</html>

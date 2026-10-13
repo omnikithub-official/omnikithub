@@ -1,0 +1,280 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Image / JPG to PDF Converter - OmniKitHub</title>
+    <meta name="description" content="Convert JPG, PNG, and WebP images to PDF online for free. Combine multiple photos into a single PDF document instantly.">
+    <meta name="keywords" content="jpg to pdf converter, image to pdf free, convert photo to pdf, combine images to pdf, online pdf maker">
+    <link rel="stylesheet" href="../style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <!-- jsPDF & html2canvas -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+
+    <style>
+        .tool-container {
+            max-width: 1000px;
+            margin: 40px auto;
+            background: var(--bg-surface);
+            border: 1px solid var(--card-border);
+            border-radius: 16px;
+            padding: 30px;
+            box-shadow: var(--card-shadow);
+        }
+
+        .upload-area {
+            border: 2px dashed var(--accent-color);
+            border-radius: 12px;
+            padding: 40px 20px;
+            text-align: center;
+            background: var(--bg-primary);
+            cursor: pointer;
+            transition: background var(--transition-speed) ease;
+            margin-bottom: 25px;
+        }
+
+        .upload-area:hover { background: var(--badge-bg); }
+
+        .controls-row {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 15px;
+            margin-bottom: 25px;
+            background: var(--bg-primary);
+            padding: 20px;
+            border-radius: 12px;
+            border: 1px solid var(--card-border);
+        }
+
+        .form-group label {
+            display: block;
+            font-weight: 600;
+            font-size: 0.9rem;
+            margin-bottom: 6px;
+            color: var(--text-primary);
+        }
+
+        .form-control {
+            width: 100%;
+            padding: 10px 12px;
+            border-radius: 8px;
+            border: 1px solid var(--card-border);
+            background: var(--bg-surface);
+            color: var(--text-primary);
+            outline: none;
+        }
+
+        .image-preview-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(130px, 1fr));
+            gap: 15px;
+            margin-bottom: 25px;
+        }
+
+        .img-card {
+            position: relative;
+            background: var(--bg-primary);
+            border: 1px solid var(--card-border);
+            border-radius: 8px;
+            padding: 8px;
+            text-align: center;
+        }
+
+        .img-card img {
+            width: 100%;
+            height: 110px;
+            object-fit: cover;
+            border-radius: 6px;
+        }
+
+        .remove-btn {
+            position: absolute;
+            top: 4px;
+            right: 4px;
+            background: #ef4444;
+            color: #fff;
+            border: none;
+            width: 24px;
+            height: 24px;
+            border-radius: 50%;
+            cursor: pointer;
+            font-size: 0.75rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .action-btn {
+            width: 100%;
+            padding: 14px;
+            border-radius: 10px;
+            border: none;
+            background: var(--accent-color);
+            color: #fff;
+            font-weight: 700;
+            font-size: 1rem;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            transition: background var(--transition-speed) ease;
+        }
+
+        .action-btn:hover { background: var(--accent-hover); }
+    </style>
+</head>
+<body class="light-theme">
+
+    <header class="navbar">
+        <div class="container nav-container">
+            <a href="../index.html" class="logo">
+                <i class="fa-solid fa-toolbox logo-icon"></i>
+                <span class="logo-text">OmniKit<span class="highlight">Hub</span></span>
+            </a>
+            <div class="nav-actions">
+                <button id="theme-toggle" class="icon-btn" aria-label="Toggle Theme">
+                    <i class="fa-solid fa-moon"></i>
+                </button>
+            </div>
+        </div>
+    </header>
+
+    <main class="container">
+        <div class="tool-container">
+            <h1 style="font-size: 1.8rem; margin-bottom: 8px;">Image / JPG to PDF Converter</h1>
+            <p style="color: var(--text-secondary); margin-bottom: 24px;">Convert photos (JPG, PNG, WebP) into a clean, combined PDF document instantly.</p>
+
+            <div class="upload-area" onclick="document.getElementById('file-input').click()">
+                <i class="fa-solid fa-file-pdf" style="font-size: 2.5rem; color: var(--accent-color); margin-bottom: 10px;"></i>
+                <div style="font-weight: 700; font-size: 1.1rem; color: var(--text-primary);">Click or Drag Multiple Images Here</div>
+                <div style="font-size: 0.85rem; color: var(--text-secondary); margin-top: 4px;">Supports JPG, JPEG, PNG, WebP</div>
+                <input type="file" id="file-input" accept="image/*" multiple style="display: none;">
+            </div>
+
+            <div class="controls-row">
+                <div class="form-group">
+                    <label>Page Orientation:</label>
+                    <select id="pdf-orientation" class="form-control">
+                        <option value="p">Portrait (Vertical)</option>
+                        <option value="l">Landscape (Horizontal)</option>
+                    </select>
+                </div>
+
+                <div class="form-group">
+                    <label>Page Margin:</label>
+                    <select id="pdf-margin" class="form-control">
+                        <option value="0">No Margin</option>
+                        <option value="10" selected>Small Margin (10mm)</option>
+                        <option value="20">Large Margin (20mm)</option>
+                    </select>
+                </div>
+            </div>
+
+            <div id="preview-grid" class="image-preview-grid">
+                <!-- Uploaded image cards will appear here -->
+            </div>
+
+            <button id="convert-btn" class="action-btn"><i class="fa-solid fa-file-export"></i> Convert & Download PDF</button>
+        </div>
+    </main>
+
+    <footer class="footer">
+        <div class="footer-bottom">
+            <div class="container">
+                <p>&copy; 2026 OmniKitHub.com. All rights reserved.</p>
+            </div>
+        </div>
+    </footer>
+
+    <script src="../script.js"></script>
+    <script>
+        const fileInput = document.getElementById('file-input');
+        const previewGrid = document.getElementById('preview-grid');
+        const pdfOrientation = document.getElementById('pdf-orientation');
+        const pdfMargin = document.getElementById('pdf-margin');
+        const convertBtn = document.getElementById('convert-btn');
+
+        let imageList = [];
+
+        fileInput.addEventListener('change', (e) => {
+            const files = Array.from(e.target.files);
+            files.forEach(file => {
+                const reader = new FileReader();
+                reader.onload = (event) => {
+                    imageList.push(event.target.result);
+                    renderPreviews();
+                };
+                reader.readAsDataURL(file);
+            });
+            fileInput.value = '';
+        });
+
+        function renderPreviews() {
+            previewGrid.innerHTML = '';
+            imageList.forEach((src, idx) => {
+                const card = document.createElement('div');
+                card.className = 'img-card';
+                card.innerHTML = `
+                    <img src="${src}" alt="Page ${idx + 1}">
+                    <button class="remove-btn" onclick="removeImage(${idx})"><i class="fa-solid fa-xmark"></i></button>
+                    <div style="font-size: 0.75rem; color: var(--text-secondary); margin-top: 4px;">Page ${idx + 1}</div>
+                `;
+                previewGrid.appendChild(card);
+            });
+        }
+
+        window.removeImage = function(index) {
+            imageList.splice(index, 1);
+            renderPreviews();
+        };
+
+        convertBtn.addEventListener('click', async () => {
+            if (imageList.length === 0) {
+                alert('Please upload at least one image!');
+                return;
+            }
+
+            convertBtn.innerHTML = '<i class="fa-solid fa-spinner fa-spin"></i> Generating PDF...';
+
+            setTimeout(() => {
+                const { jsPDF } = window.jspdf;
+                const orientation = pdfOrientation.value;
+                const margin = parseInt(pdfMargin.value);
+
+                const pdf = new jsPDF(orientation, 'mm', 'a4');
+                const pageWidth = pdf.internal.pageSize.getWidth();
+                const pageHeight = pdf.internal.pageSize.getHeight();
+
+                imageList.forEach((imgData, index) => {
+                    if (index > 0) pdf.addPage();
+
+                    const img = new Image();
+                    img.src = imgData;
+
+                    const printableW = pageWidth - (margin * 2);
+                    const printableH = pageHeight - (margin * 2);
+
+                    let drawW = printableW;
+                    let drawH = (img.height * printableW) / img.width;
+
+                    if (drawH > printableH) {
+                        drawH = printableH;
+                        drawW = (img.width * printableH) / img.height;
+                    }
+
+                    const x = margin + (printableW - drawW) / 2;
+                    const y = margin + (printableH - drawH) / 2;
+
+                    pdf.addImage(imgData, 'JPEG', x, y, drawW, drawH);
+                });
+
+                pdf.save('OmniKitHub-Converted.pdf');
+                convertBtn.innerHTML = '<i class="fa-solid fa-file-export"></i> Convert & Download PDF';
+            }, 500);
+        });
+    </script>
+</body>
+</html>

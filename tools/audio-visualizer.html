@@ -1,0 +1,292 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Audio Spectrum & Frequency Visualizer - OmniKitHub</title>
+    <meta name="description" content="Free online audio spectrum visualizer. Upload your music files and visualize real-time frequency waveforms with stunning custom animations.">
+    <meta name="keywords" content="audio visualizer online, music spectrum analyzer, real time audio frequency, sound equalizer visualizer, web audio api">
+    <link rel="stylesheet" href="../style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        .tool-container {
+            max-width: 950px;
+            margin: 40px auto;
+            background: var(--bg-surface);
+            border: 1px solid var(--card-border);
+            border-radius: 16px;
+            padding: 30px;
+            box-shadow: var(--card-shadow);
+            text-align: center;
+        }
+
+        .upload-area {
+            border: 2px dashed var(--accent-color);
+            border-radius: 12px;
+            padding: 30px 20px;
+            text-align: center;
+            background: var(--bg-primary);
+            cursor: pointer;
+            transition: background var(--transition-speed) ease;
+            margin-bottom: 20px;
+        }
+
+        .upload-area:hover { background: var(--badge-bg); }
+
+        .visualizer-card {
+            background: #0f172a;
+            border: 1px solid var(--card-border);
+            border-radius: 16px;
+            padding: 20px;
+            margin-bottom: 25px;
+            position: relative;
+            overflow: hidden;
+        }
+
+        canvas {
+            width: 100%;
+            height: 320px;
+            border-radius: 8px;
+            display: block;
+        }
+
+        .controls-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 15px;
+            background: var(--bg-primary);
+            padding: 20px;
+            border-radius: 12px;
+            border: 1px solid var(--card-border);
+            margin-bottom: 20px;
+        }
+
+        .form-group label {
+            display: block;
+            font-weight: 600;
+            font-size: 0.85rem;
+            margin-bottom: 6px;
+            color: var(--text-primary);
+            text-align: left;
+        }
+
+        .form-control {
+            width: 100%;
+            padding: 8px 12px;
+            border-radius: 8px;
+            border: 1px solid var(--card-border);
+            background: var(--bg-surface);
+            color: var(--text-primary);
+            outline: none;
+            font-size: 0.95rem;
+        }
+
+        audio {
+            width: 100%;
+            margin-top: 10px;
+            outline: none;
+            border-radius: 30px;
+        }
+    </style>
+</head>
+<body class="light-theme">
+
+    <header class="navbar">
+        <div class="container nav-container">
+            <a href="../index.html" class="logo">
+                <i class="fa-solid fa-toolbox logo-icon"></i>
+                <span class="logo-text">OmniKit<span class="highlight">Hub</span></span>
+            </a>
+            <div class="nav-actions">
+                <button id="theme-toggle" class="icon-btn" aria-label="Toggle Theme">
+                    <i class="fa-solid fa-moon"></i>
+                </button>
+            </div>
+        </div>
+    </header>
+
+    <main class="container">
+        <div class="tool-container">
+            <h1 style="font-size: 1.8rem; margin-bottom: 8px;">Audio Spectrum & Frequency Visualizer</h1>
+            <p style="color: var(--text-secondary); margin-bottom: 24px;">Upload MP3 or WAV audio tracks to generate live real-time frequency spectrum waveforms.</p>
+
+            <div class="upload-area" onclick="document.getElementById('audio-input').click()">
+                <i class="fa-solid fa-music" style="font-size: 2.5rem; color: var(--accent-color); margin-bottom: 10px;"></i>
+                <div style="font-weight: 700; font-size: 1.1rem; color: var(--text-primary);">Click or Drag Audio Track Here</div>
+                <div style="font-size: 0.85rem; color: var(--text-secondary); margin-top: 4px;">Supports MP3, WAV, AAC, OGG</div>
+                <input type="file" id="audio-input" accept="audio/*" style="display: none;">
+            </div>
+
+            <div class="visualizer-card">
+                <canvas id="spectrum-canvas"></canvas>
+            </div>
+
+            <div class="controls-grid">
+                <div class="form-group">
+                    <label>Visualizer Style:</label>
+                    <select id="viz-style" class="form-control">
+                        <option value="bars">Frequency Bars</option>
+                        <option value="circle">Circular Wave</option>
+                    </select>
+                </div>
+
+                <div class="form-group">
+                    <label>Color Theme:</label>
+                    <select id="viz-theme" class="form-control">
+                        <option value="neon">Cyber Neon</option>
+                        <option value="sunset">Sunset Gold</option>
+                        <option value="ocean">Ocean Wave</option>
+                    </select>
+                </div>
+            </div>
+
+            <audio id="audio-player" controls style="display: none;"></audio>
+        </div>
+    </main>
+
+    <footer class="footer">
+        <div class="footer-bottom">
+            <div class="container">
+                <p>&copy; 2026 OmniKitHub.com. All rights reserved.</p>
+            </div>
+        </div>
+    </footer>
+
+    <script src="../script.js"></script>
+    <script>
+        const audioInput = document.getElementById('audio-input');
+        const audioPlayer = document.getElementById('audio-player');
+        const canvas = document.getElementById('spectrum-canvas');
+        const ctx = canvas.getContext('2d');
+        const vizStyleSelect = document.getElementById('viz-style');
+        const vizThemeSelect = document.getElementById('viz-theme');
+
+        let audioCtx = null;
+        let analyser = null;
+        let source = null;
+        let isInitialized = false;
+
+        function resizeCanvas() {
+            canvas.width = canvas.parentElement.clientWidth - 40;
+            canvas.height = 320;
+        }
+
+        window.addEventListener('resize', resizeCanvas);
+        resizeCanvas();
+
+        audioInput.addEventListener('change', (e) => {
+            const file = e.target.files[0];
+            if (!file) return;
+
+            const url = URL.createObjectURL(file);
+            audioPlayer.src = url;
+            audioPlayer.style.display = 'block';
+
+            if (!isInitialized) {
+                initAudioContext();
+            }
+
+            audioPlayer.play();
+        });
+
+        function initAudioContext() {
+            audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+            analyser = audioCtx.createAnalyser();
+            analyser.fftSize = 128;
+
+            source = audioCtx.createMediaElementSource(audioPlayer);
+            source.connect(analyser);
+            analyser.connect(audioCtx.destination);
+
+            isInitialized = true;
+            drawVisualizer();
+        }
+
+        audioPlayer.addEventListener('play', () => {
+            if (audioCtx && audioCtx.state === 'suspended') {
+                audioCtx.resume();
+            }
+        });
+
+        function drawVisualizer() {
+            requestAnimationFrame(drawVisualizer);
+
+            const bufferLength = analyser.frequencyBinCount;
+            const dataArray = new Uint8Array(bufferLength);
+            analyser.getByteFrequencyData(dataArray);
+
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+            const style = vizStyleSelect.value;
+            const theme = vizThemeSelect.value;
+
+            if (style === 'bars') {
+                drawBars(dataArray, bufferLength, theme);
+            } else {
+                drawCircle(dataArray, bufferLength, theme);
+            }
+        }
+
+        function getGradients(theme, height) {
+            const grad = ctx.createLinearGradient(0, height, 0, 0);
+            if (theme === 'neon') {
+                grad.addColorStop(0, '#06b6d4');
+                grad.addColorStop(0.5, '#3b82f6');
+                grad.addColorStop(1, '#ec4899');
+            } else if (theme === 'sunset') {
+                grad.addColorStop(0, '#f59e0b');
+                grad.addColorStop(0.5, '#ef4444');
+                grad.addColorStop(1, '#8b5cf6');
+            } else {
+                grad.addColorStop(0, '#10b981');
+                grad.addColorStop(0.5, '#06b6d4');
+                grad.addColorStop(1, '#6366f1');
+            }
+            return grad;
+        }
+
+        function drawBars(dataArray, bufferLength, theme) {
+            const barWidth = (canvas.width / bufferLength) * 1.5;
+            let x = 0;
+
+            for (let i = 0; i < bufferLength; i++) {
+                const barHeight = (dataArray[i] / 255) * canvas.height;
+
+                ctx.fillStyle = getGradients(theme, canvas.height);
+                ctx.fillRect(x, canvas.height - barHeight, barWidth - 3, barHeight);
+
+                x += barWidth;
+            }
+        }
+
+        function drawCircle(dataArray, bufferLength, theme) {
+            const centerX = canvas.width / 2;
+            const centerY = canvas.height / 2;
+            const radius = 60;
+
+            ctx.beginPath();
+            ctx.arc(centerX, centerY, radius, 0, 2 * Math.PI);
+            ctx.strokeStyle = '#334155';
+            ctx.lineWidth = 2;
+            ctx.stroke();
+
+            for (let i = 0; i < bufferLength; i++) {
+                const angle = (i / bufferLength) * (2 * Math.PI);
+                const barLength = (dataArray[i] / 255) * 80;
+
+                const startX = centerX + Math.cos(angle) * radius;
+                const startY = centerY + Math.sin(angle) * radius;
+                const endX = centerX + Math.cos(angle) * (radius + barLength);
+                const endY = centerY + Math.sin(angle) * (radius + barLength);
+
+                ctx.beginPath();
+                ctx.moveTo(startX, startY);
+                ctx.lineTo(endX, endY);
+                ctx.strokeStyle = getGradients(theme, canvas.height);
+                ctx.lineWidth = 4;
+                ctx.stroke();
+            }
+        }
+    </script>
+</body>
+</html>

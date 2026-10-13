@@ -1,0 +1,245 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AI Image Upscaler & Enlarger - OmniKitHub</title>
+    <meta name="description" content="Enhance image resolution and upscale photos to HD or 4K quality online for free. Increase image resolution without quality loss instantly.">
+    <meta name="keywords" content="image upscaler free, upscale photo online, photo resolution increaser, image enlarger, hd photo converter">
+    <link rel="stylesheet" href="../style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        .tool-container {
+            max-width: 1000px;
+            margin: 40px auto;
+            background: var(--bg-surface);
+            border: 1px solid var(--card-border);
+            border-radius: 16px;
+            padding: 30px;
+            box-shadow: var(--card-shadow);
+        }
+
+        .upload-area {
+            border: 2px dashed var(--accent-color);
+            border-radius: 12px;
+            padding: 35px 20px;
+            text-align: center;
+            background: var(--bg-primary);
+            cursor: pointer;
+            transition: background var(--transition-speed) ease;
+            margin-bottom: 25px;
+        }
+
+        .upload-area:hover { background: var(--badge-bg); }
+
+        .controls-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 15px;
+            margin-bottom: 25px;
+            background: var(--bg-primary);
+            padding: 20px;
+            border-radius: 12px;
+            border: 1px solid var(--card-border);
+        }
+
+        .form-group label {
+            display: block;
+            font-weight: 600;
+            font-size: 0.9rem;
+            margin-bottom: 6px;
+            color: var(--text-primary);
+        }
+
+        .form-control {
+            width: 100%;
+            padding: 8px 12px;
+            border-radius: 8px;
+            border: 1px solid var(--card-border);
+            background: var(--bg-surface);
+            color: var(--text-primary);
+            outline: none;
+        }
+
+        .preview-box {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            min-height: 280px;
+            background: var(--bg-primary);
+            border: 1px solid var(--card-border);
+            border-radius: 12px;
+            padding: 20px;
+            margin-bottom: 20px;
+        }
+
+        canvas {
+            max-width: 100%;
+            max-height: 320px;
+            border-radius: 8px;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+        }
+
+        .action-btn {
+            width: 100%;
+            padding: 14px;
+            border-radius: 10px;
+            border: none;
+            background: var(--accent-color);
+            color: #fff;
+            font-weight: 700;
+            font-size: 1rem;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            transition: background var(--transition-speed) ease;
+        }
+
+        .action-btn:hover { background: var(--accent-hover); }
+    </style>
+</head>
+<body class="light-theme">
+
+    <header class="navbar">
+        <div class="container nav-container">
+            <a href="../index.html" class="logo">
+                <i class="fa-solid fa-toolbox logo-icon"></i>
+                <span class="logo-text">OmniKit<span class="highlight">Hub</span></span>
+            </a>
+            <div class="nav-actions">
+                <button id="theme-toggle" class="icon-btn" aria-label="Toggle Theme">
+                    <i class="fa-solid fa-moon"></i>
+                </button>
+            </div>
+        </div>
+    </header>
+
+    <main class="container">
+        <div class="tool-container">
+            <h1 style="font-size: 1.8rem; margin-bottom: 8px;">AI Image Upscaler & Enlarger</h1>
+            <p style="color: var(--text-secondary); margin-bottom: 24px;">Enlarge image resolution by 2x or 4x with smart sharpening filters online for free.</p>
+
+            <div class="upload-area" onclick="document.getElementById('file-input').click()">
+                <i class="fa-solid fa-expand" style="font-size: 2.5rem; color: var(--accent-color); margin-bottom: 10px;"></i>
+                <div style="font-weight: 700; font-size: 1.1rem; color: var(--text-primary);">Click or Drag Image to Upscale</div>
+                <div style="font-size: 0.85rem; color: var(--text-secondary); margin-top: 4px;">Supports JPG, PNG, WebP</div>
+                <input type="file" id="file-input" accept="image/*" style="display: none;">
+            </div>
+
+            <div class="controls-grid">
+                <div class="form-group">
+                    <label>Upscale Multiplier:</label>
+                    <select id="scale-factor" class="form-control">
+                        <option value="2">2x HD Upscale</option>
+                        <option value="4">4x Ultra HD Upscale</option>
+                    </select>
+                </div>
+
+                <div class="form-group">
+                    <label>Sharpening Filter: <span id="sharp-val">20%</span></label>
+                    <input type="range" id="sharp-slider" min="0" max="100" value="20" style="width: 100%;">
+                </div>
+            </div>
+
+            <div class="preview-box">
+                <canvas id="upscale-canvas"></canvas>
+                <div id="info-text" style="margin-top: 10px; font-size: 0.85rem; color: var(--text-secondary); font-weight: 600;">Upload an image to preview HD upscale</div>
+            </div>
+
+            <button id="download-btn" class="action-btn"><i class="fa-solid fa-download"></i> Download Upscaled HD Image</button>
+        </div>
+    </main>
+
+    <footer class="footer">
+        <div class="footer-bottom">
+            <div class="container">
+                <p>&copy; 2026 OmniKitHub.com. All rights reserved.</p>
+            </div>
+        </div>
+    </footer>
+
+    <script src="../script.js"></script>
+    <script>
+        const fileInput = document.getElementById('file-input');
+        const scaleFactor = document.getElementById('scale-factor');
+        const sharpSlider = document.getElementById('sharp-slider');
+        const sharpVal = document.getElementById('sharp-val');
+        const canvas = document.getElementById('upscale-canvas');
+        const ctx = canvas.getContext('2d');
+        const infoText = document.getElementById('info-text');
+        const downloadBtn = document.getElementById('download-btn');
+
+        let loadedImg = null;
+
+        fileInput.addEventListener('change', (e) => {
+            const file = e.target.files[0];
+            if (!file) return;
+
+            const reader = new FileReader();
+            reader.onload = (event) => {
+                loadedImg = new Image();
+                loadedImg.onload = () => {
+                    processUpscale();
+                };
+                loadedImg.src = event.target.result;
+            };
+            reader.readAsDataURL(file);
+        });
+
+        scaleFactor.addEventListener('change', () => { if (loadedImg) processUpscale(); });
+        sharpSlider.addEventListener('input', () => {
+            sharpVal.innerText = `${sharpSlider.value}%`;
+            if (loadedImg) processUpscale();
+        });
+
+        function processUpscale() {
+            if (!loadedImg) return;
+
+            const scale = parseInt(scaleFactor.value);
+            const targetW = loadedImg.width * scale;
+            const targetH = loadedImg.height * scale;
+
+            canvas.width = targetW;
+            canvas.height = targetH;
+
+            ctx.imageSmoothingEnabled = true;
+            ctx.imageSmoothingQuality = 'high';
+            ctx.drawImage(loadedImg, 0, 0, targetW, targetH);
+
+            applySharpen(ctx, targetW, targetH, parseFloat(sharpSlider.value) / 100);
+
+            infoText.innerText = `Original: ${loadedImg.width}x${loadedImg.height} px ➔ Upscaled: ${targetW}x${targetH} px (${scale}x HD)`;
+        }
+
+        function applySharpen(context, width, height, mix) {
+            if (mix <= 0) return;
+            const imageData = context.getImageData(0, 0, width, height);
+            const data = imageData.data;
+            const copy = new Uint8ClampedArray(data);
+
+            for (let i = 4 * width + 4; i < data.length - (4 * width + 4); i += 4) {
+                for (let c = 0; c < 3; c++) {
+                    const idx = i + c;
+                    const sharp = 5 * copy[idx] - copy[idx - 4] - copy[idx + 4] - copy[idx - 4 * width] - copy[idx + 4 * width];
+                    data[idx] = copy[idx] * (1 - mix) + sharp * mix;
+                }
+            }
+            context.putImageData(imageData, 0, 0);
+        }
+
+        downloadBtn.addEventListener('click', () => {
+            if (!loadedImg) {
+                alert('Please upload an image first!');
+                return;
+            }
+            const link = document.createElement('a');
+            link.download = 'OmniKitHub-Upscaled-HD.png';
+            link.href = canvas.toDataURL('image/png');
+            link.click();
+        });
+    </script>
+</body>
+</html>

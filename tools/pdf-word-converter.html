@@ -1,0 +1,238 @@
+<!DOCTYPE html>
+<html lang="bn">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>PDF to Word & Word to PDF Converter - OmniKitHub</title>
+    <meta name="description" content="Convert PDF documents to editable Word format and convert text/documents back to PDF online for free.">
+    <link rel="stylesheet" href="../style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <!-- pdf.js and pdf-lib for PDF handling -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/2.16.105/pdf.min.js"></script>
+    <script src="https://unpkg.com/pdf-lib@1.17.1/dist/pdf-lib.min.js"></script>
+
+    <style>
+        .tool-container {
+            max-width: 950px;
+            margin: 40px auto;
+            background: var(--bg-surface);
+            border: 1px solid var(--card-border);
+            border-radius: 16px;
+            padding: 30px;
+            box-shadow: var(--card-shadow);
+        }
+
+        .mode-selector {
+            display: flex;
+            gap: 12px;
+            margin-bottom: 25px;
+        }
+
+        .mode-btn {
+            flex: 1;
+            padding: 12px;
+            border-radius: 30px;
+            border: 1px solid var(--card-border);
+            background: var(--bg-primary);
+            color: var(--text-secondary);
+            font-weight: 700;
+            cursor: pointer;
+            transition: all var(--transition-speed) ease;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+        }
+
+        .mode-btn.active {
+            background: var(--accent-color);
+            color: #ffffff;
+            border-color: var(--accent-color);
+        }
+
+        .upload-area {
+            border: 2px dashed var(--accent-color);
+            border-radius: 12px;
+            padding: 35px 20px;
+            text-align: center;
+            background: var(--bg-primary);
+            cursor: pointer;
+            transition: background var(--transition-speed) ease;
+            margin-bottom: 25px;
+        }
+
+        .upload-area:hover { background: var(--badge-bg); }
+
+        textarea {
+            width: 100%;
+            height: 280px;
+            padding: 15px;
+            border-radius: 12px;
+            border: 1px solid var(--card-border);
+            background: var(--bg-primary);
+            color: var(--text-primary);
+            font-size: 0.95rem;
+            outline: none;
+            resize: vertical;
+            margin-bottom: 20px;
+        }
+
+        .action-btn {
+            padding: 12px 24px;
+            border-radius: 8px;
+            border: none;
+            background: var(--accent-color);
+            color: #fff;
+            font-weight: 700;
+            font-size: 1rem;
+            cursor: pointer;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            transition: background var(--transition-speed) ease;
+        }
+
+        .action-btn:hover { background: var(--accent-hover); }
+    </style>
+</head>
+<body class="light-theme">
+
+    <header class="navbar">
+        <div class="container nav-container">
+            <a href="../index.html" class="logo">
+                <i class="fa-solid fa-toolbox logo-icon"></i>
+                <span class="logo-text">OmniKit<span class="highlight">Hub</span></span>
+            </a>
+            <div class="nav-actions">
+                <button id="theme-toggle" class="icon-btn" aria-label="Toggle Theme">
+                    <i class="fa-solid fa-moon"></i>
+                </button>
+            </div>
+        </div>
+    </header>
+
+    <main class="container">
+        <div class="tool-container">
+            <h1 style="font-size: 1.8rem; margin-bottom: 8px;">PDF to Word / Word to PDF Converter</h1>
+            <p style="color: var(--text-secondary); margin-bottom: 24px;">Convert PDF documents into editable text/Word format or generate PDF files seamlessly.</p>
+
+            <div class="mode-selector">
+                <button id="mode-p2w" class="mode-btn active" onclick="switchMode('p2w')">
+                    <i class="fa-solid fa-file-pdf"></i> PDF to Word
+                </button>
+                <button id="mode-w2p" class="mode-btn" onclick="switchMode('w2p')">
+                    <i class="fa-solid fa-file-word"></i> Word / Text to PDF
+                </button>
+            </div>
+
+            <div id="upload-box" class="upload-area" onclick="document.getElementById('file-input').click()">
+                <i class="fa-solid fa-file-export" style="font-size: 2.5rem; color: var(--accent-color); margin-bottom: 10px;"></i>
+                <div id="upload-title" style="font-weight: 700; font-size: 1.1rem; color: var(--text-primary);">Upload PDF File</div>
+                <div style="font-size: 0.85rem; color: var(--text-secondary); margin-top: 4px;">Select a file from your device</div>
+                <input type="file" id="file-input" accept=".pdf" style="display: none;">
+            </div>
+
+            <textarea id="text-editor" placeholder="Extracted or typed text will appear here..."></textarea>
+
+            <div style="text-align: right;">
+                <button id="download-btn" class="action-btn" onclick="downloadResult()"><i class="fa-solid fa-download"></i> Download File</button>
+            </div>
+        </div>
+    </main>
+
+    <footer class="footer">
+        <div class="footer-bottom">
+            <div class="container">
+                <p>&copy; 2026 OmniKitHub.com. All rights reserved.</p>
+            </div>
+        </div>
+    </footer>
+
+    <script src="../script.js"></script>
+    <script>
+        pdfjsLib.GlobalWorkerOptions.workerSrc = 'https://cdnjs.cloudflare.com/ajax/libs/pdf.js/2.16.105/pdf.worker.min.js';
+
+        let currentMode = 'p2w';
+        const fileInput = document.getElementById('file-input');
+        const textEditor = document.getElementById('text-editor');
+        const uploadTitle = document.getElementById('upload-title');
+        const downloadBtn = document.getElementById('download-btn');
+
+        function switchMode(mode) {
+            currentMode = mode;
+            textEditor.value = '';
+
+            if (mode === 'p2w') {
+                document.getElementById('mode-p2w').classList.add('active');
+                document.getElementById('mode-w2p').classList.remove('active');
+                uploadTitle.innerText = 'Upload PDF File';
+                fileInput.accept = '.pdf';
+                downloadBtn.innerHTML = '<i class="fa-solid fa-file-word"></i> Download Word (.doc)';
+            } else {
+                document.getElementById('mode-w2p').classList.add('active');
+                document.getElementById('mode-p2w').classList.remove('active');
+                uploadTitle.innerText = 'Upload Text / Word Document File';
+                fileInput.accept = '.txt,.doc,.docx';
+                downloadBtn.innerHTML = '<i class="fa-solid fa-file-pdf"></i> Download PDF';
+            }
+        }
+
+        fileInput.addEventListener('change', async (e) => {
+            const file = e.target.files[0];
+            if (!file) return;
+
+            if (currentMode === 'p2w') {
+                const arrayBuffer = await file.arrayBuffer();
+                const pdf = await pdfjsLib.getDocument({ data: arrayBuffer }).promise;
+                let fullText = '';
+
+                for (let i = 1; i <= pdf.numPages; i++) {
+                    const page = await pdf.getPage(i);
+                    const textContent = await page.getTextContent();
+                    const pageText = textContent.items.map(item => item.str).join(' ');
+                    fullText += `--- Page ${i} ---\n` + pageText + '\n\n';
+                }
+                textEditor.value = fullText;
+            } else {
+                const reader = new FileReader();
+                reader.onload = function(evt) {
+                    textEditor.value = evt.target.result;
+                };
+                reader.readAsText(file);
+            }
+        });
+
+        async function downloadResult() {
+            const content = textEditor.value.trim();
+            if (!content) {
+                alert('Please input or extract text first!');
+                return;
+            }
+
+            if (currentMode === 'p2w') {
+                const blob = new Blob(['\ufeff' + content], { type: 'application/msword' });
+                const url = URL.createObjectURL(blob);
+                const a = document.createElement('a');
+                a.href = url;
+                a.download = 'OmniKitHub-Converted.doc';
+                a.click();
+            } else {
+                const pdfDoc = await PDFLib.PDFDocument.create();
+                const page = pdfDoc.addPage([600, 800]);
+                page.drawText(content.substring(0, 2000), { x: 50, y: 750, size: 12 });
+                const pdfBytes = await pdfDoc.save();
+
+                const blob = new Blob([pdfBytes], { type: 'application/pdf' });
+                const url = URL.createObjectURL(blob);
+                const a = document.createElement('a');
+                a.href = url;
+                a.download = 'OmniKitHub-Converted.pdf';
+                a.click();
+            }
+        }
+
+        switchMode('p2w');
+    </script>
+</body>
+</html>

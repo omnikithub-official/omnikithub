@@ -1,0 +1,170 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Percentage Calculator - OmniKitHub</title>
+    <meta name="description" content="Free online percentage calculator. Calculate percentage increases, decreases, discounts, and markups instantly.">
+    <meta name="keywords" content="percentage calculator, calculate percentage, discount calculator, percentage change, online math tool">
+    <link rel="stylesheet" href="../style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        .tool-container {
+            max-width: 850px;
+            margin: 40px auto;
+            background: var(--bg-surface);
+            border: 1px solid var(--card-border);
+            border-radius: 16px;
+            padding: 30px;
+            box-shadow: var(--card-shadow);
+        }
+
+        .calc-card {
+            background: var(--bg-primary);
+            border: 1px solid var(--card-border);
+            border-radius: 12px;
+            padding: 20px;
+            margin-bottom: 20px;
+        }
+
+        .calc-row {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            flex-wrap: wrap;
+            font-size: 1.05rem;
+            font-weight: 600;
+            color: var(--text-primary);
+        }
+
+        .form-control {
+            width: 110px;
+            padding: 8px 12px;
+            border-radius: 8px;
+            border: 1px solid var(--card-border);
+            background: var(--bg-surface);
+            color: var(--text-primary);
+            font-size: 1rem;
+            font-weight: 700;
+            outline: none;
+            text-align: center;
+        }
+
+        .result-badge {
+            padding: 8px 16px;
+            border-radius: 8px;
+            background: var(--accent-color);
+            color: #ffffff;
+            font-weight: 800;
+            font-size: 1.1rem;
+            display: inline-block;
+            margin-left: auto;
+        }
+
+        @media (max-width: 600px) {
+            .calc-row { flex-direction: column; align-items: flex-start; }
+            .result-badge { margin-left: 0; margin-top: 10px; width: 100%; text-align: center; }
+        }
+    </style>
+</head>
+<body class="light-theme">
+
+    <header class="navbar">
+        <div class="container nav-container">
+            <a href="../index.html" class="logo">
+                <i class="fa-solid fa-toolbox logo-icon"></i>
+                <span class="logo-text">OmniKit<span class="highlight">Hub</span></span>
+            </a>
+            <div class="nav-actions">
+                <button id="theme-toggle" class="icon-btn" aria-label="Toggle Theme">
+                    <i class="fa-solid fa-moon"></i>
+                </button>
+            </div>
+        </div>
+    </header>
+
+    <main class="container">
+        <div class="tool-container">
+            <h1 style="font-size: 1.8rem; margin-bottom: 8px;">Percentage Calculator</h1>
+            <p style="color: var(--text-secondary); margin-bottom: 24px;">Quick percentage increases, decreases, discounts, and markups mathematical solutions.</p>
+
+            <!-- Mode 1 -->
+            <div class="calc-card">
+                <div class="calc-row">
+                    <span>What is</span>
+                    <input type="number" id="p1-val1" class="form-control" value="15" oninput="calcMode1()">
+                    <span>% of</span>
+                    <input type="number" id="p1-val2" class="form-control" value="200" oninput="calcMode1()">
+                    <span>?</span>
+                    <span id="p1-res" class="result-badge">30</span>
+                </div>
+            </div>
+
+            <!-- Mode 2 -->
+            <div class="calc-card">
+                <div class="calc-row">
+                    <input type="number" id="p2-val1" class="form-control" value="25" oninput="calcMode2()">
+                    <span>is what % of</span>
+                    <input type="number" id="p2-val2" class="form-control" value="500" oninput="calcMode2()">
+                    <span>?</span>
+                    <span id="p2-res" class="result-badge">5%</span>
+                </div>
+            </div>
+
+            <!-- Mode 3 -->
+            <div class="calc-card">
+                <div class="calc-row">
+                    <span>What is the percentage change from</span>
+                    <input type="number" id="p3-val1" class="form-control" value="100" oninput="calcMode3()">
+                    <span>to</span>
+                    <input type="number" id="p3-val2" class="form-control" value="150" oninput="calcMode3()">
+                    <span>?</span>
+                    <span id="p3-res" class="result-badge">+50%</span>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <footer class="footer">
+        <div class="footer-bottom">
+            <div class="container">
+                <p>&copy; 2026 OmniKitHub.com. All rights reserved.</p>
+            </div>
+        </div>
+    </footer>
+
+    <script src="../script.js"></script>
+    <script>
+        function calcMode1() {
+            const v1 = parseFloat(document.getElementById('p1-val1').value) || 0;
+            const v2 = parseFloat(document.getElementById('p1-val2').value) || 0;
+            const res = (v1 / 100) * v2;
+            document.getElementById('p1-res').innerText = Number.isInteger(res) ? res : res.toFixed(2);
+        }
+
+        function calcMode2() {
+            const v1 = parseFloat(document.getElementById('p2-val1').value) || 0;
+            const v2 = parseFloat(document.getElementById('p2-val2').value) || 1;
+            const res = (v1 / v2) * 100;
+            document.getElementById('p2-res').innerText = (Number.isInteger(res) ? res : res.toFixed(2)) + '%';
+        }
+
+        function calcMode3() {
+            const v1 = parseFloat(document.getElementById('p3-val1').value) || 0;
+            const v2 = parseFloat(document.getElementById('p3-val2').value) || 0;
+            if (v1 === 0) {
+                document.getElementById('p3-res').innerText = '0%';
+                return;
+            }
+            const res = ((v2 - v1) / v1) * 100;
+            const sign = res > 0 ? '+' : '';
+            document.getElementById('p3-res').innerText = sign + (Number.isInteger(res) ? res : res.toFixed(2)) + '%';
+        }
+
+        // Initial Calculations
+        calcMode1();
+        calcMode2();
+        calcMode3();
+    </script>
+</body>
+</html>

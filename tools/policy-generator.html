@@ -1,0 +1,217 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Privacy Policy & Terms Generator - OmniKitHub</title>
+    <meta name="description" content="Generate Google AdSense compliant Privacy Policy and Terms & Conditions pages instantly for your website or blog for free.">
+    <meta name="keywords" content="privacy policy generator, terms and conditions generator, adsense policy maker, free legal page generator, website policy maker">
+    <link rel="stylesheet" href="../style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        .tool-container {
+            max-width: 1000px;
+            margin: 40px auto;
+            background: var(--bg-surface);
+            border: 1px solid var(--card-border);
+            border-radius: 16px;
+            padding: 30px;
+            box-shadow: var(--card-shadow);
+        }
+
+        .form-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+            gap: 15px;
+            margin-bottom: 20px;
+        }
+
+        .form-group {
+            display: flex;
+            flex-direction: column;
+            gap: 6px;
+        }
+
+        .form-group label {
+            font-weight: 600;
+            font-size: 0.9rem;
+            color: var(--text-primary);
+        }
+
+        .form-control {
+            padding: 10px 12px;
+            border-radius: 8px;
+            border: 1px solid var(--card-border);
+            background: var(--bg-primary);
+            color: var(--text-primary);
+            outline: none;
+            font-size: 0.95rem;
+        }
+
+        .type-selector {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 20px;
+        }
+
+        .type-btn {
+            padding: 10px 20px;
+            border-radius: 20px;
+            border: 1px solid var(--card-border);
+            background: var(--bg-primary);
+            color: var(--text-secondary);
+            font-weight: 600;
+            cursor: pointer;
+            transition: all var(--transition-speed) ease;
+        }
+
+        .type-btn.active {
+            background: var(--accent-color);
+            color: #fff;
+            border-color: var(--accent-color);
+        }
+
+        .output-box {
+            width: 100%;
+            height: 300px;
+            padding: 16px;
+            border-radius: 12px;
+            border: 1px solid var(--card-border);
+            background: var(--bg-primary);
+            color: var(--text-primary);
+            font-size: 0.95rem;
+            line-height: 1.6;
+            resize: vertical;
+            outline: none;
+            margin-bottom: 20px;
+            font-family: inherit;
+        }
+
+        .btn-controls {
+            display: flex;
+            gap: 12px;
+            justify-content: flex-end;
+            flex-wrap: wrap;
+        }
+
+        .action-btn {
+            padding: 10px 20px;
+            border-radius: 8px;
+            border: none;
+            font-weight: 600;
+            cursor: pointer;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            transition: all var(--transition-speed) ease;
+        }
+
+        .btn-primary { background: var(--accent-color); color: #fff; }
+        .btn-primary:hover { background: var(--accent-hover); }
+        .btn-secondary { background: var(--badge-bg); color: var(--text-primary); border: 1px solid var(--card-border); }
+    </style>
+</head>
+<body class="light-theme">
+
+    <header class="navbar">
+        <div class="container nav-container">
+            <a href="../index.html" class="logo">
+                <i class="fa-solid fa-toolbox logo-icon"></i>
+                <span class="logo-text">OmniKit<span class="highlight">Hub</span></span>
+            </a>
+            <div class="nav-actions">
+                <button id="theme-toggle" class="icon-btn" aria-label="Toggle Theme">
+                    <i class="fa-solid fa-moon"></i>
+                </button>
+            </div>
+        </div>
+    </header>
+
+    <main class="container">
+        <div class="tool-container">
+            <h1 style="font-size: 1.8rem; margin-bottom: 8px;">Privacy Policy & Terms Generator</h1>
+            <p style="color: var(--text-secondary); margin-bottom: 24px;">Enter your site information to generate Google AdSense-compliant legal pages instantly.</p>
+
+            <div class="form-grid">
+                <div class="form-group">
+                    <label>Website / Company Name:</label>
+                    <input type="text" id="site-name" class="form-control" value="OmniKitHub" placeholder="e.g. My Awesome Site">
+                </div>
+                <div class="form-group">
+                    <label>Website URL:</label>
+                    <input type="text" id="site-url" class="form-control" value="https://omnikithub.com" placeholder="https://example.com">
+                </div>
+                <div class="form-group">
+                    <label>Contact Email:</label>
+                    <input type="text" id="site-email" class="form-control" value="contact@omnikithub.com" placeholder="support@example.com">
+                </div>
+            </div>
+
+            <div class="type-selector">
+                <button id="btn-privacy" class="type-btn active" onclick="switchType('privacy')">Privacy Policy</button>
+                <button id="btn-terms" class="type-btn" onclick="switchType('terms')">Terms & Conditions</button>
+            </div>
+
+            <textarea id="policy-output" class="output-box" readonly></textarea>
+
+            <div class="btn-controls">
+                <button id="generate-btn" class="action-btn btn-primary" onclick="generatePolicy()"><i class="fa-solid fa-gear"></i> Generate Legal Page</button>
+                <button class="action-btn btn-secondary" onclick="copyOutput()"><i class="fa-solid fa-copy"></i> Copy Policy</button>
+            </div>
+        </div>
+    </main>
+
+    <footer class="footer">
+        <div class="footer-bottom">
+            <div class="container">
+                <p>&copy; 2026 OmniKitHub.com. All rights reserved.</p>
+            </div>
+        </div>
+    </footer>
+
+    <script src="../script.js"></script>
+    <script>
+        let currentType = 'privacy';
+
+        const siteName = document.getElementById('site-name');
+        const siteUrl = document.getElementById('site-url');
+        const siteEmail = document.getElementById('site-email');
+        const output = document.getElementById('policy-output');
+        const btnPrivacy = document.getElementById('btn-privacy');
+        const btnTerms = document.getElementById('btn-terms');
+
+        function switchType(type) {
+            currentType = type;
+            if (type === 'privacy') {
+                btnPrivacy.classList.add('active');
+                btnTerms.classList.remove('active');
+            } else {
+                btnTerms.classList.add('active');
+                btnPrivacy.classList.remove('active');
+            }
+            generatePolicy();
+        }
+
+        function generatePolicy() {
+            const name = siteName.value.trim() || 'Website';
+            const url = siteUrl.value.trim() || 'https://example.com';
+            const email = siteEmail.value.trim() || 'contact@example.com';
+
+            if (currentType === 'privacy') {
+                output.value = `Privacy Policy for ${name}\n\nAt ${name}, accessible from ${url}, one of our main priorities is the privacy of our visitors. This Privacy Policy document contains types of information that is collected and recorded by ${name} and how we use it.\n\nLog Files:\n${name} follows a standard procedure of using log files. These files log visitors when they visit websites. The information collected includes internet protocol (IP) addresses, browser type, Internet Service Provider (ISP), date and time stamp, referring/exit pages.\n\nGoogle DoubleClick DART Cookie:\nGoogle is one of a third-party vendor on our site. It also uses cookies, known as DART cookies, to serve ads to our site visitors. Users may choose to decline the use of DART cookies by visiting the Google ad and content network Privacy Policy.\n\nContact Us:\nIf you have additional questions or require more information about our Privacy Policy, do not hesitate to contact us at ${email}.`;
+            } else {
+                output.value = `Terms and Conditions for ${name}\n\nWelcome to ${name}!\n\nThese terms and conditions outline the rules and regulations for the use of ${name}'s Website, located at ${url}.\n\nBy accessing this website we assume you accept these terms and conditions. Do not continue to use ${name} if you do not agree to take all of the terms and conditions stated on this page.\n\nLicense:\nUnless otherwise stated, ${name} and/or its licensors own the intellectual property rights for all material on ${name}. All intellectual property rights are reserved.\n\nContact Information:\nIf you have any queries regarding any of our terms, please contact us at ${email}.`;
+            }
+        }
+
+        function copyOutput() {
+            if (!output.value) return;
+            navigator.clipboard.writeText(output.value);
+            alert('Legal text copied to clipboard!');
+        }
+
+        // Initial Generation
+        generatePolicy();
+    </script>
+</body>
+</html>

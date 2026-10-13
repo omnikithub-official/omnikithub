@@ -1,0 +1,251 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Assignment & Document Formatter - OmniKitHub</title>
+    <meta name="description" content="Format your academic assignments, essays, and documents instantly. Adjust line spacing, fix headings, and clean extra spaces online for free.">
+    <meta name="keywords" content="assignment formatter, document layout tool, text clean up, essay formatter online, line spacing adjuster">
+    <link rel="stylesheet" href="../style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- jsPDF for PDF export -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+    <style>
+        .tool-container {
+            max-width: 1100px;
+            margin: 40px auto;
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 25px;
+        }
+
+        .panel-box {
+            background: var(--bg-surface);
+            border: 1px solid var(--card-border);
+            border-radius: 16px;
+            padding: 24px;
+            box-shadow: var(--card-shadow);
+        }
+
+        .form-group {
+            margin-bottom: 15px;
+        }
+
+        .form-group label {
+            display: block;
+            font-weight: 600;
+            font-size: 0.9rem;
+            margin-bottom: 6px;
+            color: var(--text-primary);
+        }
+
+        .form-control {
+            width: 100%;
+            padding: 10px 12px;
+            border-radius: 8px;
+            border: 1px solid var(--card-border);
+            background: var(--bg-primary);
+            color: var(--text-primary);
+            outline: none;
+            font-size: 0.95rem;
+        }
+
+        textarea.form-control {
+            height: 220px;
+            resize: vertical;
+            line-height: 1.5;
+        }
+
+        .controls-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 12px;
+            margin-bottom: 15px;
+        }
+
+        .preview-paper {
+            background: #ffffff;
+            color: #111827;
+            padding: 30px;
+            border-radius: 8px;
+            border: 1px solid var(--card-border);
+            min-height: 420px;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.08);
+            font-family: 'Georgia', serif;
+            font-size: 1rem;
+            line-height: 1.6;
+            white-space: pre-wrap;
+            word-wrap: break-word;
+        }
+
+        .btn-group {
+            display: flex;
+            gap: 10px;
+            margin-top: 20px;
+            flex-wrap: wrap;
+        }
+
+        .action-btn {
+            flex: 1;
+            padding: 12px;
+            border-radius: 8px;
+            border: none;
+            font-weight: 600;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            transition: all var(--transition-speed) ease;
+        }
+
+        .btn-primary { background: var(--accent-color); color: #fff; }
+        .btn-primary:hover { background: var(--accent-hover); }
+        .btn-secondary { background: var(--badge-bg); color: var(--text-primary); border: 1px solid var(--card-border); }
+
+        @media (max-width: 900px) {
+            .tool-container { grid-template-columns: 1fr; }
+        }
+    </style>
+</head>
+<body class="light-theme">
+
+    <header class="navbar">
+        <div class="container nav-container">
+            <a href="../index.html" class="logo">
+                <i class="fa-solid fa-toolbox logo-icon"></i>
+                <span class="logo-text">OmniKit<span class="highlight">Hub</span></span>
+            </a>
+            <div class="nav-actions">
+                <button id="theme-toggle" class="icon-btn" aria-label="Toggle Theme">
+                    <i class="fa-solid fa-moon"></i>
+                </button>
+            </div>
+        </div>
+    </header>
+
+    <main class="container">
+        <div class="tool-container">
+            <!-- Left Controls -->
+            <div class="panel-box">
+                <h1 style="font-size: 1.5rem; margin-bottom: 6px;">Assignment & Document Formatter</h1>
+                <p style="color: var(--text-secondary); font-size: 0.9rem; margin-bottom: 20px;">Paste raw assignment text to automatically align spacing, typography, and structure.</p>
+
+                <div class="form-group">
+                    <label>Raw Document / Assignment Text:</label>
+                    <textarea id="raw-text" class="form-control" placeholder="Paste unformatted assignment or research paper text here..."></textarea>
+                </div>
+
+                <div class="controls-grid">
+                    <div class="form-group">
+                        <label>Line Spacing:</label>
+                        <select id="line-spacing" class="form-control">
+                            <option value="1.4">Single (1.4)</option>
+                            <option value="1.8" selected>1.5 Lines (1.8)</option>
+                            <option value="2.2">Double Space (2.2)</option>
+                        </select>
+                    </div>
+
+                    <div class="form-group">
+                        <label>Font Style:</label>
+                        <select id="font-style" class="form-control">
+                            <option value="'Georgia', serif">Georgia (Academic)</option>
+                            <option value="'Times New Roman', Times, serif">Times New Roman</option>
+                            <option value="'Arial', sans-serif">Arial Clean</option>
+                        </select>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label>Text Alignment:</label>
+                    <select id="text-align" class="form-control">
+                        <option value="justify">Justify (Recommended for Assignments)</option>
+                        <option value="left">Left Align</option>
+                        <option value="center">Center Align</option>
+                    </select>
+                </div>
+
+                <div class="btn-group">
+                    <button id="clean-btn" class="action-btn btn-secondary"><i class="fa-solid fa-broom"></i> Clean Spaces</button>
+                    <button id="capitalize-btn" class="action-btn btn-secondary"><i class="fa-solid fa-font"></i> Title Case</button>
+                </div>
+            </div>
+
+            <!-- Right Live Preview -->
+            <div class="panel-box" style="display: flex; flex-direction: column;">
+                <h3 style="font-size: 1.1rem; margin-bottom: 12px;">Formatted Live Document</h3>
+                <div id="preview-paper" class="preview-paper">Your formatted document preview will appear here live...</div>
+
+                <div class="btn-group">
+                    <button id="copy-btn" class="action-btn btn-secondary"><i class="fa-solid fa-copy"></i> Copy Text</button>
+                    <button id="pdf-btn" class="action-btn btn-primary"><i class="fa-solid fa-file-pdf"></i> Save as PDF</button>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <footer class="footer">
+        <div class="footer-bottom">
+            <div class="container">
+                <p>&copy; 2026 OmniKitHub.com. All rights reserved.</p>
+            </div>
+        </div>
+    </footer>
+
+    <script src="../script.js"></script>
+    <script>
+        const rawText = document.getElementById('raw-text');
+        const previewPaper = document.getElementById('preview-paper');
+        const lineSpacing = document.getElementById('line-spacing');
+        const fontStyle = document.getElementById('font-style');
+        const textAlign = document.getElementById('text-align');
+        const cleanBtn = document.getElementById('clean-btn');
+        const capitalizeBtn = document.getElementById('capitalize-btn');
+        const copyBtn = document.getElementById('copy-btn');
+        const pdfBtn = document.getElementById('pdf-btn');
+
+        function updatePreview() {
+            let text = rawText.value.trim();
+            previewPaper.innerText = text || 'Your formatted document preview will appear here live...';
+            previewPaper.style.lineHeight = lineSpacing.value;
+            previewPaper.style.fontFamily = fontStyle.value;
+            previewPaper.style.textAlign = textAlign.value;
+        }
+
+        rawText.addEventListener('input', updatePreview);
+        lineSpacing.addEventListener('change', updatePreview);
+        fontStyle.addEventListener('change', updatePreview);
+        textAlign.addEventListener('change', updatePreview);
+
+        cleanBtn.addEventListener('click', () => {
+            rawText.value = rawText.value.replace(/[ \t]+/g, ' ').replace(/\n\s*\n/g, '\n\n').trim();
+            updatePreview();
+        });
+
+        capitalizeBtn.addEventListener('click', () => {
+            rawText.value = rawText.value.toLowerCase().replace(/(?:^|\s|-)\S/g, c => c.toUpperCase());
+            updatePreview();
+        });
+
+        copyBtn.addEventListener('click', () => {
+            if (!rawText.value) return;
+            navigator.clipboard.writeText(previewPaper.innerText);
+            alert('Formatted text copied to clipboard!');
+        });
+
+        pdfBtn.addEventListener('click', () => {
+            if (!rawText.value) return;
+            const { jsPDF } = window.jspdf;
+            html2canvas(previewPaper, { scale: 2 }).then(canvas => {
+                const imgData = canvas.toDataURL('image/png');
+                const pdf = new jsPDF('p', 'mm', 'a4');
+                const pdfWidth = pdf.internal.pageSize.getWidth();
+                const pdfHeight = (canvas.height * pdfWidth) / canvas.width;
+                pdf.addImage(imgData, 'PNG', 0, 0, pdfWidth, pdfHeight);
+                pdf.save('OmniKitHub-Formatted-Document.pdf');
+            });
+        });
+    </script>
+</body>
+</html>

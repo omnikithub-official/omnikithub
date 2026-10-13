@@ -1,0 +1,293 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>All-in-One Financial & Loan Calculator - OmniKitHub</title>
+    <meta name="description" content="Free online financial calculator for EMI loan calculation, Fixed Deposit (FD) returns, and SIP investment growth estimation.">
+    <meta name="keywords" content="emi calculator, loan calculator online, fd calculator, sip return calculator, interest calculator, financial tools">
+    <link rel="stylesheet" href="../style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        .tool-container {
+            max-width: 1000px;
+            margin: 40px auto;
+            background: var(--bg-surface);
+            border: 1px solid var(--card-border);
+            border-radius: 16px;
+            padding: 30px;
+            box-shadow: var(--card-shadow);
+        }
+
+        .tab-selector {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 25px;
+            border-bottom: 1px solid var(--card-border);
+            padding-bottom: 12px;
+            flex-wrap: wrap;
+        }
+
+        .tab-btn {
+            padding: 10px 20px;
+            border-radius: 20px;
+            border: 1px solid var(--card-border);
+            background: var(--bg-primary);
+            color: var(--text-secondary);
+            font-weight: 700;
+            cursor: pointer;
+            transition: all var(--transition-speed) ease;
+        }
+
+        .tab-btn.active {
+            background: var(--accent-color);
+            color: #ffffff;
+            border-color: var(--accent-color);
+        }
+
+        .calc-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 25px;
+        }
+
+        .form-group {
+            margin-bottom: 18px;
+        }
+
+        .form-group label {
+            display: block;
+            font-weight: 600;
+            font-size: 0.9rem;
+            margin-bottom: 6px;
+            color: var(--text-primary);
+        }
+
+        .form-control {
+            width: 100%;
+            padding: 10px 12px;
+            border-radius: 8px;
+            border: 1px solid var(--card-border);
+            background: var(--bg-primary);
+            color: var(--text-primary);
+            outline: none;
+            font-size: 1rem;
+        }
+
+        .form-control:focus { border-color: var(--accent-color); }
+
+        .result-card {
+            background: var(--bg-primary);
+            border: 1px solid var(--card-border);
+            border-radius: 14px;
+            padding: 24px;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+        }
+
+        .result-item {
+            display: flex;
+            justify-content: space-between;
+            padding: 12px 0;
+            border-bottom: 1px dashed var(--card-border);
+            font-size: 0.95rem;
+            color: var(--text-primary);
+        }
+
+        .result-item strong {
+            font-size: 1.1rem;
+            color: var(--accent-color);
+        }
+
+        .action-btn {
+            width: 100%;
+            padding: 12px;
+            border-radius: 8px;
+            border: none;
+            background: var(--accent-color);
+            color: #fff;
+            font-weight: 700;
+            cursor: pointer;
+            margin-top: 15px;
+            transition: background var(--transition-speed) ease;
+        }
+
+        .action-btn:hover { background: var(--accent-hover); }
+
+        @media (max-width: 768px) {
+            .calc-grid { grid-template-columns: 1fr; }
+        }
+    </style>
+</head>
+<body class="light-theme">
+
+    <header class="navbar">
+        <div class="container nav-container">
+            <a href="../index.html" class="logo">
+                <i class="fa-solid fa-toolbox logo-icon"></i>
+                <span class="logo-text">OmniKit<span class="highlight">Hub</span></span>
+            </a>
+            <div class="nav-actions">
+                <button id="theme-toggle" class="icon-btn" aria-label="Toggle Theme">
+                    <i class="fa-solid fa-moon"></i>
+                </button>
+            </div>
+        </div>
+    </header>
+
+    <main class="container">
+        <div class="tool-container">
+            <h1 style="font-size: 1.8rem; margin-bottom: 8px;">All-in-One Financial & Loan Calculator</h1>
+            <p style="color: var(--text-secondary); margin-bottom: 24px;">Calculate Loan EMI, Fixed Deposit (FD) returns, and SIP investment growth instantly.</p>
+
+            <div class="tab-selector">
+                <button id="tab-emi" class="tab-btn active" onclick="switchCalc('emi')">Loan EMI Calculator</button>
+                <button id="tab-fd" class="tab-btn" onclick="switchCalc('fd')">Fixed Deposit (FD)</button>
+                <button id="tab-sip" class="tab-btn" onclick="switchCalc('sip')">SIP Growth</button>
+            </div>
+
+            <div class="calc-grid">
+                <!-- Inputs -->
+                <div>
+                    <div class="form-group">
+                        <label id="lbl-amount">Loan Amount ($ / ৳):</label>
+                        <input type="number" id="inp-amount" class="form-control" value="100000">
+                    </div>
+                    <div class="form-group">
+                        <label id="lbl-rate">Annual Interest Rate (%):</label>
+                        <input type="number" id="inp-rate" class="form-control" value="8.5" step="0.1">
+                    </div>
+                    <div class="form-group">
+                        <label id="lbl-tenure">Tenure (Years):</label>
+                        <input type="number" id="inp-tenure" class="form-control" value="5">
+                    </div>
+                    <button class="action-btn" onclick="calculate()"><i class="fa-solid fa-calculator"></i> Calculate Returns</button>
+                </div>
+
+                <!-- Results Summary -->
+                <div class="result-card">
+                    <h3 style="font-size: 1.1rem; margin-bottom: 15px; color: var(--text-primary);"><i class="fa-solid fa-chart-pie"></i> Financial Breakdown</h3>
+                    
+                    <div class="result-item">
+                        <span id="res-lbl-1">Monthly Payment (EMI):</span>
+                        <strong id="res-val-1">$0</strong>
+                    </div>
+                    <div class="result-item">
+                        <span id="res-lbl-2">Total Interest Payable:</span>
+                        <strong id="res-val-2">$0</strong>
+                    </div>
+                    <div class="result-item" style="border-bottom: none;">
+                        <span id="res-lbl-3">Total Amount Payable:</span>
+                        <strong id="res-val-3" style="font-size: 1.3rem;">$0</strong>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <footer class="footer">
+        <div class="footer-bottom">
+            <div class="container">
+                <p>&copy; 2026 OmniKitHub.com. All rights reserved.</p>
+            </div>
+        </div>
+    </footer>
+
+    <script src="../script.js"></script>
+    <script>
+        let currentMode = 'emi';
+
+        function switchCalc(mode) {
+            currentMode = mode;
+            document.querySelectorAll('.tab-btn').forEach(btn => btn.classList.remove('active'));
+
+            if (mode === 'emi') {
+                document.getElementById('tab-emi').classList.add('active');
+                document.getElementById('lbl-amount').innerText = 'Loan Amount ($ / ৳):';
+                document.getElementById('lbl-tenure').innerText = 'Tenure (Years):';
+                document.getElementById('inp-amount').value = 100000;
+                document.getElementById('inp-rate').value = 8.5;
+                document.getElementById('inp-tenure').value = 5;
+            } else if (mode === 'fd') {
+                document.getElementById('tab-fd').classList.add('active');
+                document.getElementById('lbl-amount').innerText = 'Deposit Amount ($ / ৳):';
+                document.getElementById('lbl-tenure').innerText = 'Investment Duration (Years):';
+                document.getElementById('inp-amount').value = 50000;
+                document.getElementById('inp-rate').value = 7.0;
+                document.getElementById('inp-tenure').value = 3;
+            } else {
+                document.getElementById('tab-sip').classList.add('active');
+                document.getElementById('lbl-amount').innerText = 'Monthly Investment ($ / ৳):';
+                document.getElementById('lbl-tenure').innerText = 'Investment Period (Years):';
+                document.getElementById('inp-amount').value = 2000;
+                document.getElementById('inp-rate').value = 12.0;
+                document.getElementById('inp-tenure').value = 10;
+            }
+            calculate();
+        }
+
+        function calculate() {
+            const p = parseFloat(document.getElementById('inp-amount').value) || 0;
+            const r = parseFloat(document.getElementById('inp-rate').value) || 0;
+            const y = parseFloat(document.getElementById('inp-tenure').value) || 0;
+
+            const res1 = document.getElementById('res-val-1');
+            const res2 = document.getElementById('res-val-2');
+            const res3 = document.getElementById('res-val-3');
+
+            const lbl1 = document.getElementById('res-lbl-1');
+            const lbl2 = document.getElementById('res-lbl-2');
+            const lbl3 = document.getElementById('res-lbl-3');
+
+            if (currentMode === 'emi') {
+                lbl1.innerText = 'Monthly EMI:';
+                lbl2.innerText = 'Total Interest Payable:';
+                lbl3.innerText = 'Total Amount Payable:';
+
+                const monthlyRate = r / 12 / 100;
+                const months = y * 12;
+                const emi = (p * monthlyRate * Math.pow(1 + monthlyRate, months)) / (Math.pow(1 + monthlyRate, months) - 1);
+                const totalPayable = emi * months;
+                const totalInterest = totalPayable - p;
+
+                res1.innerText = formatCurr(emi);
+                res2.innerText = formatCurr(totalInterest);
+                res3.innerText = formatCurr(totalPayable);
+            } else if (currentMode === 'fd') {
+                lbl1.innerText = 'Invested Amount:';
+                lbl2.innerText = 'Total Interest Earned:';
+                lbl3.innerText = 'Total Maturity Value:';
+
+                const maturity = p * Math.pow((1 + r / 100), y);
+                const interestEarned = maturity - p;
+
+                res1.innerText = formatCurr(p);
+                res2.innerText = formatCurr(interestEarned);
+                res3.innerText = formatCurr(maturity);
+            } else if (currentMode === 'sip') {
+                lbl1.innerText = 'Total Invested:';
+                lbl2.innerText = 'Estimated Returns:';
+                lbl3.innerText = 'Total Future Value:';
+
+                const i = r / 12 / 100;
+                const n = y * 12;
+                const futureValue = p * ((Math.pow(1 + i, n) - 1) / i) * (1 + i);
+                const totalInvested = p * n;
+                const returns = futureValue - totalInvested;
+
+                res1.innerText = formatCurr(totalInvested);
+                res2.innerText = formatCurr(returns);
+                res3.innerText = formatCurr(futureValue);
+            }
+        }
+
+        function formatCurr(val) {
+            return isNaN(val) ? '$0' : '$' + Math.round(val).toLocaleString();
+        }
+
+        // Initial Calculation
+        calculate();
+    </script>
+</body>
+</html>

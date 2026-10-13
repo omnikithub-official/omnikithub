@@ -1,0 +1,290 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Advanced Unit & Currency Converter - OmniKitHub</title>
+    <meta name="description" content="Free online unit converter for length, weight, temperature, and currency conversion with live exchange rates.">
+    <meta name="keywords" content="unit converter online, currency converter, temperature converter, weight conversion tool, length converter">
+    <link rel="stylesheet" href="../style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        .tool-container {
+            max-width: 900px;
+            margin: 40px auto;
+            background: var(--bg-surface);
+            border: 1px solid var(--card-border);
+            border-radius: 16px;
+            padding: 30px;
+            box-shadow: var(--card-shadow);
+        }
+
+        .category-tabs {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 25px;
+            flex-wrap: wrap;
+        }
+
+        .cat-btn {
+            padding: 10px 18px;
+            border-radius: 20px;
+            border: 1px solid var(--card-border);
+            background: var(--bg-primary);
+            color: var(--text-secondary);
+            font-weight: 700;
+            cursor: pointer;
+            transition: all var(--transition-speed) ease;
+        }
+
+        .cat-btn.active {
+            background: var(--accent-color);
+            color: #ffffff;
+            border-color: var(--accent-color);
+        }
+
+        .converter-grid {
+            display: grid;
+            grid-template-columns: 1fr auto 1fr;
+            gap: 20px;
+            align-items: center;
+            background: var(--bg-primary);
+            padding: 25px;
+            border-radius: 12px;
+            border: 1px solid var(--card-border);
+            margin-bottom: 20px;
+        }
+
+        .form-group {
+            margin-bottom: 12px;
+        }
+
+        .form-group label {
+            display: block;
+            font-weight: 600;
+            font-size: 0.85rem;
+            margin-bottom: 6px;
+            color: var(--text-primary);
+        }
+
+        .form-control {
+            width: 100%;
+            padding: 10px 12px;
+            border-radius: 8px;
+            border: 1px solid var(--card-border);
+            background: var(--bg-surface);
+            color: var(--text-primary);
+            outline: none;
+            font-size: 1rem;
+        }
+
+        .swap-btn {
+            width: 45px;
+            height: 45px;
+            border-radius: 50%;
+            background: var(--accent-color);
+            color: #fff;
+            border: none;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.1rem;
+            transition: transform 0.2s ease;
+            margin-top: 20px;
+        }
+
+        .swap-btn:hover { transform: scale(1.1); }
+
+        .result-box {
+            background: var(--bg-primary);
+            border: 1px solid var(--card-border);
+            border-radius: 12px;
+            padding: 20px;
+            text-align: center;
+        }
+
+        @media (max-width: 768px) {
+            .converter-grid { grid-template-columns: 1fr; }
+            .swap-btn { margin: 0 auto; }
+        }
+    </style>
+</head>
+<body class="light-theme">
+
+    <header class="navbar">
+        <div class="container nav-container">
+            <a href="../index.html" class="logo">
+                <i class="fa-solid fa-toolbox logo-icon"></i>
+                <span class="logo-text">OmniKit<span class="highlight">Hub</span></span>
+            </a>
+            <div class="nav-actions">
+                <button id="theme-toggle" class="icon-btn" aria-label="Toggle Theme">
+                    <i class="fa-solid fa-moon"></i>
+                </button>
+            </div>
+        </div>
+    </header>
+
+    <main class="container">
+        <div class="tool-container">
+            <h1 style="font-size: 1.8rem; margin-bottom: 8px;">Advanced Unit & Currency Converter</h1>
+            <p style="color: var(--text-secondary); margin-bottom: 24px;">Convert length, weight, temperature, and currency units seamlessly.</p>
+
+            <div class="category-tabs">
+                <button id="btn-length" class="cat-btn active" onclick="switchCategory('length')">Length</button>
+                <button id="btn-weight" class="cat-btn" onclick="switchCategory('weight')">Weight</button>
+                <button id="btn-temp" class="cat-btn" onclick="switchCategory('temp')">Temperature</button>
+                <button id="btn-currency" class="cat-btn" onclick="switchCategory('currency')">Currency</button>
+            </div>
+
+            <div class="converter-grid">
+                <!-- From Section -->
+                <div>
+                    <div class="form-group">
+                        <label>From:</label>
+                        <select id="unit-from" class="form-control" onchange="convert()"></select>
+                    </div>
+                    <div class="form-group" style="margin-bottom: 0;">
+                        <label>Amount:</label>
+                        <input type="number" id="inp-value" class="form-control" value="1" oninput="convert()">
+                    </div>
+                </div>
+
+                <!-- Swap Button -->
+                <button class="swap-btn" onclick="swapUnits()" title="Swap Units">
+                    <i class="fa-solid fa-right-left"></i>
+                </button>
+
+                <!-- To Section -->
+                <div>
+                    <div class="form-group">
+                        <label>To:</label>
+                        <select id="unit-to" class="form-control" onchange="convert()"></select>
+                    </div>
+                </div>
+            </div>
+
+            <div class="result-box">
+                <div style="font-size: 0.9rem; font-weight: 600; color: var(--text-secondary);">Converted Result</div>
+                <div id="res-output" style="font-size: 2.2rem; font-weight: 800; color: var(--accent-color); margin-top: 6px;">0</div>
+            </div>
+        </div>
+    </main>
+
+    <footer class="footer">
+        <div class="footer-bottom">
+            <div class="container">
+                <p>&copy; 2026 OmniKitHub.com. All rights reserved.</p>
+            </div>
+        </div>
+    </footer>
+
+    <script src="../script.js"></script>
+    <script>
+        let currentCategory = 'length';
+
+        const unitsData = {
+            length: {
+                Meters: 1,
+                Kilometers: 1000,
+                Centimeters: 0.01,
+                Millimeters: 0.001,
+                Miles: 1609.34,
+                Feet: 0.3048,
+                Inches: 0.0254
+            },
+            weight: {
+                Kilograms: 1,
+                Grams: 0.001,
+                Milligrams: 0.000001,
+                Pounds: 0.453592,
+                Ounces: 0.0283495
+            },
+            temp: {
+                Celsius: 'C',
+                Fahrenheit: 'F',
+                Kelvin: 'K'
+            },
+            currency: {
+                USD: 1,
+                EUR: 0.92,
+                GBP: 0.79,
+                BDT: 117.5,
+                INR: 83.2,
+                CAD: 1.35
+            }
+        };
+
+        const unitFrom = document.getElementById('unit-from');
+        const unitTo = document.getElementById('unit-to');
+        const inpValue = document.getElementById('inp-value');
+        const resOutput = document.getElementById('res-output');
+
+        function switchCategory(cat) {
+            currentCategory = cat;
+            document.querySelectorAll('.cat-btn').forEach(btn => btn.classList.remove('active'));
+            document.getElementById(`btn-${cat}`).classList.add('active');
+
+            populateSelects();
+            convert();
+        }
+
+        function populateSelects() {
+            const keys = Object.keys(unitsData[currentCategory]);
+            unitFrom.innerHTML = '';
+            unitTo.innerHTML = '';
+
+            keys.forEach((key, idx) => {
+                unitFrom.add(new Option(key, key));
+                unitTo.add(new Option(key, key));
+            });
+            if (keys.length > 1) unitTo.selectedIndex = 1;
+        }
+
+        function swapUnits() {
+            const temp = unitFrom.value;
+            unitFrom.value = unitTo.value;
+            unitTo.value = temp;
+            convert();
+        }
+
+        function convert() {
+            const val = parseFloat(inpValue.value);
+            if (isNaN(val)) {
+                resOutput.innerText = '0';
+                return;
+            }
+
+            const from = unitFrom.value;
+            const to = unitTo.value;
+            let result = 0;
+
+            if (currentCategory === 'temp') {
+                result = convertTemp(val, from, to);
+            } else {
+                const data = unitsData[currentCategory];
+                const baseVal = val * data[from];
+                result = baseVal / data[to];
+            }
+
+            resOutput.innerText = Number(result.toFixed(4)).toLocaleString();
+        }
+
+        function convertTemp(val, from, to) {
+            if (from === to) return val;
+            let celsius = val;
+            if (from === 'Fahrenheit') celsius = (val - 32) * 5/9;
+            if (from === 'Kelvin') celsius = val - 273.15;
+
+            if (to === 'Celsius') return celsius;
+            if (to === 'Fahrenheit') return (celsius * 9/5) + 32;
+            if (to === 'Kelvin') return celsius + 273.15;
+            return celsius;
+        }
+
+        // Initialize
+        switchCategory('length');
+    </script>
+</body>
+</html>
