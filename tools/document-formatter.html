@@ -3,249 +3,431 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Assignment & Document Formatter - OmniKitHub</title>
-    <meta name="description" content="Format your academic assignments, essays, and documents instantly. Adjust line spacing, fix headings, and clean extra spaces online for free.">
-    <meta name="keywords" content="assignment formatter, document layout tool, text clean up, essay formatter online, line spacing adjuster">
-    <link rel="stylesheet" href="../style.css">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    <!-- jsPDF for PDF export -->
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+    <title>Pro Assignment & Document Formatter | OmniKitHub</title>
+    <meta name="description" content="Free online Assignment & Document Formatter. Create professional university cover pages, format text spacing, academic fonts, word counters, and export PDF reports.">
+    <meta name="keywords" content="assignment formatter, university cover page generator, document formatting tool, lab report cover page, word counter, academic pdf exporter">
+    <meta name="robots" content="index, follow">
+    <link rel="canonical" href="https://omnikithub.com/tools/document-formatter.html">
+
+    <!-- Open Graph Tags -->
+    <meta property="og:title" content="Pro Assignment & Document Formatter - OmniKitHub">
+    <meta property="og:description" content="Generate official university cover pages, format academic text, and export polished PDFs instantly.">
+    <meta property="og:url" content="https://omnikithub.com/tools/document-formatter.html">
+    <meta property="og:type" content="website">
+
+    <!-- html2pdf Library -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
+
+    <!-- Schema.org Markup -->
+    <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@type": "WebApplication",
+      "name": "Pro Assignment & Document Formatter",
+      "url": "https://omnikithub.com/tools/document-formatter.html",
+      "applicationCategory": "EducationalApplication",
+      "operatingSystem": "All",
+      "offers": {
+        "@type": "Offer",
+        "price": "0",
+        "priceCurrency": "USD"
+      }
+    }
+    </script>
+
     <style>
-        .tool-container {
-            max-width: 1100px;
-            margin: 40px auto;
+        :root {
+            --bg-color: #f4f6f9;
+            --card-bg: #ffffff;
+            --text-color: #1e293b;
+            --border-color: #cbd5e1;
+            --primary-color: #2563eb;
+            --primary-hover: #1d4ed8;
+            --doc-font: 'Georgia', serif;
+            --line-spacing: 1.5;
+            --text-align: justify;
+        }
+
+        body.dark-mode {
+            --bg-color: #0f172a;
+            --card-bg: #1e293b;
+            --text-color: #f8fafc;
+            --border-color: #334155;
+            --primary-color: #3b82f6;
+            --primary-hover: #60a5fa;
+        }
+
+        * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; }
+        body { background-color: var(--bg-color); color: var(--text-color); padding: 20px; transition: all 0.3s ease; }
+
+        .app-container {
+            max-width: 1250px;
+            margin: 0 auto;
             display: grid;
             grid-template-columns: 1fr 1fr;
             gap: 25px;
         }
 
-        .panel-box {
-            background: var(--bg-surface);
-            border: 1px solid var(--card-border);
-            border-radius: 16px;
-            padding: 24px;
-            box-shadow: var(--card-shadow);
+        @media (max-width: 900px) {
+            .app-container { grid-template-columns: 1fr; }
         }
 
-        .form-group {
-            margin-bottom: 15px;
+        .editor-card, .preview-card {
+            background: var(--card-bg);
+            border-radius: 12px;
+            padding: 25px;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.08);
+            border: 1px solid var(--border-color);
         }
 
-        .form-group label {
-            display: block;
-            font-weight: 600;
-            font-size: 0.9rem;
-            margin-bottom: 6px;
-            color: var(--text-primary);
+        .header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 15px; }
+        .header h1 { font-size: 22px; color: var(--primary-color); }
+
+        .theme-btn {
+            background: transparent;
+            border: 1px solid var(--border-color);
+            color: var(--text-color);
+            padding: 6px 12px;
+            border-radius: 20px;
+            cursor: pointer;
+            font-size: 13px;
         }
 
-        .form-control {
+        .section-title {
+            font-size: 14px;
+            font-weight: 700;
+            margin: 16px 0 8px 0;
+            color: var(--primary-color);
+            border-bottom: 1px solid var(--border-color);
+            padding-bottom: 4px;
+            text-transform: uppercase;
+        }
+
+        .form-group { margin-bottom: 10px; }
+        .form-group label { display: block; font-size: 12px; font-weight: 600; margin-bottom: 4px; }
+
+        input[type="text"], textarea, select {
             width: 100%;
-            padding: 10px 12px;
-            border-radius: 8px;
-            border: 1px solid var(--card-border);
-            background: var(--bg-primary);
-            color: var(--text-primary);
+            padding: 9px 12px;
+            border: 1px solid var(--border-color);
+            border-radius: 6px;
+            font-size: 13px;
+            background: var(--card-bg);
+            color: var(--text-color);
             outline: none;
-            font-size: 0.95rem;
         }
 
-        textarea.form-control {
-            height: 220px;
-            resize: vertical;
-            line-height: 1.5;
-        }
+        textarea { height: 110px; resize: vertical; }
 
-        .controls-grid {
+        .settings-grid {
             display: grid;
             grid-template-columns: 1fr 1fr;
-            gap: 12px;
-            margin-bottom: 15px;
+            gap: 10px;
         }
 
-        .preview-paper {
+        /* Stats Bar */
+        .stats-bar {
+            display: flex;
+            gap: 15px;
+            font-size: 12px;
+            color: #64748b;
+            margin-bottom: 10px;
+            font-weight: 600;
+        }
+
+        /* Document Live Paper */
+        .doc-paper {
             background: #ffffff;
-            color: #111827;
-            padding: 30px;
-            border-radius: 8px;
-            border: 1px solid var(--card-border);
-            min-height: 420px;
-            box-shadow: 0 4px 12px rgba(0,0,0,0.08);
-            font-family: 'Georgia', serif;
-            font-size: 1rem;
-            line-height: 1.6;
-            white-space: pre-wrap;
-            word-wrap: break-word;
+            color: #000000;
+            padding: 40px;
+            border-radius: 4px;
+            box-shadow: 0 0 10px rgba(0,0,0,0.1);
+            min-height: 700px;
+            font-family: var(--doc-font);
         }
 
-        .btn-group {
+        /* Cover Page Styling */
+        .cover-page {
+            text-align: center;
+            border-bottom: 2px dashed #cbd5e1;
+            padding-bottom: 30px;
+            margin-bottom: 30px;
+        }
+
+        .uni-name { font-size: 22px; font-weight: bold; text-transform: uppercase; color: #1e293b; margin-bottom: 15px; }
+        .doc-type { font-size: 14px; font-weight: bold; color: #2563eb; margin-bottom: 5px; text-transform: uppercase; }
+        .course-title { font-size: 16px; font-weight: bold; margin-bottom: 25px; }
+
+        .cover-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 20px;
+            text-align: left;
+            font-size: 12px;
+        }
+
+        .cover-table th, .cover-table td {
+            border: 1px solid #334155;
+            padding: 8px 10px;
+            vertical-align: top;
+        }
+
+        .cover-table th { background: #f1f5f9; color: #0f172a; text-transform: uppercase; font-size: 11px; }
+
+        .doc-content {
+            font-size: 13px;
+            line-height: var(--line-spacing);
+            text-align: var(--text-align);
+            white-space: pre-line;
+        }
+
+        /* Action Buttons */
+        .action-bar {
             display: flex;
             gap: 10px;
             margin-top: 20px;
             flex-wrap: wrap;
         }
 
-        .action-btn {
-            flex: 1;
-            padding: 12px;
-            border-radius: 8px;
-            border: none;
+        .btn {
+            padding: 10px 16px;
+            border-radius: 6px;
+            border: 1px solid var(--border-color);
+            background: var(--card-bg);
+            color: var(--text-color);
             font-weight: 600;
             cursor: pointer;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            gap: 8px;
-            transition: all var(--transition-speed) ease;
+            font-size: 13px;
         }
 
-        .btn-primary { background: var(--accent-color); color: #fff; }
-        .btn-primary:hover { background: var(--accent-hover); }
-        .btn-secondary { background: var(--badge-bg); color: var(--text-primary); border: 1px solid var(--card-border); }
+        .btn-primary { background: var(--primary-color); color: white; border: none; }
+        .btn-primary:hover { background: var(--primary-hover); }
+        .btn-share { background: #10b981; color: white; border: none; }
 
-        @media (max-width: 900px) {
-            .tool-container { grid-template-columns: 1fr; }
+        @media print {
+            body * { visibility: hidden; }
+            #docPaper, #docPaper * { visibility: visible; }
+            #docPaper { position: absolute; left: 0; top: 0; width: 100%; box-shadow: none; padding: 0; }
+            .editor-card, .header, .action-bar { display: none; }
         }
     </style>
 </head>
-<body class="light-theme">
+<body>
 
-    <header class="navbar">
-        <div class="container nav-container">
-            <a href="../index.html" class="logo">
-                <i class="fa-solid fa-toolbox logo-icon"></i>
-                <span class="logo-text">OmniKit<span class="highlight">Hub</span></span>
-            </a>
-            <div class="nav-actions">
-                <button id="theme-toggle" class="icon-btn" aria-label="Toggle Theme">
-                    <i class="fa-solid fa-moon"></i>
-                </button>
+<div class="app-container">
+    <!-- Left Editor -->
+    <div class="editor-card">
+        <div class="header">
+            <h1>📝 Assignment Formatter</h1>
+            <button id="themeToggle" class="theme-btn">🌙 Dark Mode</button>
+        </div>
+
+        <div class="section-title">1. Cover Page Details</div>
+        <div class="form-group">
+            <label>University / Institute Name:</label>
+            <input type="text" id="uniInput" value="World University of Bangladesh">
+        </div>
+        <div class="settings-grid">
+            <div class="form-group">
+                <label>Report / Exp No:</label>
+                <input type="text" id="expNoInput" value="Exp No: 01">
+            </div>
+            <div class="form-group">
+                <label>Assignment Type:</label>
+                <input type="text" id="expNameInput" value="Lab Assignment">
             </div>
         </div>
-    </header>
+        <div class="form-group">
+            <label>Course Name & Code:</label>
+            <input type="text" id="courseInput" value="Web Technologies and Programming (CSE-321)">
+        </div>
 
-    <main class="container">
-        <div class="tool-container">
-            <!-- Left Controls -->
-            <div class="panel-box">
-                <h1 style="font-size: 1.5rem; margin-bottom: 6px;">Assignment & Document Formatter</h1>
-                <p style="color: var(--text-secondary); font-size: 0.9rem; margin-bottom: 20px;">Paste raw assignment text to automatically align spacing, typography, and structure.</p>
-
-                <div class="form-group">
-                    <label>Raw Document / Assignment Text:</label>
-                    <textarea id="raw-text" class="form-control" placeholder="Paste unformatted assignment or research paper text here..."></textarea>
-                </div>
-
-                <div class="controls-grid">
-                    <div class="form-group">
-                        <label>Line Spacing:</label>
-                        <select id="line-spacing" class="form-control">
-                            <option value="1.4">Single (1.4)</option>
-                            <option value="1.8" selected>1.5 Lines (1.8)</option>
-                            <option value="2.2">Double Space (2.2)</option>
-                        </select>
-                    </div>
-
-                    <div class="form-group">
-                        <label>Font Style:</label>
-                        <select id="font-style" class="form-control">
-                            <option value="'Georgia', serif">Georgia (Academic)</option>
-                            <option value="'Times New Roman', Times, serif">Times New Roman</option>
-                            <option value="'Arial', sans-serif">Arial Clean</option>
-                        </select>
-                    </div>
-                </div>
-
-                <div class="form-group">
-                    <label>Text Alignment:</label>
-                    <select id="text-align" class="form-control">
-                        <option value="justify">Justify (Recommended for Assignments)</option>
-                        <option value="left">Left Align</option>
-                        <option value="center">Center Align</option>
-                    </select>
-                </div>
-
-                <div class="btn-group">
-                    <button id="clean-btn" class="action-btn btn-secondary"><i class="fa-solid fa-broom"></i> Clean Spaces</button>
-                    <button id="capitalize-btn" class="action-btn btn-secondary"><i class="fa-solid fa-font"></i> Title Case</button>
-                </div>
+        <div class="settings-grid">
+            <div class="form-group">
+                <label>Submitted By (Name, Roll, Batch):</label>
+                <textarea id="subByInput" style="height: 65px;">MD. ALIMUL HASAN
+Roll: 4595 | Batch: Evening (70B)
+Department: CSE</textarea>
             </div>
-
-            <!-- Right Live Preview -->
-            <div class="panel-box" style="display: flex; flex-direction: column;">
-                <h3 style="font-size: 1.1rem; margin-bottom: 12px;">Formatted Live Document</h3>
-                <div id="preview-paper" class="preview-paper">Your formatted document preview will appear here live...</div>
-
-                <div class="btn-group">
-                    <button id="copy-btn" class="action-btn btn-secondary"><i class="fa-solid fa-copy"></i> Copy Text</button>
-                    <button id="pdf-btn" class="action-btn btn-primary"><i class="fa-solid fa-file-pdf"></i> Save as PDF</button>
-                </div>
+            <div class="form-group">
+                <label>Submitted To (Teacher Name, Dept):</label>
+                <textarea id="subToInput" style="height: 65px;">Mst. Nishita Aktar
+Lecturer, Department of CSE</textarea>
             </div>
         </div>
-    </main>
 
-    <footer class="footer">
-        <div class="footer-bottom">
-            <div class="container">
-                <p>&copy; 2026 OmniKitHub.com. All rights reserved.</p>
+        <div class="section-title">2. Document Content & Formatting</div>
+        <div class="form-group">
+            <label>Main Body Text / Assignment Body:</label>
+            <textarea id="contentInput" placeholder="Paste your assignment body text here...">Introduction:
+Web technologies encompass a wide range of tools and techniques utilized in the process of communication between different types of devices over the internet.
+
+Objective:
+To design and deploy a responsive, high-performance web platform using modern HTML5, CSS3, and JavaScript frameworks.
+
+Methodology & Implementation:
+The development lifecycle followed modular component structures, ensuring cross-browser compatibility and optimized page load speed.</textarea>
+        </div>
+
+        <div class="settings-grid">
+            <div class="form-group">
+                <label>Line Spacing:</label>
+                <select id="spacingPicker">
+                    <option value="1.3">1.3 Compact</option>
+                    <option value="1.5" selected>1.5 Standard (1.5)</option>
+                    <option value="2.0">2.0 Double Spacing</option>
+                </select>
+            </div>
+            <div class="form-group">
+                <label>Font Style:</label>
+                <select id="fontPicker">
+                    <option value="'Georgia', serif" selected>Georgia (Academic)</option>
+                    <option value="'Times New Roman', serif">Times New Roman</option>
+                    <option value="Arial, sans-serif">Arial</option>
+                </select>
             </div>
         </div>
-    </footer>
 
-    <script src="../script.js"></script>
-    <script>
-        const rawText = document.getElementById('raw-text');
-        const previewPaper = document.getElementById('preview-paper');
-        const lineSpacing = document.getElementById('line-spacing');
-        const fontStyle = document.getElementById('font-style');
-        const textAlign = document.getElementById('text-align');
-        const cleanBtn = document.getElementById('clean-btn');
-        const capitalizeBtn = document.getElementById('capitalize-btn');
-        const copyBtn = document.getElementById('copy-btn');
-        const pdfBtn = document.getElementById('pdf-btn');
+        <div class="action-bar">
+            <button id="downloadPdfBtn" class="btn btn-primary">📥 Save Assignment PDF</button>
+            <button id="printBtn" class="btn">🖨️ Print</button>
+            <button id="shareBtn" class="btn btn-share">🔗 Share Tool</button>
+            <button id="clearBtn" class="btn">🗑️ Clear All</button>
+        </div>
+    </div>
 
-        function updatePreview() {
-            let text = rawText.value.trim();
-            previewPaper.innerText = text || 'Your formatted document preview will appear here live...';
-            previewPaper.style.lineHeight = lineSpacing.value;
-            previewPaper.style.fontFamily = fontStyle.value;
-            previewPaper.style.textAlign = textAlign.value;
+    <!-- Right Live Preview -->
+    <div class="preview-card">
+        <h3 style="margin-bottom: 10px; color: var(--primary-color);">Live Formatted Preview</h3>
+        <div class="stats-bar">
+            <span id="wordCount">Words: 0</span>
+            <span id="pageCount">Estimated Pages: 1</span>
+        </div>
+        
+        <div class="doc-paper" id="docPaper">
+            <!-- Cover Page Preview -->
+            <div class="cover-page">
+                <div class="uni-name" id="prevUni">World University of Bangladesh</div>
+                <div class="doc-type" id="prevExpName">Lab Assignment</div>
+                <div style="font-size: 13px; font-weight: bold; margin-bottom: 10px;" id="prevExpNo">Exp No: 01</div>
+                <div class="course-title" id="prevCourse">Course: Web Technologies and Programming</div>
+
+                <table class="cover-table">
+                    <tr>
+                        <th width="50%">Submitted By</th>
+                        <th width="50%">Submitted To</th>
+                    </tr>
+                    <tr>
+                        <td id="prevSubBy" style="white-space: pre-line;">MD. ALIMUL HASAN...</td>
+                        <td id="prevSubTo" style="white-space: pre-line;">Mst. Nishita Aktar...</td>
+                    </tr>
+                </table>
+            </div>
+
+            <!-- Main Content Preview -->
+            <div class="doc-content" id="prevContent">
+                Assignment body content will appear here...
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    const uniInput = document.getElementById('uniInput');
+    const expNoInput = document.getElementById('expNoInput');
+    const expNameInput = document.getElementById('expNameInput');
+    const courseInput = document.getElementById('courseInput');
+    const subByInput = document.getElementById('subByInput');
+    const subToInput = document.getElementById('subToInput');
+    const contentInput = document.getElementById('contentInput');
+
+    const prevUni = document.getElementById('prevUni');
+    const prevExpNo = document.getElementById('prevExpNo');
+    const prevExpName = document.getElementById('prevExpName');
+    const prevCourse = document.getElementById('prevCourse');
+    const prevSubBy = document.getElementById('prevSubBy');
+    const prevSubTo = document.getElementById('prevSubTo');
+    const prevContent = document.getElementById('prevContent');
+
+    const spacingPicker = document.getElementById('spacingPicker');
+    const fontPicker = document.getElementById('fontPicker');
+    const docPaper = document.getElementById('docPaper');
+    const wordCount = document.getElementById('wordCount');
+    const pageCount = document.getElementById('pageCount');
+    const themeToggle = document.getElementById('themeToggle');
+
+    function updatePreview() {
+        prevUni.innerText = uniInput.value;
+        prevExpNo.innerText = expNoInput.value;
+        prevExpName.innerText = expNameInput.value;
+        prevCourse.innerText = `Course: ${courseInput.value}`;
+        prevSubBy.innerText = subByInput.value;
+        prevSubTo.innerText = subToInput.value;
+        prevContent.innerText = contentInput.value;
+
+        // Word and Page Calculator
+        const text = contentInput.value.trim();
+        const words = text ? text.split(/\s+/).length : 0;
+        const pages = Math.max(1, Math.ceil(words / 250));
+        wordCount.innerText = `Words: ${words}`;
+        pageCount.innerText = `Estimated Pages: ${pages}`;
+    }
+
+    [uniInput, expNoInput, expNameInput, courseInput, subByInput, subToInput, contentInput].forEach(inp => {
+        inp.addEventListener('input', updatePreview);
+    });
+
+    spacingPicker.addEventListener('change', (e) => {
+        docPaper.style.setProperty('--line-spacing', e.target.value);
+    });
+
+    fontPicker.addEventListener('change', (e) => {
+        docPaper.style.setProperty('--doc-font', e.target.value);
+    });
+
+    // Dark Mode
+    themeToggle.addEventListener('click', () => {
+        document.body.classList.toggle('dark-mode');
+        themeToggle.innerText = document.body.classList.contains('dark-mode') ? '☀️ Light Mode' : '🌙 Dark Mode';
+    });
+
+    // Actions
+    document.getElementById('downloadPdfBtn').addEventListener('click', () => {
+        const opt = {
+            margin: 0.3,
+            filename: 'Assignment_Report.pdf',
+            html2canvas: { scale: 2 },
+            jsPDF: { unit: 'in', format: 'letter', orientation: 'portrait' }
+        };
+        html2pdf().set(opt).from(docPaper).save();
+    });
+
+    document.getElementById('printBtn').addEventListener('click', () => window.print());
+
+    document.getElementById('clearBtn').addEventListener('click', () => {
+        uniInput.value = ''; expNoInput.value = ''; expNameInput.value = '';
+        courseInput.value = ''; subByInput.value = ''; subToInput.value = '';
+        contentInput.value = '';
+        updatePreview();
+    });
+
+    document.getElementById('shareBtn').addEventListener('click', async () => {
+        if (navigator.share) {
+            try {
+                await navigator.share({
+                    title: 'Assignment Formatter & Cover Page Generator',
+                    text: 'Create university cover pages and format academic reports online!',
+                    url: window.location.href
+                });
+            } catch (err) { console.log(err); }
+        } else {
+            navigator.clipboard.writeText(window.location.href);
+            alert('Tool link copied to clipboard!');
         }
+    });
 
-        rawText.addEventListener('input', updatePreview);
-        lineSpacing.addEventListener('change', updatePreview);
-        fontStyle.addEventListener('change', updatePreview);
-        textAlign.addEventListener('change', updatePreview);
+    updatePreview();
+</script>
 
-        cleanBtn.addEventListener('click', () => {
-            rawText.value = rawText.value.replace(/[ \t]+/g, ' ').replace(/\n\s*\n/g, '\n\n').trim();
-            updatePreview();
-        });
-
-        capitalizeBtn.addEventListener('click', () => {
-            rawText.value = rawText.value.toLowerCase().replace(/(?:^|\s|-)\S/g, c => c.toUpperCase());
-            updatePreview();
-        });
-
-        copyBtn.addEventListener('click', () => {
-            if (!rawText.value) return;
-            navigator.clipboard.writeText(previewPaper.innerText);
-            alert('Formatted text copied to clipboard!');
-        });
-
-        pdfBtn.addEventListener('click', () => {
-            if (!rawText.value) return;
-            const { jsPDF } = window.jspdf;
-            html2canvas(previewPaper, { scale: 2 }).then(canvas => {
-                const imgData = canvas.toDataURL('image/png');
-                const pdf = new jsPDF('p', 'mm', 'a4');
-                const pdfWidth = pdf.internal.pageSize.getWidth();
-                const pdfHeight = (canvas.height * pdfWidth) / canvas.width;
-                pdf.addImage(imgData, 'PNG', 0, 0, pdfWidth, pdfHeight);
-                pdf.save('OmniKitHub-Formatted-Document.pdf');
-            });
-        });
-    </script>
 </body>
 </html>
