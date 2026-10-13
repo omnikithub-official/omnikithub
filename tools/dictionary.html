@@ -3,19 +3,19 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Universal Online Dictionary & All Language Translator | OmniKitHub</title>
-    <meta name="description" content="Free online Universal Dictionary and Multi-language Translator. Translate words and full sentences between English, Bangla, and global languages with audio pronunciation and PDF export.">
-    <meta name="keywords" content="online dictionary, english to bangla dictionary, sentence translator, all language translator, word meaning finder, audio pronunciation, english grammar helper">
+    <title>Universal Fast Online Dictionary & Translator | OmniKitHub</title>
+    <meta name="description" content="Free ultra-fast Universal Dictionary and Translator. Translate English to Bangla words, full sentences, grammar details, audio pronunciation, and download PDF notes.">
+    <meta name="keywords" content="fast online dictionary, english to bangla dictionary, sentence translator, google translate engine, word meaning finder, audio pronunciation">
     <meta name="robots" content="index, follow">
     <link rel="canonical" href="https://omnikithub.com/tools/dictionary.html">
 
     <!-- Open Graph Tags -->
-    <meta property="og:title" content="Universal Dictionary & Sentence Translator - OmniKitHub">
-    <meta property="og:description" content="Instant dictionary search, full sentence translation, audio pronunciation, and vocabulary PDF report generator.">
+    <meta property="og:title" content="Universal Fast Online Dictionary & Translator - OmniKitHub">
+    <meta property="og:description" content="Instant high-speed dictionary search, full sentence translation, audio pronunciation, and vocabulary PDF report generator.">
     <meta property="og:url" content="https://omnikithub.com/tools/dictionary.html">
     <meta property="og:type" content="website">
 
-    <!-- html2pdf for Exporting Word Notes -->
+    <!-- html2pdf for Exporting Notes -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
 
     <!-- Schema.org Markup -->
@@ -23,7 +23,7 @@
     {
       "@context": "https://schema.org",
       "@type": "WebApplication",
-      "name": "Universal Online Dictionary & Translator",
+      "name": "Universal Fast Online Dictionary & Translator",
       "url": "https://omnikithub.com/tools/dictionary.html",
       "applicationCategory": "EducationalApplication",
       "operatingSystem": "All",
@@ -81,7 +81,6 @@
 
         .description { color: #64748b; font-size: 14px; margin-bottom: 25px; }
 
-        /* Dashboard Tabs */
         .tab-bar {
             display: flex;
             gap: 10px;
@@ -206,10 +205,6 @@
         .section-title { font-size: 14px; font-weight: 700; color: #64748b; margin-bottom: 8px; text-transform: uppercase; }
 
         .definition-item { margin-bottom: 12px; line-height: 1.6; font-size: 15px; }
-        .example-text { color: #64748b; font-style: italic; font-size: 14px; display: block; margin-top: 2px; }
-
-        .tags-list { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 8px; }
-        .tag-pill { background: var(--border-color); padding: 4px 12px; border-radius: 12px; font-size: 13px; }
 
         .action-bar {
             display: flex;
@@ -244,15 +239,14 @@
 
 <div class="container" id="printableReport">
     <div class="header">
-        <h1>📖 Universal Dictionary & Translator</h1>
+        <h1>📖 Universal Fast Dictionary & Translator</h1>
         <button id="themeToggle" class="theme-btn">🌙 Dark Mode</button>
     </div>
-    <p class="description">Look up dictionary word meanings, pronunciations, or translate full sentences across multiple languages.</p>
+    <p class="description">Ultra-fast word definitions, instant Bangla meanings, and sentence translation powered by high-speed translation pipeline.</p>
 
-    <!-- Dashboard Tabs -->
     <div class="tab-bar">
         <button class="tab-btn active" onclick="switchTab(event, 'dictTab')">📕 Word Dictionary</button>
-        <button class="tab-btn" onclick="switchTab(event, 'transTab')">🌐 Universal Sentence Translator</button>
+        <button class="tab-btn" onclick="switchTab(event, 'transTab')">🌐 Sentence Translator</button>
     </div>
 
     <!-- Tab 1: Dictionary -->
@@ -280,22 +274,17 @@
             </div>
 
             <div class="bangla-box">
-                🇧🇩 Meaning: <span id="resBangla">বই, পুস্তক, গ্রন্থ, রেজিস্টার করা</span>
+                🇧🇩 Meaning / অনুবাদ: <span id="resBangla">বই, পুস্তক</span>
             </div>
 
             <div style="margin-bottom: 20px;">
-                <div class="section-title">📌 Grammar & Definition</div>
+                <div class="section-title">📌 Definition & Grammar</div>
                 <div id="resDefinitions"></div>
-            </div>
-
-            <div>
-                <div class="section-title">🔄 Synonyms & Related Terms</div>
-                <div id="resSynonyms" class="tags-list"></div>
             </div>
         </div>
     </div>
 
-    <!-- Tab 2: Universal Translator -->
+    <!-- Tab 2: Translator -->
     <div id="transTab" class="tab-content">
         <div style="display: flex; gap: 10px; margin-bottom: 15px;">
             <select id="langPair">
@@ -306,9 +295,9 @@
                 <option value="en|hi">English ➔ Hindi</option>
             </select>
         </div>
-        <textarea id="transInput" placeholder="Type or paste your sentence here to translate..."></textarea>
+        <textarea id="transInput" placeholder="Type or paste your text/sentence here to translate..."></textarea>
         <div style="margin: 15px 0;">
-            <button id="translateBtn" class="btn-main">⚡ Translate Sentence</button>
+            <button id="translateBtn" class="btn-main">⚡ Translate Now</button>
         </div>
         
         <div class="result-card">
@@ -319,7 +308,6 @@
         </div>
     </div>
 
-    <!-- Action Bar -->
     <div class="action-bar">
         <button id="downloadPdfBtn" class="btn-action">📄 Save PDF Note</button>
         <button id="printBtn" class="btn-action">🖨️ Print Word Card</button>
@@ -335,17 +323,19 @@
     const resPhonetic = document.getElementById('resPhonetic');
     const resBangla = document.getElementById('resBangla');
     const resDefinitions = document.getElementById('resDefinitions');
-    const resSynonyms = document.getElementById('resSynonyms');
     const audioBtn = document.getElementById('audioBtn');
     const themeToggle = document.getElementById('themeToggle');
 
-    const localDb = {
-        "book": { bangla: "বই, পুস্তক, গ্রন্থ, রেজিস্টার করা", pos: "Noun / Verb", def: "A written or printed work consisting of pages bound together.", ex: "She is reading a captivating book.", syn: ["volume", "publication", "novel", "record"] },
-        "knowledge": { bangla: "জ্ঞান, বিদ্যা, অভিজ্ঞতা, তথ্য", pos: "Noun", def: "Facts, information, and skills acquired through experience or education.", ex: "Knowledge is power.", syn: ["wisdom", "information", "learning"] },
-        "student": { bangla: "ছাত্র, ছাত্রী, শিক্ষার্থী", pos: "Noun", def: "A person who is studying at a school or college.", ex: "The student passed the exam.", syn: ["learner", "pupil", "scholar"] },
-        "computer": { bangla: "কম্পিউটার, গণকযন্ত্র", pos: "Noun", def: "An electronic device for storing and processing data.", ex: "He works on a computer.", syn: ["pc", "processor", "laptop"] },
-        "education": { bangla: "শিক্ষা, প্রশিক্ষণ, জ্ঞানার্জন", pos: "Noun", def: "The process of receiving or giving systematic instruction.", ex: "Education builds the future.", syn: ["schooling", "tuition"] }
-    };
+    async function translateTextFast(text, sourceLang = 'en', targetLang = 'bn') {
+        try {
+            const url = `https://translate.googleapis.com/translate_a/single?client=gtx&sl=${sourceLang}&tl=${targetLang}&dt=t&q=${encodeURIComponent(text)}`;
+            const res = await fetch(url);
+            const data = await res.json();
+            return data[0].map(item => item[0]).join('');
+        } catch (e) {
+            return null;
+        }
+    }
 
     async function searchWord() {
         const query = searchInput.value.trim().toLowerCase();
@@ -353,37 +343,33 @@
 
         searchBtn.innerText = 'Searching...';
 
-        try {
-            const res = await fetch(`https://api.dictionaryapi.dev/api/v2/entries/en/${query}`);
-            if(!res.ok) throw new Error('API limit');
-            const data = await res.json();
-            
-            resWord.innerText = data[0].word;
-            resPhonetic.innerText = data[0].phonetic || '';
-            resBangla.innerText = localDb[query] ? localDb[query].bangla : `${query} (Search Completed)`;
-            
+        resWord.innerText = query;
+        resPhonetic.innerText = `/${query}/`;
+
+        // Parallel execution for Dictionary + Google Translate pipeline
+        const [bnMeaning, dictData] = await Promise.all([
+            translateTextFast(query, 'en', 'bn'),
+            fetch(`https://api.dictionaryapi.dev/api/v2/entries/en/${query}`).then(r => r.ok ? r.json() : null).catch(() => null)
+        ]);
+
+        if (bnMeaning) {
+            resBangla.innerText = bnMeaning;
+        } else {
+            resBangla.innerText = `${query} (অর্থ খোঁজা হচ্ছে)`;
+        }
+
+        if (dictData && dictData[0]) {
+            if (dictData[0].phonetic) resPhonetic.innerText = dictData[0].phonetic;
             let defs = '';
-            data[0].meanings.forEach(m => {
+            dictData[0].meanings.forEach(m => {
                 defs += `<div class="definition-item"><b>[${m.partOfSpeech}]</b> ${m.definitions[0].definition}</div>`;
             });
             resDefinitions.innerHTML = defs;
-            resSynonyms.innerHTML = '<span class="tag-pill">vocabulary</span><span class="tag-pill">meaning</span>';
-        } catch (e) {
-            const fallback = localDb[query] || {
-                bangla: `${query} (শব্দটির অর্থ পাওয়া গেছে)`,
-                pos: "General Term",
-                def: `Meaning and analysis for "${query}".`,
-                ex: `Usage example for "${query}".`,
-                syn: ["concept", "term"]
-            };
-            resWord.innerText = query;
-            resPhonetic.innerText = `/${query}/`;
-            resBangla.innerText = fallback.bangla;
-            resDefinitions.innerHTML = `<div class="definition-item"><b>[${fallback.pos}]</b> ${fallback.def}</div>`;
-            resSynonyms.innerHTML = fallback.syn.map(s => `<span class="tag-pill">${s}</span>`).join('');
-        } finally {
-            searchBtn.innerText = '🔍 Search Word';
+        } else {
+            resDefinitions.innerHTML = `<div class="definition-item"><b>[Word]</b> Direct meaning: "${bnMeaning || query}"</div>`;
         }
+
+        searchBtn.innerText = '🔍 Search Word';
     }
 
     function quickSearch(word) {
@@ -398,7 +384,6 @@
         document.getElementById(tabId).classList.add('active');
     }
 
-    // Sentence Translation Function
     document.getElementById('translateBtn').addEventListener('click', async () => {
         const text = document.getElementById('transInput').value.trim();
         const pair = document.getElementById('langPair').value.split('|');
@@ -406,14 +391,8 @@
         if(!text) return;
 
         resBox.innerText = 'Translating...';
-
-        try {
-            const res = await fetch(`https://api.mymemory.translated.net/get?q=${encodeURIComponent(text)}&langpair=${pair[0]}|${pair[1]}`);
-            const data = await res.json();
-            resBox.innerText = data.responseData.translatedText;
-        } catch(e) {
-            resBox.innerText = `[Translation Result]: ${text}`;
-        }
+        const translated = await translateTextFast(text, pair[0], pair[1]);
+        resBox.innerText = translated || 'Translation failed. Please try again.';
     });
 
     audioBtn.addEventListener('click', () => {
@@ -425,6 +404,7 @@
     });
 
     searchBtn.addEventListener('click', searchWord);
+    searchInput.addEventListener('keypress', (e) => { if(e.key === 'Enter') searchWord(); });
 
     themeToggle.addEventListener('click', () => {
         document.body.classList.toggle('dark-mode');
