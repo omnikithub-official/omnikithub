@@ -79,6 +79,13 @@ a {
     max-width: 1200px;
     margin: 0 auto;
     padding: 0 20px;
+   /* Global Boxed Layout Fix */
+body {
+    max-width: 1320px;
+    margin: 0 auto !important;
+    padding: 0 20px;
+    box-sizing: border-box;
+}
 }
 
 /* 3. Navigation Header */
