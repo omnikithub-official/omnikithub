@@ -40,8 +40,6 @@
             --border-color: #e2e8f0;
             --primary-color: #2563eb;
             --primary-hover: #1d4ed8;
-            --nav-bg: #1e293b;
-            --footer-bg: #0f172a;
         }
 
         body.dark-mode {
@@ -51,67 +49,10 @@
             --border-color: #334155;
             --primary-color: #3b82f6;
             --primary-hover: #60a5fa;
-            --nav-bg: #020617;
-            --footer-bg: #020617;
         }
 
         * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Segoe UI', system-ui, -apple-system, sans-serif; }
-        body { background-color: var(--bg-color); color: var(--text-color); min-height: 100vh; display: flex; flex-direction: column; justify-content: space-between; transition: all 0.3s ease; }
-
-        /* Site Header Navigation */
-        .site-navbar {
-            background: var(--nav-bg);
-            padding: 15px 30px;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            box-shadow: 0 4px 12px rgba(0,0,0,0.1);
-        }
-
-        .brand-logo {
-            display: flex;
-            align-items: center;
-            gap: 10px;
-            text-decoration: none;
-            color: #ffffff;
-            font-size: 20px;
-            font-weight: 800;
-        }
-
-        .brand-logo span { color: #38bdf8; }
-
-        .nav-links {
-            display: flex;
-            align-items: center;
-            gap: 20px;
-        }
-
-        .nav-links a {
-            color: #cbd5e1;
-            text-decoration: none;
-            font-size: 14px;
-            font-weight: 600;
-            transition: color 0.2s;
-        }
-
-        .nav-links a:hover { color: #ffffff; }
-
-        .theme-btn {
-            background: rgba(255,255,255,0.1);
-            border: 1px solid rgba(255,255,255,0.2);
-            color: #ffffff;
-            padding: 6px 14px;
-            border-radius: 20px;
-            cursor: pointer;
-            font-size: 13px;
-            font-weight: 600;
-        }
-
-        /* App Container */
-        .main-wrapper {
-            padding: 40px 20px;
-            flex-grow: 1;
-        }
+        body { background-color: var(--bg-color); color: var(--text-color); padding: 20px; transition: all 0.3s ease; }
 
         .app-container {
             max-width: 950px;
@@ -125,6 +66,17 @@
 
         .header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px; }
         .header h1 { font-size: 24px; color: var(--primary-color); display: flex; align-items: center; gap: 10px; }
+
+        .theme-btn {
+            background: transparent;
+            border: 1px solid var(--border-color);
+            color: var(--text-color);
+            padding: 8px 16px;
+            border-radius: 20px;
+            cursor: pointer;
+            font-size: 13px;
+            font-weight: 600;
+        }
 
         .description { color: #64748b; font-size: 14px; margin-bottom: 25px; }
 
@@ -219,98 +171,62 @@
         .action-bar { display: flex; gap: 12px; }
         .btn { padding: 12px 20px; border-radius: 8px; border: none; background: var(--primary-color); color: white; font-weight: 600; cursor: pointer; font-size: 14px; flex: 1; }
         .btn-outline { background: transparent; border: 1px solid var(--border-color); color: var(--text-color); }
-
-        /* Site Global Footer */
-        .site-footer {
-            background: var(--footer-bg);
-            color: #94a3b8;
-            text-align: center;
-            padding: 25px 20px;
-            font-size: 13px;
-            border-top: 1px solid var(--border-color);
-        }
-
-        .site-footer a { color: #38bdf8; text-decoration: none; margin: 0 8px; }
-        .site-footer a:hover { text-decoration: underline; }
     </style>
 </head>
 <body>
 
-<!-- Site Header Navigation -->
-<header class="site-navbar">
-    <a href="https://omnikithub.com" class="brand-logo">
-        📦 OmniKit<span>Hub</span>
-    </a>
-    <nav class="nav-links">
-        <a href="https://omnikithub.com">Home</a>
-        <a href="https://omnikithub.com/#tools">All Tools</a>
+<div class="app-container">
+    <div class="header">
+        <h1>🔄 Pro Unit & Currency Converter</h1>
         <button id="themeToggle" class="theme-btn">🌙 Dark Mode</button>
-    </nav>
-</header>
+    </div>
+    <p class="description">Convert length, weight, temperature, digital data, area, speed, and real-time currencies instantly.</p>
 
-<!-- Main Tool Wrapper -->
-<main class="main-wrapper">
-    <div class="app-container">
-        <div class="header">
-            <h1>🔄 Pro Unit & Currency Converter</h1>
-        </div>
-        <p class="description">Convert length, weight, temperature, digital data, area, speed, and real-time currencies instantly.</p>
+    <!-- Category Tabs -->
+    <div class="category-tabs">
+        <button class="tab-btn active" onclick="switchCategory('length')">📏 Length</button>
+        <button class="tab-btn" onclick="switchCategory('weight')">⚖️ Weight</button>
+        <button class="tab-btn" onclick="switchCategory('temp')">🌡️ Temperature</button>
 
-        <!-- Category Tabs -->
-        <div class="category-tabs">
-            <button class="tab-btn active" onclick="switchCategory('length')">📏 Length</button>
-            <button class="tab-btn" onclick="switchCategory('weight')">⚖️ Weight</button>
-            <button class="tab-btn" onclick="switchCategory('temp')">🌡️ Temperature</button>
-            <button class="tab-btn" onclick="switchCategory('digital')">💾 Digital Data</button>
-            <button class="tab-btn" onclick="switchCategory('currency')">💱 Currency</button>
-        </div>
+        <button class="tab-btn" onclick="switchCategory('digital')">💾 Digital Data</button>
+        <button class="tab-btn" onclick="switchCategory('currency')">💱 Currency</button>
+    </div>
 
-        <!-- Converter Form -->
-        <div class="converter-grid">
-            <div class="input-group">
-                <label>From Unit:</label>
-                <select id="fromUnit" onchange="calculate()"></select>
-                <div style="margin-top: 10px;">
-                    <label>Amount:</label>
-                    <input type="number" id="fromVal" value="1" oninput="calculate()">
-                </div>
-            </div>
-
-            <button class="swap-btn" onclick="swapUnits()">⇄</button>
-
-            <div class="input-group">
-                <label>To Unit:</label>
-                <select id="toUnit" onchange="calculate()"></select>
-                <div style="margin-top: 10px;">
-                    <label>Converted Output:</label>
-                    <input type="number" id="toVal" readonly placeholder="Result">
-                </div>
+    <!-- Converter Form -->
+    <div class="converter-grid">
+        <div class="input-group">
+            <label>From Unit:</label>
+            <select id="fromUnit" onchange="calculate()"></select>
+            <div style="margin-top: 10px;">
+                <label>Amount:</label>
+                <input type="number" id="fromVal" value="1" oninput="calculate()">
             </div>
         </div>
 
-        <!-- Big Result Card -->
-        <div class="result-card">
-            <div class="result-title">Converted Value</div>
-            <div class="result-value" id="resultDisplay">0.001</div>
-        </div>
+        <button class="swap-btn" onclick="swapUnits()">⇄</button>
 
-        <!-- Action Bar -->
-        <div class="action-bar">
-            <button class="btn" id="copyBtn">📋 Copy Result</button>
-            <button class="btn btn-outline" id="shareBtn">🔗 Share Tool</button>
+        <div class="input-group">
+            <label>To Unit:</label>
+            <select id="toUnit" onchange="calculate()"></select>
+            <div style="margin-top: 10px;">
+                <label>Converted Output:</label>
+                <input type="number" id="toVal" readonly placeholder="Result">
+            </div>
         </div>
     </div>
-</main>
 
-<!-- Site Global Footer -->
-<footer class="site-footer">
-    <p>© 2026 <b>OmniKitHub.com</b>. All rights reserved.</p>
-    <p style="margin-top: 6px;">
-        <a href="https://omnikithub.com">Home</a> | 
-        <a href="https://omnikithub.com/privacy.html">Privacy Policy</a> | 
-        <a href="https://omnikithub.com/terms.html">Terms of Service</a>
-    </p>
-</footer>
+    <!-- Big Result Card -->
+    <div class="result-card">
+        <div class="result-title">Converted Value</div>
+        <div class="result-value" id="resultDisplay">0.001</div>
+    </div>
+
+    <!-- Action Bar -->
+    <div class="action-bar">
+        <button class="btn" id="copyBtn">📋 Copy Result</button>
+        <button class="btn btn-outline" id="shareBtn">🔗 Share Tool</button>
+    </div>
+</div>
 
 <script>
     let currentCategory = 'length';
