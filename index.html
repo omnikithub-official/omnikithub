@@ -7,6 +7,7 @@
     <meta name="description" content="OmniKitHub offers free tools, ultra-fast, secure online utility tools including AI assistant, PDF tools, media converters, generators, and calculators. No signup required.">
     <meta name="keywords" content="online tools, AI assistant, pdf converter, image compressor, speech to text, qr generator, resume builder, speed test, omnikithub">
     <meta name="author" content="OmniKitHub">
+    
     <!-- OmniKitHub Futuristic Hexagon Favicon -->
     <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><polygon points=%2250,5 95,27 95,73 50,95 5,73 5,27%22 fill=%22%230f172a%22 stroke=%22%2338bdf8%22 stroke-width=%226%22/><text x=%2250%22 y=%2262%22 font-size=%2240%22 font-weight=%22bold%22 fill=%22%2338bdf8%22 text-anchor=%22middle%22 font-family=%22sans-serif%22>OK</text></svg>">
     
@@ -14,13 +15,39 @@
     <meta property="og:type" content="website">
     <meta property="og:url" content="https://omnikithub.com/">
     <meta property="og:title" content="OmniKitHub - All-in-One Free Professional Utility Kit">
-    <meta property="og:description" content=" free tools, privacy-first, client-side web utilities and AI tools directly in your browser.">
+    <meta property="og:description" content="Free tools, privacy-first, client-side web utilities and AI tools directly in your browser.">
     
     <!-- Stylesheet -->
     <link rel="stylesheet" href="style.css">
     
     <!-- Font Awesome Icons -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+    <!-- Extra UI Enhancements for Vibrant Look -->
+    <style>
+        .hero-section {
+            background: radial-gradient(circle at 50% 20%, rgba(37, 99, 235, 0.08) 0%, transparent 70%);
+            padding: 50px 20px 30px;
+        }
+        .tool-card {
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1) !important;
+            border: 1px solid var(--border-color, #e2e8f0);
+        }
+        .tool-card:hover {
+            transform: translateY(-5px);
+            border-color: #2563eb !important;
+            box-shadow: 0 12px 30px -10px rgba(37, 99, 235, 0.15);
+        }
+        .ad-placeholder {
+            border: 1px dashed #cbd5e1;
+            background: rgba(0,0,0,0.01);
+            padding: 15px;
+            border-radius: 10px;
+            text-align: center;
+            color: #64748b;
+            font-size: 13px;
+        }
+    </style>
 </head>
 <body class="light-theme">
 
@@ -55,7 +82,7 @@
     </section>
 
     <!-- Ad Space 1 (Top Banner Placeholder) -->
-    <div class="container ad-wrapper">
+    <div class="container ad-wrapper" style="margin: 20px auto;">
         <div class="ad-placeholder">
             <span>Responsive Advertisement Space</span>
         </div>
@@ -129,11 +156,11 @@
             </a>
 
            <a href="tools/text-diff-checker.html" class="tool-card" data-category="ai-text">
-           <div class="card-icon"><i class="fa-solid fa-code-compare"></i></div>
-           <div class="card-badge">Text & Code</div>
-           <h3>Text Diff & Compare Tool</h3>
-          <p>Compare two text documents or code side-by-side to highlight line differences instantly.</p>
-          </a>
+               <div class="card-icon"><i class="fa-solid fa-code-compare"></i></div>
+               <div class="card-badge">Text & Code</div>
+               <h3>Text Diff & Compare Tool</h3>
+              <p>Compare two text documents or code side-by-side to highlight line differences instantly.</p>
+           </a>
 
             <!-- Category 2: Document & Career Tools -->
             <a href="tools/resume-builder.html" class="tool-card" data-category="doc-career">
@@ -285,19 +312,20 @@
                 <h3>Page Speed & Ping Tester</h3>
                 <p>Evaluate website server response time, ping latency, and page performance score.</p>
             </a>
-       <!-- Web Page Source Code & Meta Inspector Tool Card -->
-        <a href="tools/speed-test.html" class="tool-card">
-            <div class="card-badge">SEO Tool</div>
-            <div class="tool-icon">🔍</div>
-            <h3>Meta & Source Inspector</h3>
-            <p>Analyze website SEO meta tags, title length, Open Graph cards, and view HTML source code instantly.</p>
-        </a>
+
+            <!-- Web Page Source Code & Meta Inspector Tool Card -->
+            <a href="tools/speed-test.html" class="tool-card" data-category="calc-utilities">
+                <div class="card-icon"><i class="fa-solid fa-magnifying-glass-chart"></i></div>
+                <div class="card-badge">SEO Tool</div>
+                <h3>Meta & Source Inspector</h3>
+                <p>Analyze website SEO meta tags, title length, Open Graph cards, and view HTML source code instantly.</p>
+            </a>
         
         </div>
     </main>
 
     <!-- Ad Space 2 (Mid-Content Banner Placeholder) -->
-    <div class="container ad-wrapper">
+    <div class="container ad-wrapper" style="margin: 20px auto;">
         <div class="ad-placeholder">
             <span>Responsive Advertisement Space</span>
         </div>
