@@ -15,6 +15,10 @@
     <meta property="og:url" content="https://omnikithub.com/tools/image-compressor.html">
     <meta property="og:type" content="website">
 
+    <!-- External CSS & Icons -->
+    <link rel="stylesheet" href="../style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
     <!-- Schema.org Markup -->
     <script type="application/ld+json">
     {
@@ -52,11 +56,17 @@
         }
 
         * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; }
-        body { background-color: var(--bg-color); color: var(--text-color); padding: 20px; transition: all 0.3s ease; }
+        body { background-color: var(--bg-color); color: var(--text-color); display: flex; flex-direction: column; min-height: 100vh; transition: all 0.3s ease; }
+
+        .main-wrapper {
+            flex: 1;
+            max-width: 1100px;
+            width: 100%;
+            margin: 20px auto;
+            padding: 0 20px;
+        }
 
         .app-container {
-            max-width: 1100px;
-            margin: 0 auto;
             background: var(--card-bg);
             border-radius: 12px;
             padding: 30px;
@@ -66,16 +76,6 @@
 
         .header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px; }
         .header h1 { font-size: 24px; color: var(--primary-color); }
-
-        .theme-btn {
-            background: transparent;
-            border: 1px solid var(--border-color);
-            color: var(--text-color);
-            padding: 6px 12px;
-            border-radius: 20px;
-            cursor: pointer;
-            font-size: 13px;
-        }
 
         .description { color: #64748b; font-size: 14px; margin-bottom: 25px; }
 
@@ -166,59 +166,164 @@
         .btn-primary { background: var(--primary-color); color: white; border: none; }
         .btn-primary:hover { background: var(--primary-hover); }
         .btn-share { background: #10b981; color: white; border: none; }
+
+        /* Ad Slots & SEO Card Styling */
+        .ad-placeholder {
+            border: 1px dashed #cbd5e1;
+            background: rgba(0,0,0,0.01);
+            padding: 15px;
+            border-radius: 10px;
+            text-align: center;
+            color: #64748b;
+            font-size: 13px;
+            margin: 20px 0;
+        }
+
+        .seo-content-card {
+            background: var(--card-bg);
+            border-radius: 12px;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.08);
+            padding: 30px;
+            margin-top: 30px;
+            border: 1px solid var(--border-color);
+            line-height: 1.7;
+        }
+
+        .seo-content-card h2 { font-size: 1.4rem; color: var(--primary-color); margin-bottom: 12px; }
+        .seo-content-card h3 { font-size: 1.1rem; color: var(--text-color); margin: 15px 0 8px 0; }
+        .seo-content-card p, .seo-content-card li { font-size: 0.95rem; margin-bottom: 8px; color: #64748b; }
+        .seo-content-card ul { padding-left: 20px; margin-bottom: 10px; }
     </style>
 </head>
-<body>
+<body class="light-theme">
 
-<div class="app-container">
-    <div class="header">
-        <h1>⚡ Pro Image Compressor</h1>
-        <button id="themeToggle" class="theme-btn">🌙 Dark Mode</button>
-    </div>
-    <p class="description">Compress JPG, PNG, and WebP images instantly without losing visual quality. Reduce image file size in KB for lightning-fast website performance.</p>
-
-    <!-- Dropzone -->
-    <div class="dropzone" onclick="document.getElementById('imageInput').click()">
-        <div style="font-size: 32px;">🖼️</div>
-        <p><b>Click or Drag Image Here to Compress</b><br>Supports JPG, PNG, WebP</p>
-        <input type="file" id="imageInput" accept="image/*" style="display: none;">
-    </div>
-
-    <!-- Stats Bar -->
-    <div class="stats-grid">
-        <div class="stat-card">
-            <h3 id="origSize">0 KB</h3>
-            <p>Original Size</p>
+    <!-- Navigation Header -->
+    <header class="navbar">
+        <div class="container nav-container" style="max-width: 100% !important; padding: 0 !important;">
+            <a href="../index.html" class="logo">
+                <i class="fa-solid fa-toolbox logo-icon"></i>
+                <span class="logo-text">OmniKit<span class="highlight">Hub</span></span>
+            </a>
+            <div class="nav-actions">
+                <button id="theme-toggle" class="icon-btn" aria-label="Toggle Theme">
+                    <i class="fa-solid fa-moon"></i>
+                </button>
+            </div>
         </div>
-        <div class="stat-card">
-            <h3 id="compSize" style="color: #10b981;">0 KB</h3>
-            <p>Compressed Size</p>
+    </header>
+
+<div class="main-wrapper">
+
+    <!-- Top Advertisement Slot -->
+    <div class="ad-placeholder">
+        <span>Responsive Advertisement Space (Google AdSense)</span>
+    </div>
+
+    <div class="app-container">
+        <div class="header">
+            <h1>⚡ Pro Image Compressor</h1>
         </div>
-        <div class="stat-card">
-            <h3 id="savedSize" style="color: #2563eb;">0%</h3>
-            <p>Size Saved</p>
+        <p class="description">Compress JPG, PNG, and WebP images instantly without losing visual quality. Reduce image file size in KB for lightning-fast website performance.</p>
+
+        <!-- Dropzone -->
+        <div class="dropzone" onclick="document.getElementById('imageInput').click()">
+            <div style="font-size: 32px;">🖼️</div>
+            <p><b>Click or Drag Image Here to Compress</b><br>Supports JPG, PNG, WebP</p>
+            <input type="file" id="imageInput" accept="image/*" style="display: none;">
+        </div>
+
+        <!-- Stats Bar -->
+        <div class="stats-grid">
+            <div class="stat-card">
+                <h3 id="origSize">0 KB</h3>
+                <p>Original Size</p>
+            </div>
+            <div class="stat-card">
+                <h3 id="compSize" style="color: #10b981;">0 KB</h3>
+                <p>Compressed Size</p>
+            </div>
+            <div class="stat-card">
+                <h3 id="savedSize" style="color: #2563eb;">0%</h3>
+                <p>Size Saved</p>
+            </div>
+        </div>
+
+        <!-- Compression Quality Slider -->
+        <div class="control-group">
+            <label>Compression Quality Level: <span id="qualityVal" style="color: var(--primary-color); font-weight: bold;">80%</span></label>
+            <input type="range" id="qualityRange" min="10" max="95" value="80">
+        </div>
+
+        <!-- Preview -->
+        <div class="preview-area" id="previewArea">
+            <img id="outputImg" alt="Compressed Preview">
+        </div>
+
+        <!-- Action Bar -->
+        <div class="action-bar">
+            <button id="downloadBtn" class="btn btn-primary" style="flex: 1; display: none;">📥 Download Compressed Image</button>
+            <button id="shareBtn" class="btn btn-share">🔗 Share Tool</button>
+            <button id="clearBtn" class="btn">🗑️ Reset</button>
         </div>
     </div>
 
-    <!-- Compression Quality Slider -->
-    <div class="control-group">
-        <label>Compression Quality Level: <span id="qualityVal" style="color: var(--primary-color); font-weight: bold;">80%</span></label>
-        <input type="range" id="qualityRange" min="10" max="95" value="80">
+    <!-- Bottom Advertisement Slot -->
+    <div class="ad-placeholder">
+        <span>Responsive Advertisement Space (Google AdSense)</span>
     </div>
 
-    <!-- Preview -->
-    <div class="preview-area" id="previewArea">
-        <img id="outputImg" alt="Compressed Preview">
+    <!-- AdSense Friendly SEO Content Section -->
+    <div class="seo-content-card">
+        <h2>About Pro Image Compressor & KB Reducer</h2>
+        <p>OmniKitHub's Pro Image Compressor is a powerful online utility built to reduce image file sizes in KB instantly. Whether you are optimizing JPEGs, PNGs, or WebPs for website performance or faster sharing, our client-side compression tool ensures maximum visual clarity.</p>
+
+        <h3>Key Features & Benefits</h3>
+        <ul>
+            <li><strong>Instant File Size Reduction:</strong> Shrink bulky photo sizes significantly while maintaining high visual definition.</li>
+            <li><strong>Adjustable Quality Slider:</strong> Take complete control over compression levels using real-time quality sliders.</li>
+            <li><strong>100% Secure & Client-Side:</strong> Your photos are processed safely right inside your browser without uploading to external servers.</li>
+            <li><strong>Live Compression Statistics:</strong> Track original size, compressed KB output, and total percentage savings immediately.</li>
+        </ul>
+
+        <h3>How to Compress Images Online</h3>
+        <ol>
+            <li>Click or drag your image into the upload dropzone.</li>
+            <li>Adjust the quality slider to find the ideal balance between file size and image clarity.</li>
+            <li>Click <strong>Download Compressed Image</strong> to save your optimized photo instantly.</li>
+        </ol>
     </div>
 
-    <!-- Action Bar -->
-    <div class="action-bar">
-        <button id="downloadBtn" class="btn btn-primary" style="flex: 1; display: none;">📥 Download Compressed Image</button>
-        <button id="shareBtn" class="btn btn-share">🔗 Share Tool</button>
-        <button id="clearBtn" class="btn">🗑️ Reset</button>
-    </div>
 </div>
 
+<!-- Footer Section -->
+<footer class="footer">
+    <div class="container footer-container" style="max-width: 100% !important;">
+        <div class="footer-brand">
+            <a href="../index.html" class="logo">
+                <i class="fa-solid fa-toolbox logo-icon"></i>
+                <span class="logo-text">OmniKit<span class="highlight">Hub</span></span>
+            </a>
+            <p>Your ultimate free online toolkit for daily developer, text, media, PDF, and web tasks.</p>
+        </div>
+        
+        <div class="footer-links">
+            <h4>Legal & Pages</h4>
+            <ul>
+                <li><a href="../pages/about.html">About Us</a></li>
+                <li><a href="../pages/contact.html">Contact Us</a></li>
+                <li><a href="../pages/privacy-policy.html">Privacy Policy</a></li>
+                <li><a href="../pages/terms.html">Terms of Service</a></li>
+            </ul>
+        </div>
+    </div>
+    <div class="footer-bottom">
+        <div class="container">
+            <p>&copy; 2026 OmniKitHub.com. All rights reserved.</p>
+        </div>
+    </div>
+</footer>
+
+<script src="../script.js"></script>
 <script>
     const imageInput = document.getElementById('imageInput');
     const qualityRange = document.getElementById('qualityRange');
@@ -229,7 +334,7 @@
     const outputImg = document.getElementById('outputImg');
     const previewArea = document.getElementById('previewArea');
     const downloadBtn = document.getElementById('downloadBtn');
-    const themeToggle = document.getElementById('themeToggle');
+    const themeToggle = document.getElementById('theme-toggle');
 
     let originalFile = null;
     let originalImageObj = null;
@@ -288,12 +393,6 @@
         link.download = `Compressed_${originalFile.name.replace(/\.[^/.]+$/, "")}.jpg`;
         link.href = outputImg.src;
         link.click();
-    });
-
-    // Dark Mode
-    themeToggle.addEventListener('click', () => {
-        document.body.classList.toggle('dark-mode');
-        themeToggle.innerText = document.body.classList.contains('dark-mode') ? '☀️ Light Mode' : '🌙 Dark Mode';
     });
 
     document.getElementById('clearBtn').addEventListener('click', () => {
