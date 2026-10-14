@@ -15,6 +15,10 @@
     <meta property="og:url" content="https://omnikithub.com/tools/photo-signature-resizer.html">
     <meta property="og:type" content="website">
 
+    <!-- External CSS & Icons -->
+    <link rel="stylesheet" href="../style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
     <!-- Schema.org Markup -->
     <script type="application/ld+json">
     {
@@ -52,11 +56,17 @@
         }
 
         * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; }
-        body { background-color: var(--bg-color); color: var(--text-color); padding: 20px; transition: all 0.3s ease; }
+        body { background-color: var(--bg-color); color: var(--text-color); display: flex; flex-direction: column; min-height: 100vh; transition: all 0.3s ease; }
+
+        .main-wrapper {
+            flex: 1;
+            max-width: 1250px;
+            width: 100%;
+            margin: 20px auto;
+            padding: 0 20px;
+        }
 
         .app-container {
-            max-width: 1250px;
-            margin: 0 auto;
             display: grid;
             grid-template-columns: 1fr 1fr;
             gap: 25px;
@@ -77,16 +87,6 @@
         .header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 15px; }
         .header h1 { font-size: 22px; color: var(--primary-color); }
 
-        .theme-btn {
-            background: transparent;
-            border: 1px solid var(--border-color);
-            color: var(--text-color);
-            padding: 6px 12px;
-            border-radius: 20px;
-            cursor: pointer;
-            font-size: 13px;
-        }
-
         .section-title {
             font-size: 13px;
             font-weight: 700;
@@ -98,7 +98,7 @@
         }
 
         .form-group { margin-bottom: 12px; }
-        .form-group label { display: block; font-size: 12px; font-weight: 600; margin-bottom: 5px; }
+        .form-group label { display: block; font-size: 12px; font-weight: 600; margin-bottom: 5px; color: var(--text-color); }
 
         input[type="number"], select {
             width: 100%;
@@ -201,78 +201,184 @@
         .btn-primary { background: var(--primary-color); color: white; border: none; }
         .btn-primary:hover { background: var(--primary-hover); }
         .btn-share { background: #10b981; color: white; border: none; }
+
+        /* Ad Slots & SEO Card Styling */
+        .ad-placeholder {
+            border: 1px dashed #cbd5e1;
+            background: rgba(0,0,0,0.01);
+            padding: 15px;
+            border-radius: 10px;
+            text-align: center;
+            color: #64748b;
+            font-size: 13px;
+            margin: 20px 0;
+        }
+
+        .seo-content-card {
+            background: var(--card-bg);
+            border-radius: 12px;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.08);
+            padding: 30px;
+            margin-top: 30px;
+            border: 1px solid var(--border-color);
+            line-height: 1.7;
+        }
+
+        .seo-content-card h2 { font-size: 1.4rem; color: var(--primary-color); margin-bottom: 12px; }
+        .seo-content-card h3 { font-size: 1.1rem; color: var(--text-color); margin: 15px 0 8px 0; }
+        .seo-content-card p, .seo-content-card li { font-size: 0.95rem; margin-bottom: 8px; color: #64748b; }
+        .seo-content-card ul { padding-left: 20px; margin-bottom: 10px; }
     </style>
 </head>
-<body>
+<body class="light-theme">
 
-<div class="app-container">
-    <!-- Left Editor -->
-    <div class="editor-card">
-        <div class="header">
-            <h1>🖼️ Pro Photo & Signature Resizer</h1>
-            <button id="themeToggle" class="theme-btn">🌙 Dark Mode</button>
+    <!-- Navigation Header -->
+    <header class="navbar">
+        <div class="container nav-container" style="max-width: 100% !important; padding: 0 !important;">
+            <a href="../index.html" class="logo">
+                <i class="fa-solid fa-toolbox logo-icon"></i>
+                <span class="logo-text">OmniKit<span class="highlight">Hub</span></span>
+            </a>
+            <div class="nav-actions">
+                <button id="theme-toggle" class="icon-btn" aria-label="Toggle Theme">
+                    <i class="fa-solid fa-moon"></i>
+                </button>
+            </div>
         </div>
+    </header>
 
-        <div class="section-title">1. Upload Image</div>
-        <div class="dropzone" onclick="document.getElementById('imageInput').click()">
-            <div style="font-size: 24px;">📁</div>
-            <p><b>Click or Drag Image Here</b><br>Supports JPG, PNG, WebP for Job Applications</p>
-            <input type="file" id="imageInput" accept="image/*" style="display: none;">
-        </div>
+<div class="main-wrapper">
 
-        <div class="section-title">2. Quick Job Form Presets</div>
-        <div class="preset-grid">
-            <span class="preset-chip" onclick="setPreset(300, 300)">Govt Photo (300x300px)</span>
-            <span class="preset-chip" onclick="setPreset(300, 80)">Signature (300x80px)</span>
-            <span class="preset-chip" onclick="setPreset(600, 600)">Passport (600x600px)</span>
-            <span class="preset-chip" onclick="setPreset(150, 150)">Thumbnail (150x150px)</span>
-        </div>
+    <!-- Top Advertisement Slot -->
+    <div class="ad-placeholder">
+        <span>Responsive Advertisement Space (Google AdSense)</span>
+    </div>
 
-        <div class="section-title">3. Custom Dimensions & Quality</div>
-        <div class="settings-grid">
+    <div class="app-container">
+        <!-- Left Editor -->
+        <div class="editor-card">
+            <div class="header">
+                <h1>🖼️ Pro Photo & Signature Resizer</h1>
+            </div>
+
+            <div class="section-title">1. Upload Image</div>
+            <div class="dropzone" onclick="document.getElementById('imageInput').click()">
+                <div style="font-size: 24px;">📁</div>
+                <p><b>Click or Drag Image Here</b><br>Supports JPG, PNG, WebP for Job Applications</p>
+                <input type="file" id="imageInput" accept="image/*" style="display: none;">
+            </div>
+
+            <div class="section-title">2. Quick Job Form Presets</div>
+            <div class="preset-grid">
+                <span class="preset-chip" onclick="setPreset(300, 300)">Govt Photo (300x300px)</span>
+                <span class="preset-chip" onclick="setPreset(300, 80)">Signature (300x80px)</span>
+                <span class="preset-chip" onclick="setPreset(600, 600)">Passport (600x600px)</span>
+                <span class="preset-chip" onclick="setPreset(150, 150)">Thumbnail (150x150px)</span>
+            </div>
+
+            <div class="section-title">3. Custom Dimensions & Quality</div>
+            <div class="settings-grid">
+                <div class="form-group">
+                    <label>Width (Pixels):</label>
+                    <input type="number" id="widthInput" value="300">
+                </div>
+                <div class="form-group">
+                    <label>Height (Pixels):</label>
+                    <input type="number" id="heightInput" value="300">
+                </div>
+            </div>
+
             <div class="form-group">
-                <label>Width (Pixels):</label>
-                <input type="number" id="widthInput" value="300">
+                <label>Compression Quality (KB Optimizer):</label>
+                <input type="range" id="qualityRange" min="10" max="100" value="90" style="width: 100%; cursor: pointer;">
+                <div style="display: flex; justify-content: space-between; font-size: 11px; color: #64748b; margin-top: 4px;">
+                    <span>Low Size (Small KB)</span>
+                    <span id="qualityVal">90%</span>
+                    <span>High Quality</span>
+                </div>
             </div>
-            <div class="form-group">
-                <label>Height (Pixels):</label>
-                <input type="number" id="heightInput" value="300">
+
+            <div class="action-bar">
+                <button id="resizeBtn" class="btn btn-primary" style="flex: 1;">⚡ Process & Resize Image</button>
+                <button id="clearBtn" class="btn">🗑️ Reset</button>
             </div>
         </div>
 
-        <div class="form-group">
-            <label>Compression Quality (KB Optimizer):</label>
-            <input type="range" id="qualityRange" min="10" max="100" value="90" style="width: 100%; cursor: pointer;">
-            <div style="display: flex; justify-content: space-between; font-size: 11px; color: #64748b; margin-top: 4px;">
-                <span>Low Size (Small KB)</span>
-                <span id="qualityVal">90%</span>
-                <span>High Quality</span>
+        <!-- Right Live Preview -->
+        <div class="preview-card">
+            <h3 style="margin-bottom: 15px; color: var(--primary-color);">Live Resized Result & Download</h3>
+            
+            <div class="preview-box">
+                <div id="placeholderText" style="color: #94a3b8; font-size: 14px;">No image uploaded yet.<br>Please select an image on the left.</div>
+                <img id="outputImg" alt="Resized Preview">
+                <div id="imageInfo" class="info-text"></div>
             </div>
-        </div>
 
-        <div class="action-bar">
-            <button id="resizeBtn" class="btn btn-primary" style="flex: 1;">⚡ Process & Resize Image</button>
-            <button id="clearBtn" class="btn">🗑️ Reset</button>
+            <div class="action-bar">
+                <button id="downloadBtn" class="btn btn-primary" style="flex: 1; display: none;">📥 Download Resized Image</button>
+                <button id="shareBtn" class="btn btn-share">🔗 Share Tool</button>
+            </div>
         </div>
     </div>
 
-    <!-- Right Live Preview -->
-    <div class="preview-card">
-        <h3 style="margin-bottom: 15px; color: var(--primary-color);">Live Resized Result & Download</h3>
+    <!-- Bottom Advertisement Slot -->
+    <div class="ad-placeholder">
+        <span>Responsive Advertisement Space (Google AdSense)</span>
+    </div>
+
+    <!-- Helpful Tutorial Video Carousel -->
+    <div style="margin: 30px 0;">
+        <h3 style="font-size: 1.2rem; color: var(--text-color); margin-bottom: 12px;"><i class="fa-solid fa-video" style="color: var(--primary-color);"></i> Recommended Photo & Signature Resizing Tutorials</h3>
+        <Carousel>
+          <Video source="youtube" query="how to resize image and signature for job application online" count="3"/>
+        </Carousel>
+    </div>
+
+    <!-- AdSense Friendly SEO Content Section -->
+    <div class="seo-content-card">
+        <h2>About Ultimate Photo & Signature Resizer</h2>
+        <p>OmniKitHub's Photo Resizer and Signature Cropper is designed specifically for online job applications, university admissions, and government portal forms (like BCS, SSC, HSC, and banking exams). Resize and compress photos to exact pixel dimensions and strict KB size limits instantly.</p>
         
-        <div class="preview-box">
-            <div id="placeholderText" style="color: #94a3b8; font-size: 14px;">No image uploaded yet.<br>Please select an image on the left.</div>
-            <img id="outputImg" alt="Resized Preview">
-            <div id="imageInfo" class="info-text"></div>
-        </div>
-
-        <div class="action-bar">
-            <button id="downloadBtn" class="btn btn-primary" style="flex: 1; display: none;">📥 Download Resized Image</button>
-            <button id="shareBtn" class="btn btn-share">🔗 Share Tool</button>
-        </div>
+        <h3>Key Features & Capabilities</h3>
+        <ul>
+            <li><strong>Job Form Presets:</strong> One-click standard dimensions for government candidate photos (300x300px) and signatures (300x80px).</li>
+            <li><strong>File Size KB Compressor:</strong> Adjust JPEG compression quality to ensure your uploaded files fit under strict platform size limits.</li>
+            <li><strong>Instant Live Preview:</strong> View exact output dimensions and estimated file size before downloading.</li>
+            <li><strong>100% Private Browser Processing:</strong> Your personal photos and signatures never leave your device.</li>
+        </ul>
     </div>
+
 </div>
 
+<!-- Footer Section -->
+<footer class="footer">
+    <div class="container footer-container" style="max-width: 100% !important;">
+        <div class="footer-brand">
+            <a href="../index.html" class="logo">
+                <i class="fa-solid fa-toolbox logo-icon"></i>
+                <span class="logo-text">OmniKit<span class="highlight">Hub</span></span>
+            </a>
+            <p>Your ultimate free online toolkit for daily developer, text, media, PDF, and web tasks.</p>
+        </div>
+        
+        <div class="footer-links">
+            <h4>Legal & Pages</h4>
+            <ul>
+                <li><a href="../pages/about.html">About Us</a></li>
+                <li><a href="../pages/contact.html">Contact Us</a></li>
+                <li><a href="../pages/privacy-policy.html">Privacy Policy</a></li>
+                <li><a href="../pages/terms.html">Terms of Service</a></li>
+            </ul>
+        </div>
+    </div>
+    <div class="footer-bottom">
+        <div class="container">
+            <p>&copy; 2026 OmniKitHub.com. All rights reserved.</p>
+        </div>
+    </div>
+</footer>
+
+<script src="../script.js"></script>
 <script>
     const imageInput = document.getElementById('imageInput');
     const widthInput = document.getElementById('widthInput');
@@ -284,7 +390,7 @@
     const outputImg = document.getElementById('outputImg');
     const placeholderText = document.getElementById('placeholderText');
     const imageInfo = document.getElementById('imageInfo');
-    const themeToggle = document.getElementById('themeToggle');
+    const themeToggle = document.getElementById('theme-toggle');
 
     let uploadedImage = null;
 
@@ -353,7 +459,7 @@
         link.click();
     });
 
-    // Dark Mode
+    // Dark Mode Toggle
     themeToggle.addEventListener('click', () => {
         document.body.classList.toggle('dark-mode');
         themeToggle.innerText = document.body.classList.contains('dark-mode') ? '☀️ Light Mode' : '🌙 Dark Mode';
