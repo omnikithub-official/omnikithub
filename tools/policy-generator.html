@@ -3,215 +3,390 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Privacy Policy & Terms Generator - OmniKitHub</title>
-    <meta name="description" content="Generate Google AdSense compliant Privacy Policy and Terms & Conditions pages instantly for your website or blog for free.">
-    <meta name="keywords" content="privacy policy generator, terms and conditions generator, adsense policy maker, free legal page generator, website policy maker">
-    <link rel="stylesheet" href="../style.css">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <title>Pro Privacy Policy & Terms Generator | OmniKitHub</title>
+    <meta name="description" content="Free online legal page generator. Create Google AdSense & GDPR compliant Privacy Policy, Terms & Conditions, Disclaimer, and Refund Policy for your website instantly with PDF export.">
+    <meta name="keywords" content="privacy policy generator, terms and conditions generator, adsense compliant policy, gdpr policy generator, disclaimer generator, website legal pages">
+    <meta name="robots" content="index, follow">
+    <link rel="canonical" href="https://omnikithub.com/tools/policy-generator.html">
+
+    <!-- Open Graph Tags -->
+    <meta property="og:title" content="Pro Privacy Policy & Terms Generator - OmniKitHub">
+    <meta property="og:description" content="Generate Google AdSense compliant Privacy Policy, Terms, and Disclaimer pages instantly with HTML and PDF export.">
+    <meta property="og:url" content="https://omnikithub.com/tools/policy-generator.html">
+    <meta property="og:type" content="website">
+
+    <!-- html2pdf Library -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
+
+    <!-- Schema.org Markup -->
+    <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@type": "WebApplication",
+      "name": "Pro Privacy Policy & Terms Generator",
+      "url": "https://omnikithub.com/tools/policy-generator.html",
+      "applicationCategory": "BusinessApplication",
+      "operatingSystem": "All",
+      "offers": {
+        "@type": "Offer",
+        "price": "0",
+        "priceCurrency": "USD"
+      }
+    }
+    </script>
+
     <style>
-        .tool-container {
-            max-width: 1000px;
-            margin: 40px auto;
-            background: var(--bg-surface);
-            border: 1px solid var(--card-border);
-            border-radius: 16px;
-            padding: 30px;
-            box-shadow: var(--card-shadow);
+        :root {
+            --bg-color: #f4f6f9;
+            --card-bg: #ffffff;
+            --text-color: #1e293b;
+            --border-color: #cbd5e1;
+            --primary-color: #2563eb;
+            --primary-hover: #1d4ed8;
         }
 
-        .form-grid {
+        body.dark-mode {
+            --bg-color: #0f172a;
+            --card-bg: #1e293b;
+            --text-color: #f8fafc;
+            --border-color: #334155;
+            --primary-color: #3b82f6;
+            --primary-hover: #60a5fa;
+        }
+
+        * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; }
+        body { background-color: var(--bg-color); color: var(--text-color); padding: 20px; transition: all 0.3s ease; }
+
+        .app-container {
+            max-width: 1200px;
+            margin: 0 auto;
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
-            gap: 15px;
-            margin-bottom: 20px;
+            grid-template-columns: 1fr 1.1fr;
+            gap: 25px;
         }
 
-        .form-group {
-            display: flex;
-            flex-direction: column;
-            gap: 6px;
+        @media (max-width: 900px) {
+            .app-container { grid-template-columns: 1fr; }
         }
 
-        .form-group label {
-            font-weight: 600;
-            font-size: 0.9rem;
-            color: var(--text-primary);
-        }
-
-        .form-control {
-            padding: 10px 12px;
-            border-radius: 8px;
-            border: 1px solid var(--card-border);
-            background: var(--bg-primary);
-            color: var(--text-primary);
-            outline: none;
-            font-size: 0.95rem;
-        }
-
-        .type-selector {
-            display: flex;
-            gap: 10px;
-            margin-bottom: 20px;
-        }
-
-        .type-btn {
-            padding: 10px 20px;
-            border-radius: 20px;
-            border: 1px solid var(--card-border);
-            background: var(--bg-primary);
-            color: var(--text-secondary);
-            font-weight: 600;
-            cursor: pointer;
-            transition: all var(--transition-speed) ease;
-        }
-
-        .type-btn.active {
-            background: var(--accent-color);
-            color: #fff;
-            border-color: var(--accent-color);
-        }
-
-        .output-box {
-            width: 100%;
-            height: 300px;
-            padding: 16px;
+        .editor-card, .preview-card {
+            background: var(--card-bg);
             border-radius: 12px;
-            border: 1px solid var(--card-border);
-            background: var(--bg-primary);
-            color: var(--text-primary);
-            font-size: 0.95rem;
-            line-height: 1.6;
-            resize: vertical;
-            outline: none;
-            margin-bottom: 20px;
-            font-family: inherit;
+            padding: 25px;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.08);
+            border: 1px solid var(--border-color);
         }
 
-        .btn-controls {
+        .header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 15px; }
+        .header h1 { font-size: 22px; color: var(--primary-color); }
+
+        .theme-btn {
+            background: transparent;
+            border: 1px solid var(--border-color);
+            color: var(--text-color);
+            padding: 6px 12px;
+            border-radius: 20px;
+            cursor: pointer;
+            font-size: 13px;
+        }
+
+        .section-title {
+            font-size: 14px;
+            font-weight: 700;
+            margin: 16px 0 8px 0;
+            color: var(--primary-color);
+            border-bottom: 1px solid var(--border-color);
+            padding-bottom: 4px;
+            text-transform: uppercase;
+        }
+
+        .form-group { margin-bottom: 12px; }
+        .form-group label { display: block; font-size: 12px; font-weight: 600; margin-bottom: 5px; }
+
+        input[type="text"], input[type="email"], select {
+            width: 100%;
+            padding: 10px 12px;
+            border: 1px solid var(--border-color);
+            border-radius: 6px;
+            font-size: 13px;
+            background: var(--card-bg);
+            color: var(--text-color);
+            outline: none;
+        }
+
+        .tab-bar {
             display: flex;
-            gap: 12px;
-            justify-content: flex-end;
+            gap: 8px;
+            margin-bottom: 15px;
             flex-wrap: wrap;
         }
 
-        .action-btn {
-            padding: 10px 20px;
-            border-radius: 8px;
-            border: none;
+        .tab-btn {
+            background: rgba(37, 99, 235, 0.1);
+            color: var(--primary-color);
+            border: 1px solid var(--border-color);
+            padding: 6px 12px;
+            border-radius: 6px;
+            font-size: 12px;
             font-weight: 600;
             cursor: pointer;
-            display: inline-flex;
-            align-items: center;
-            gap: 8px;
-            transition: all var(--transition-speed) ease;
+        }
+        .tab-btn.active { background: var(--primary-color); color: white; border-color: var(--primary-color); }
+
+        /* Legal Paper Preview */
+        .legal-paper {
+            background: #ffffff;
+            color: #000000;
+            padding: 35px;
+            border-radius: 4px;
+            box-shadow: 0 0 10px rgba(0,0,0,0.1);
+            min-height: 650px;
+            font-family: 'Arial', sans-serif;
+            font-size: 13px;
+            line-height: 1.6;
+            white-space: pre-line;
+            max-height: 700px;
+            overflow-y: auto;
         }
 
-        .btn-primary { background: var(--accent-color); color: #fff; }
-        .btn-primary:hover { background: var(--accent-hover); }
-        .btn-secondary { background: var(--badge-bg); color: var(--text-primary); border: 1px solid var(--card-border); }
+        .legal-paper h2 { color: #1e293b; margin-bottom: 12px; font-size: 18px; }
+        .legal-paper h3 { color: #2563eb; margin: 12px 0 6px 0; font-size: 14px; }
+
+        /* Action Buttons */
+        .action-bar {
+            display: flex;
+            gap: 10px;
+            margin-top: 20px;
+            flex-wrap: wrap;
+        }
+
+        .btn {
+            padding: 10px 16px;
+            border-radius: 6px;
+            border: 1px solid var(--border-color);
+            background: var(--card-bg);
+            color: var(--text-color);
+            font-weight: 600;
+            cursor: pointer;
+            font-size: 13px;
+        }
+
+        .btn-primary { background: var(--primary-color); color: white; border: none; }
+        .btn-primary:hover { background: var(--primary-hover); }
+        .btn-share { background: #10b981; color: white; border: none; }
+
+        @media print {
+            body * { visibility: hidden; }
+            #legalPaper, #legalPaper * { visibility: visible; }
+            #legalPaper { position: absolute; left: 0; top: 0; width: 100%; box-shadow: none; max-height: none; }
+            .editor-card, .header, .action-bar { display: none; }
+        }
     </style>
 </head>
-<body class="light-theme">
+<body>
 
-    <header class="navbar">
-        <div class="container nav-container">
-            <a href="../index.html" class="logo">
-                <i class="fa-solid fa-toolbox logo-icon"></i>
-                <span class="logo-text">OmniKit<span class="highlight">Hub</span></span>
-            </a>
-            <div class="nav-actions">
-                <button id="theme-toggle" class="icon-btn" aria-label="Toggle Theme">
-                    <i class="fa-solid fa-moon"></i>
-                </button>
-            </div>
+<div class="app-container">
+    <!-- Left Editor -->
+    <div class="editor-card">
+        <div class="header">
+            <h1>⚖️ Legal Page Generator</h1>
+            <button id="themeToggle" class="theme-btn">🌙 Dark Mode</button>
         </div>
-    </header>
 
-    <main class="container">
-        <div class="tool-container">
-            <h1 style="font-size: 1.8rem; margin-bottom: 8px;">Privacy Policy & Terms Generator</h1>
-            <p style="color: var(--text-secondary); margin-bottom: 24px;">Enter your site information to generate Google AdSense-compliant legal pages instantly.</p>
-
-            <div class="form-grid">
-                <div class="form-group">
-                    <label>Website / Company Name:</label>
-                    <input type="text" id="site-name" class="form-control" value="OmniKitHub" placeholder="e.g. My Awesome Site">
-                </div>
-                <div class="form-group">
-                    <label>Website URL:</label>
-                    <input type="text" id="site-url" class="form-control" value="https://omnikithub.com" placeholder="https://example.com">
-                </div>
-                <div class="form-group">
-                    <label>Contact Email:</label>
-                    <input type="text" id="site-email" class="form-control" value="contact@omnikithub.com" placeholder="support@example.com">
-                </div>
-            </div>
-
-            <div class="type-selector">
-                <button id="btn-privacy" class="type-btn active" onclick="switchType('privacy')">Privacy Policy</button>
-                <button id="btn-terms" class="type-btn" onclick="switchType('terms')">Terms & Conditions</button>
-            </div>
-
-            <textarea id="policy-output" class="output-box" readonly></textarea>
-
-            <div class="btn-controls">
-                <button id="generate-btn" class="action-btn btn-primary" onclick="generatePolicy()"><i class="fa-solid fa-gear"></i> Generate Legal Page</button>
-                <button class="action-btn btn-secondary" onclick="copyOutput()"><i class="fa-solid fa-copy"></i> Copy Policy</button>
-            </div>
+        <div class="section-title">1. Select Legal Document Type</div>
+        <div class="tab-bar">
+            <button class="tab-btn active" onclick="switchDoc('privacy')">Privacy Policy</button>
+            <button class="tab-btn" onclick="switchDoc('terms')">Terms & Conditions</button>
+            <button class="tab-btn" onclick="switchDoc('disclaimer')">Disclaimer</button>
+            <button class="tab-btn" onclick="switchDoc('refund')">Refund Policy</button>
         </div>
-    </main>
 
-    <footer class="footer">
-        <div class="footer-bottom">
-            <div class="container">
-                <p>&copy; 2026 OmniKitHub.com. All rights reserved.</p>
-            </div>
+        <div class="section-title">2. Website & Company Information</div>
+        <div class="form-group">
+            <label>Company / Website Name:</label>
+            <input type="text" id="siteName" value="OmniKitHub">
         </div>
-    </footer>
+        <div class="form-group">
+            <label>Website URL:</label>
+            <input type="text" id="siteUrl" value="https://omnikithub.com">
+        </div>
+        <div class="form-group">
+            <label>Contact Email:</label>
+            <input type="email" id="siteEmail" value="contact@omnikithub.com">
+        </div>
+        <div class="form-group">
+            <label>Country / Jurisdiction:</label>
+            <select id="siteCountry">
+                <option value="Bangladesh">Bangladesh</option>
+                <option value="United States">United States</option>
+                <option value="United Kingdom">United Kingdom</option>
+                <option value="Global / International" selected>Global / International</option>
+            </select>
+        </div>
 
-    <script src="../script.js"></script>
-    <script>
-        let currentType = 'privacy';
+        <div class="action-bar">
+            <button id="downloadPdfBtn" class="btn btn-primary">📥 Save PDF Report</button>
+            <button id="copyBtn" class="btn">📋 Copy Text</button>
+            <button id="printBtn" class="btn">🖨️ Print</button>
+            <button id="shareBtn" class="btn btn-share">🔗 Share Tool</button>
+        </div>
+    </div>
 
-        const siteName = document.getElementById('site-name');
-        const siteUrl = document.getElementById('site-url');
-        const siteEmail = document.getElementById('site-email');
-        const output = document.getElementById('policy-output');
-        const btnPrivacy = document.getElementById('btn-privacy');
-        const btnTerms = document.getElementById('btn-terms');
+    <!-- Right Live Preview -->
+    <div class="preview-card">
+        <h3 id="previewTitle" style="margin-bottom: 12px; color: var(--primary-color);">Live Generated Privacy Policy</h3>
+        <div class="legal-paper" id="legalPaper">
+            Loading legal content...
+        </div>
+    </div>
+</div>
 
-        function switchType(type) {
-            currentType = type;
-            if (type === 'privacy') {
-                btnPrivacy.classList.add('active');
-                btnTerms.classList.remove('active');
-            } else {
-                btnTerms.classList.add('active');
-                btnPrivacy.classList.remove('active');
-            }
-            generatePolicy();
+<script>
+    const siteName = document.getElementById('siteName');
+    const siteUrl = document.getElementById('siteUrl');
+    const siteEmail = document.getElementById('siteEmail');
+    const siteCountry = document.getElementById('siteCountry');
+    const legalPaper = document.getElementById('legalPaper');
+    const previewTitle = document.getElementById('previewTitle');
+    const themeToggle = document.getElementById('themeToggle');
+
+    let currentDoc = 'privacy';
+
+    function switchDoc(type) {
+        currentDoc = type;
+        document.querySelectorAll('.tab-btn').forEach(btn => btn.classList.remove('active'));
+        event.target.classList.add('active');
+        updateGenerator();
+    }
+
+    function updateGenerator() {
+        const name = siteName.value || 'Our Website';
+        const url = siteUrl.value || 'https://example.com';
+        const email = siteEmail.value || 'support@example.com';
+        const country = siteCountry.value;
+
+        if(currentDoc === 'privacy') {
+            previewTitle.innerText = 'Live Generated Privacy Policy';
+            legalPaper.innerHTML = `<h2>Privacy Policy for ${name}</h2>
+At ${name}, accessible from ${url}, one of our main priorities is the privacy of our visitors. This Privacy Policy document contains types of information that is collected and recorded by ${name} and how we use it.
+
+If you have additional questions or require more information about our Privacy Policy, do not hesitate to contact us through email at ${email}.
+
+<h3>1. Information We Collect</h3>
+The personal information that you are asked to provide, and the reasons why you are asked to provide it, will be made clear to you at the point we ask you to provide your personal information.
+
+<h3>2. Google DoubleClick DART Cookie</h3>
+Google is one of a third-party vendor on our site. It also uses cookies, known as DART cookies, to serve ads to our site visitors based upon their visit to ${url} and other sites on the internet.
+
+<h3>3. GDPR Data Protection Rights</h3>
+We would like to make sure you are fully aware of all of your data protection rights. Every user is entitled to the following under ${country} regulations:
+- The right to access – You have the right to request copies of your personal data.
+- The right to rectification – You have the right to request that we correct any information you believe is inaccurate.
+- The right to erasure – You have the right to request that we erase your personal data, under certain conditions.
+
+<h3>4. Consent</h3>
+By using our website, you hereby consent to our Privacy Policy and agree to its terms.`;
+        } 
+        else if(currentDoc === 'terms') {
+            previewTitle.innerText = 'Live Generated Terms & Conditions';
+            legalPaper.innerHTML = `<h2>Terms and Conditions for ${name}</h2>
+Welcome to ${name}! These terms and conditions outline the rules and regulations for the use of ${name}'s Website, located at ${url}.
+
+By accessing this website we assume you accept these terms and conditions. Do not continue to use ${name} if you do not agree to take all of the terms and conditions stated on this page.
+
+<h3>1. License</h3>
+Unless otherwise stated, ${name} and/or its licensors own the intellectual property rights for all material on ${name}. All intellectual property rights are reserved.
+
+<h3>2. Hyperlinking to our Content</h3>
+The following organizations may link to our Website without prior written approval:
+- Search engines;
+- News organizations;
+- Online directory distributors.
+
+<h3>3. Content Liability</h3>
+We shall not be hold responsible for any content that appears on your Website. You agree to protect and defend us against all claims that is rising on your Website.
+
+<h3>4. Contact Information</h3>
+If you have any queries regarding any of our terms, please contact us at ${email}.`;
         }
+        else if(currentDoc === 'disclaimer') {
+            previewTitle.innerText = 'Live Generated Disclaimer';
+            legalPaper.innerHTML = `<h2>Disclaimer for ${name}</h2>
+If you require any more information or have any questions about our site's disclaimer, please feel free to contact us by email at ${email}.
 
-        function generatePolicy() {
-            const name = siteName.value.trim() || 'Website';
-            const url = siteUrl.value.trim() || 'https://example.com';
-            const email = siteEmail.value.trim() || 'contact@example.com';
+<h3>1. Disclaimers for ${name}</h3>
+All the information on this website - ${url} - is published in good faith and for general information purpose only. ${name} makes no warranties about the completeness, reliability and accuracy of this information.
 
-            if (currentType === 'privacy') {
-                output.value = `Privacy Policy for ${name}\n\nAt ${name}, accessible from ${url}, one of our main priorities is the privacy of our visitors. This Privacy Policy document contains types of information that is collected and recorded by ${name} and how we use it.\n\nLog Files:\n${name} follows a standard procedure of using log files. These files log visitors when they visit websites. The information collected includes internet protocol (IP) addresses, browser type, Internet Service Provider (ISP), date and time stamp, referring/exit pages.\n\nGoogle DoubleClick DART Cookie:\nGoogle is one of a third-party vendor on our site. It also uses cookies, known as DART cookies, to serve ads to our site visitors. Users may choose to decline the use of DART cookies by visiting the Google ad and content network Privacy Policy.\n\nContact Us:\nIf you have additional questions or require more information about our Privacy Policy, do not hesitate to contact us at ${email}.`;
-            } else {
-                output.value = `Terms and Conditions for ${name}\n\nWelcome to ${name}!\n\nThese terms and conditions outline the rules and regulations for the use of ${name}'s Website, located at ${url}.\n\nBy accessing this website we assume you accept these terms and conditions. Do not continue to use ${name} if you do not agree to take all of the terms and conditions stated on this page.\n\nLicense:\nUnless otherwise stated, ${name} and/or its licensors own the intellectual property rights for all material on ${name}. All intellectual property rights are reserved.\n\nContact Information:\nIf you have any queries regarding any of our terms, please contact us at ${email}.`;
-            }
+<h3>2. Consent</h3>
+By using our website, you hereby consent to our disclaimer and agree to its terms.
+
+<h3>3. Update</h3>
+Should we update, amend or make any changes to this document, those changes will be prominently posted here.`;
         }
+        else if(currentDoc === 'refund') {
+            previewTitle.innerText = 'Live Generated Refund Policy';
+            legalPaper.innerHTML = `<h2>Return & Refund Policy for ${name}</h2>
+Thank you for shopping at ${name} located at ${url}. 
 
-        function copyOutput() {
-            if (!output.value) return;
-            navigator.clipboard.writeText(output.value);
-            alert('Legal text copied to clipboard!');
+If you are not entirely satisfied with your purchase, we're here to help. Our policy lasts 14 days. If 14 days have gone by since your purchase, unfortunately we can’t offer you a refund or exchange.
+
+<h3>1. Returns</h3>
+To be eligible for a return, your item must be unused and in the same condition that you received it.
+
+<h3>2. Refunds</h3>
+Once we receive your item, we will inspect it and notify you that we have received your returned item. If your approval is received, we will initiate a refund to your original method of payment.
+
+<h3>3. Contact Us</h3>
+If you have any questions on how to return your item to us, contact us at ${email}.`;
         }
+    }
 
-        // Initial Generation
-        generatePolicy();
-    </script>
+    [siteName, siteUrl, siteEmail, siteCountry].forEach(inp => {
+        inp.addEventListener('input', updateGenerator);
+        inp.addEventListener('change', updateGenerator);
+    });
+
+    // Dark Mode
+    themeToggle.addEventListener('click', () => {
+        document.body.classList.toggle('dark-mode');
+        themeToggle.innerText = document.body.classList.contains('dark-mode') ? '☀️ Light Mode' : '🌙 Dark Mode';
+    });
+
+    // Actions
+    document.getElementById('downloadPdfBtn').addEventListener('click', () => {
+        const opt = {
+            margin: 0.3,
+            filename: `${currentDoc}_${siteName.value.replace(/\s+/g, '_')}.pdf`,
+            html2canvas: { scale: 2 },
+            jsPDF: { unit: 'in', format: 'letter', orientation: 'portrait' }
+        };
+        html2pdf().set(opt).from(legalPaper).save();
+    });
+
+    document.getElementById('copyBtn').addEventListener('click', () => {
+        navigator.clipboard.writeText(legalPaper.innerText);
+        alert('Legal document text copied to clipboard!');
+    });
+
+    document.getElementById('printBtn').addEventListener('click', () => window.print());
+
+    document.getElementById('shareBtn').addEventListener('click', async () => {
+        if (navigator.share) {
+            try {
+                await navigator.share({
+                    title: 'Pro Legal Page Generator',
+                    text: 'Generate professional Privacy Policy and Terms & Conditions pages instantly!',
+                    url: window.location.href
+                });
+            } catch (err) { console.log(err); }
+        } else {
+            navigator.clipboard.writeText(window.location.href);
+            alert('Tool link copied to clipboard!');
+        }
+    });
+
+    updateGenerator();
+</script>
+
 </body>
 </html>
