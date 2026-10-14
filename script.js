@@ -104,11 +104,11 @@ function exportToolContent(contentElementId, actionType = 'print', title = 'Omni
         return;
     }
 
-    // A4 পেজ ও প্যারাগ্রাফ অনুযায়ী টেক্সট ফরম্যাটিং
+    // A4 পেজ ও প্যারাগ্রাফ অনুযায়ী স্মার্ট টেক্সট ফরম্যাটিং (অটো পেজ ব্রেক)
     let paragraphs = rawContent.split(/\r?\n\r?\n/);
     let formattedHTML = paragraphs.map(p => `<p>${p.replace(/\n/g, '<br>')}</p>`).join('');
 
-    // যদি ব্যবহারকারী শুধু টেক্সট শেয়ার করতে চায়
+    // যদি ব্যবহারকারী শেয়ার করতে চায়
     if (actionType === 'share') {
         if (navigator.share) {
             navigator.share({
@@ -123,7 +123,7 @@ function exportToolContent(contentElementId, actionType = 'print', title = 'Omni
         return;
     }
 
-    // প্রিন্ট বা PDF/Image সেভের জন্য নতুন উইন্ডো বা প্রিভিউ তৈরি
+    // নতুন প্রিন্ট ও এক্সপোর্ট উইন্ডো তৈরি
     const exportWindow = window.open('', '', 'height=800,width=1000');
 
     exportWindow.document.write(`
@@ -132,7 +132,7 @@ function exportToolContent(contentElementId, actionType = 'print', title = 'Omni
         <head>
             <meta charset="UTF-8">
             <title>${title}</title>
-            <!-- Canvas2Image এবং html2canvas লাইব্রেরি যোগ করা হলো JPG/PNG ডাউনলোডের জন্য -->
+            <!-- Image Conversion Library (html2canvas) -->
             <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"><\/script>
             <style>
                 @page {
@@ -187,11 +187,6 @@ function exportToolContent(contentElementId, actionType = 'print', title = 'Omni
                     widows: 3;
                 }
 
-                /* ডাউনলোডের সময় বাটনগুলো লুকিয়ে রাখার জন্য */
-                .no-export {
-                    display: none !important;
-                }
-
                 .action-bar {
                     margin-top: 20px;
                     text-align: center;
@@ -241,13 +236,11 @@ function exportToolContent(contentElementId, actionType = 'print', title = 'Omni
                     html2canvas(captureElement, { scale: 2 }).then(canvas => {
                         const link = document.createElement('a');
                         link.download = '${title.toLowerCase().replace(/\\s+/g, '_')}.' + type;
-                        link.link = type === 'jpg' ? 'image/jpeg' : 'image/png';
                         link.href = canvas.toDataURL('image/' + (type === 'jpg' ? 'jpeg' : 'png'));
                         link.click();
                     });
                 }
 
-                // যদি অ্যাকশন শুধু প্রিন্ট বা সরাসরি ডাউনলোড হয়
                 window.onload = function() {
                     if ('${actionType}' === 'print') {
                         setTimeout(() => { window.print(); }, 500);
@@ -263,43 +256,43 @@ function exportToolContent(contentElementId, actionType = 'print', title = 'Omni
 }
 
 /* ==========================================================================
-   3. Auto-Attach Engine for All Tools (.print-btn, .png-btn, .jpg-btn, .share-btn)
+   3. Auto-Injection Engine: Automatically injects buttons & binds actions
    ========================================================================== */
 document.addEventListener("DOMContentLoaded", () => {
-    // প্রিন্ট বা PDF এর জন্য
-    document.querySelectorAll(".print-btn, [data-print-target]").forEach(btn => {
-        btn.addEventListener("click", () => {
-            const targetId = btn.getAttribute("data-print-target") || "user-input";
-            const title = btn.getAttribute("data-title") || "OmniKitHub Document";
+    // ওয়েবসাইট লোড হওয়ার সাথে সাথে ইনপুট বক্স খুঁজে বের করা
+    const targetInput = document.getElementById("user-input") || document.querySelector("textarea") || document.querySelector(".tool-output");
+
+    if (targetInput && !document.querySelector(".omnikit-auto-buttons")) {
+        // নতুন ৪টি বাটন ধারণকারী কন্টেইনার জেনারেট করা
+        const buttonContainer = document.createElement("div");
+        buttonContainer.className = "omnikit-auto-buttons";
+        buttonContainer.style.cssText = "margin-top: 15px; display: flex; gap: 10px; flex-wrap: wrap;";
+
+        buttonContainer.innerHTML = `
+            <button class="print-btn" style="padding: 9px 16px; background: #007bff; color: white; border: none; border-radius: 5px; cursor: pointer; font-weight: 500;">🖨️ Print / PDF</button>
+            <button class="png-btn" style="padding: 9px 16px; background: #28a745; color: white; border: none; border-radius: 5px; cursor: pointer; font-weight: 500;">🖼️ Download PNG</button>
+            <button class="jpg-btn" style="padding: 9px 16px; background: #ffc107; color: black; border: none; border-radius: 5px; cursor: pointer; font-weight: 500;">📷 Download JPG</button>
+            <button class="share-btn" style="padding: 9px 16px; background: #17a2b8; color: white; border: none; border-radius: 4px; cursor: pointer; font-weight: 500;">🔗 Share</button>
+        `;
+
+        // বাটনগুলো ইনপুট বক্সের নিচে অটোমেটিক যুক্ত করা
+        targetInput.parentNode.insertBefore(buttonContainer, targetInput.nextSibling);
+    }
+
+    // গ্লোবাল ক্লিক ইভেন্ট হ্যান্ডলার
+    document.body.addEventListener("click", (e) => {
+        const title = document.title || "OmniKitHub Document";
+        const targetId = targetInput ? targetInput.id || "user-input" : "user-input";
+
+        if (e.target.classList.contains("print-btn")) {
             exportToolContent(targetId, 'print', title);
-        });
-    });
-
-    // PNG ডাউনলোডের জন্য
-    document.querySelectorAll(".png-btn, [data-png-target]").forEach(btn => {
-        btn.addEventListener("click", () => {
-            const targetId = btn.getAttribute("data-png-target") || "user-input";
-            const title = btn.getAttribute("data-title") || "OmniKitHub Document";
+        } else if (e.target.classList.contains("png-btn")) {
             exportToolContent(targetId, 'png', title);
-        });
-    });
-
-    // JPG ডাউনলোডের জন্য
-    document.querySelectorAll(".jpg-btn, [data-jpg-target]").forEach(btn => {
-        btn.addEventListener("click", () => {
-            const targetId = btn.getAttribute("data-jpg-target") || "user-input";
-            const title = btn.getAttribute("data-title") || "OmniKitHub Document";
+        } else if (e.target.classList.contains("jpg-btn")) {
             exportToolContent(targetId, 'jpg', title);
-        });
-    });
-
-    // শেয়ার বাটনের জন্য
-    document.querySelectorAll(".share-btn, [data-share-target]").forEach(btn => {
-        btn.addEventListener("click", () => {
-            const targetId = btn.getAttribute("data-share-target") || "user-input";
-            const title = btn.getAttribute("data-title") || "OmniKitHub Document";
+        } else if (e.target.classList.contains("share-btn")) {
             exportToolContent(targetId, 'share', title);
-        });
+        }
     });
 });
  
