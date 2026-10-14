@@ -15,6 +15,10 @@
     <meta property="og:url" content="https://omnikithub.com/tools/plagiarism-ai-detector.html">
     <meta property="og:type" content="website">
 
+    <!-- External CSS & Icons -->
+    <link rel="stylesheet" href="../style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
     <!-- html2pdf for Exporting PDF Reports -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
 
@@ -55,29 +59,26 @@
         }
 
         * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; }
-        body { background-color: var(--bg-color); color: var(--text-color); padding: 20px; display: flex; justify-content: center; transition: all 0.3s ease; }
+        body { background-color: var(--bg-color); color: var(--text-color); display: flex; flex-direction: column; min-height: 100vh; transition: all 0.3s ease; }
 
-        .container {
+        .main-wrapper {
+            flex: 1;
             max-width: 1000px;
             width: 100%;
+            margin: 20px auto;
+            padding: 0 20px;
+        }
+
+        .container {
             background: var(--card-bg);
             border-radius: 12px;
             box-shadow: 0 4px 20px rgba(0,0,0,0.08);
             padding: 30px;
+            border: 1px solid var(--border-color);
         }
 
         .header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px; }
         .header h1 { color: var(--primary-color); font-size: 26px; }
-
-        .theme-btn {
-            background: transparent;
-            border: 1px solid var(--border-color);
-            color: var(--text-color);
-            padding: 6px 12px;
-            border-radius: 20px;
-            cursor: pointer;
-            font-size: 13px;
-        }
 
         .description { color: #64748b; font-size: 14px; margin-bottom: 20px; }
 
@@ -161,8 +162,6 @@
             line-height: 1.6;
         }
 
-        .highlight-ai { background-color: rgba(239, 68, 68, 0.2); padding: 2px 4px; border-radius: 4px; }
-
         /* Action Toolbar */
         .action-bar {
             display: flex;
@@ -187,66 +186,172 @@
         .btn-share { background: #10b981; color: white; border: none; }
         .btn-share:hover { background: #059669; }
 
+        /* Ad Slots & SEO Card Styling */
+        .ad-placeholder {
+            border: 1px dashed #cbd5e1;
+            background: rgba(0,0,0,0.01);
+            padding: 15px;
+            border-radius: 10px;
+            text-align: center;
+            color: #64748b;
+            font-size: 13px;
+            margin: 20px 0;
+        }
+
+        .seo-content-card {
+            background: var(--card-bg);
+            border-radius: 12px;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.08);
+            padding: 30px;
+            margin-top: 30px;
+            border: 1px solid var(--border-color);
+            line-height: 1.7;
+        }
+
+        .seo-content-card h2 { font-size: 1.4rem; color: var(--primary-color); margin-bottom: 12px; }
+        .seo-content-card h3 { font-size: 1.1rem; color: var(--text-color); margin: 15px 0 8px 0; }
+        .seo-content-card p, .seo-content-card li { font-size: 0.95rem; margin-bottom: 8px; color: #64748b; }
+        .seo-content-card ul { padding-left: 20px; margin-bottom: 10px; }
+
         @media print {
             body * { visibility: hidden; }
             #reportArea, #reportArea * { visibility: visible; }
-            #reportArea { position: absolute; left: 0; top: 0; width: 100%; shadow: none; }
-            .action-bar, .upload-bar, .header button { display: none; }
+            #reportArea { position: absolute; left: 0; top: 0; width: 100%; box-shadow: none; }
+            .action-bar, .upload-bar, .header button, .ad-placeholder, .footer { display: none !important; }
         }
     </style>
 </head>
-<body>
+<body class="light-theme">
 
-<div class="container" id="reportArea">
-    <div class="header">
-        <h1>🛡️ Plagiarism & AI Content Detector</h1>
-        <button id="themeToggle" class="theme-btn">🌙 Dark Mode</button>
+    <!-- Navigation Header -->
+    <header class="navbar">
+        <div class="container nav-container" style="max-width: 100% !important; padding: 0 !important;">
+            <a href="../index.html" class="logo">
+                <i class="fa-solid fa-toolbox logo-icon"></i>
+                <span class="logo-text">OmniKit<span class="highlight">Hub</span></span>
+            </a>
+            <div class="nav-actions">
+                <button id="theme-toggle" class="icon-btn" aria-label="Toggle Theme">
+                    <i class="fa-solid fa-moon"></i>
+                </button>
+            </div>
+        </div>
+    </header>
+
+<div class="main-wrapper">
+
+    <!-- Top Advertisement Slot -->
+    <div class="ad-placeholder">
+        <span>Responsive Advertisement Space (Google AdSense)</span>
     </div>
-    <p class="description">Paste your article or upload a file below to scan for AI-generated text patterns, plagiarism risks, and download detailed PDF scan reports.</p>
 
-    <!-- File Upload -->
-    <div class="upload-bar">
-        <label style="font-size: 13px; font-weight: 600;">Upload Document (.TXT):</label>
-        <input type="file" id="fileInput" accept=".txt">
-    </div>
+    <div class="container" id="reportArea">
+        <div class="header">
+            <h1>🛡️ Plagiarism & AI Content Detector</h1>
+        </div>
+        <p class="description">Paste your article or upload a file below to scan for AI-generated text patterns, plagiarism risks, and download detailed PDF scan reports.</p>
 
-    <!-- Text Input Area -->
-    <textarea id="inputText" placeholder="Paste your article, essay, or blog text here (Minimum 20 words recommended)..."></textarea>
-    
-    <div class="status-info">Total Words: <span id="wordCount">0</span></div>
+        <!-- File Upload -->
+        <div class="upload-bar">
+            <label style="font-size: 13px; font-weight: 600;">Upload Document (.TXT):</label>
+            <input type="file" id="fileInput" accept=".txt">
+        </div>
 
-    <!-- Analysis Results -->
-    <div id="resultsPanel" class="results-panel">
-        <div class="scores-grid">
-            <div class="score-card">
-                <h3 id="aiScore" style="color: #ef4444;">0%</h3>
-                <p>AI CONTENT PROBABILITY</p>
-                <div class="progress-bar"><div id="aiBar" class="progress-fill" style="background: #ef4444;"></div></div>
+        <!-- Text Input Area -->
+        <textarea id="inputText" placeholder="Paste your article, essay, or blog text here (Minimum 20 words recommended)..."></textarea>
+        
+        <div class="status-info">Total Words: <span id="wordCount">0</span></div>
+
+        <!-- Analysis Results -->
+        <div id="resultsPanel" class="results-panel">
+            <div class="scores-grid">
+                <div class="score-card">
+                    <h3 id="aiScore" style="color: #ef4444;">0%</h3>
+                    <p>AI CONTENT PROBABILITY</p>
+                    <div class="progress-bar"><div id="aiBar" class="progress-fill" style="background: #ef4444;"></div></div>
+                </div>
+
+                <div class="score-card">
+                    <h3 id="originalScore" style="color: #10b981;">100%</h3>
+                    <p>ORIGINAL / HUMAN SCORE</p>
+                    <div class="progress-bar"><div id="origBar" class="progress-fill" style="background: #10b981;"></div></div>
+                </div>
             </div>
 
-            <div class="score-card">
-                <h3 id="originalScore" style="color: #10b981;">100%</h3>
-                <p>ORIGINAL / HUMAN SCORE</p>
-                <div class="progress-bar"><div id="origBar" class="progress-fill" style="background: #10b981;"></div></div>
+            <div class="analysis-box">
+                <strong>📋 Detailed Scan Summary:</strong>
+                <p id="scanDetails" style="margin-top: 8px;">Your content scan analysis breakdown will appear here...</p>
             </div>
         </div>
 
-        <div class="analysis-box">
-            <strong>📋 Detailed Scan Summary:</strong>
-            <p id="scanDetails" style="margin-top: 8px;">Your content scan analysis breakdown will appear here...</p>
+        <!-- Action Toolbar -->
+        <div class="action-bar">
+            <button id="scanBtn" class="btn btn-primary">🛡️ Scan Content</button>
+            <button id="downloadPdfBtn" class="btn">📄 Save PDF Report</button>
+            <button id="printBtn" class="btn">🖨️ Print Report</button>
+            <button id="shareBtn" class="btn btn-share">🔗 Share Tool</button>
+            <button id="clearBtn" class="btn">🗑️ Clear</button>
         </div>
     </div>
 
-    <!-- Action Toolbar -->
-    <div class="action-bar">
-        <button id="scanBtn" class="btn btn-primary">🛡️ Scan Content</button>
-        <button id="downloadPdfBtn" class="btn">📄 Save PDF Report</button>
-        <button id="printBtn" class="btn">🖨️ Print Report</button>
-        <button id="shareBtn" class="btn btn-share">🔗 Share Tool</button>
-        <button id="clearBtn" class="btn">🗑️ Clear</button>
+    <!-- Bottom Advertisement Slot -->
+    <div class="ad-placeholder">
+        <span>Responsive Advertisement Space (Google AdSense)</span>
     </div>
+
+    <!-- Helpful Tutorial Video Carousel -->
+    <div style="margin: 30px 0;">
+        <h3 style="font-size: 1.2rem; color: var(--text-color); margin-bottom: 12px;"><i class="fa-solid fa-video" style="color: var(--primary-color);"></i> Recommended Plagiarism & AI Detection Guides</h3>
+        <Carousel>
+          <Video source="youtube" query="how to check AI content and plagiarism in essays" count="3"/>
+        </Carousel>
+    </div>
+
+    <!-- AdSense Friendly SEO Content Section -->
+    <div class="seo-content-card">
+        <h2>About Plagiarism & AI Content Detector</h2>
+        <p>OmniKitHub's free AI Content & Plagiarism Detector helps students, researchers, and content writers verify the authenticity and originality of their writing. Scan essays, blog posts, and research papers for AI generation probabilities and copyright plagiarism risks instantly.</p>
+        
+        <h3>Key Features & Capabilities</h3>
+        <ul>
+            <li><strong>AI Probability Score:</strong> Analyze text patterns to detect ChatGPT, Claude, and other LLM outputs.</li>
+            <li><strong>Originality Ratio:</strong> Measure human-written text percentage versus automated phrasing.</li>
+            <li><strong>Instant PDF Reports:</strong> Download comprehensive scan analysis certificates for academic or professional submission.</li>
+            <li><strong>100% Secure & Private:</strong> All document text is analyzed directly in your browser without storing personal records.</li>
+        </ul>
+    </div>
+
 </div>
 
+<!-- Footer Section -->
+<footer class="footer">
+    <div class="container footer-container" style="max-width: 100% !important;">
+        <div class="footer-brand">
+            <a href="../index.html" class="logo">
+                <i class="fa-solid fa-toolbox logo-icon"></i>
+                <span class="logo-text">OmniKit<span class="highlight">Hub</span></span>
+            </a>
+            <p>Your ultimate free online toolkit for daily developer, text, media, PDF, and web tasks.</p>
+        </div>
+        
+        <div class="footer-links">
+            <h4>Legal & Pages</h4>
+            <ul>
+                <li><a href="../pages/about.html">About Us</a></li>
+                <li><a href="../pages/contact.html">Contact Us</a></li>
+                <li><a href="../pages/privacy-policy.html">Privacy Policy</a></li>
+                <li><a href="../pages/terms.html">Terms of Service</a></li>
+            </ul>
+        </div>
+    </div>
+    <div class="footer-bottom">
+        <div class="container">
+            <p>&copy; 2026 OmniKitHub.com. All rights reserved.</p>
+        </div>
+    </div>
+</footer>
+
+<script src="../script.js"></script>
 <script>
     const inputText = document.getElementById('inputText');
     const wordCount = document.getElementById('wordCount');
@@ -258,7 +363,7 @@
     const origBar = document.getElementById('origBar');
     const scanDetails = document.getElementById('scanDetails');
     const fileInput = document.getElementById('fileInput');
-    const themeToggle = document.getElementById('themeToggle');
+    const themeToggle = document.getElementById('theme-toggle');
 
     function updateWordCount() {
         const text = inputText.value.trim();
