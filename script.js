@@ -1,10 +1,12 @@
 /* ==========================================================================
    OmniKitHub.com - Main Global JavaScript
-   Features: Dark/Light Mode, Instant Live Search & Dynamic Category Filter
+   Features: Dark/Light Mode, Instant Live Search, Dynamic Category Filter & Universal Export Engine
    ========================================================================== */
 
 document.addEventListener("DOMContentLoaded", () => {
     initTheme();
+    initAutoExportButtons();
+    initSearchAndCategory();
 });
 
 /* --------------------------------------------------------------------------
@@ -50,18 +52,24 @@ function initTheme() {
 }
 
 /* --------------------------------------------------------------------------
-   2. Live Search Filter for 30+ Tools
+   2. Live Search Filter for Tools
    -------------------------------------------------------------------------- */
 function filterTools() {
-    const searchInput = document.getElementById("tool-search").value.toLowerCase().trim();
+    const searchInput = document.getElementById("tool-search");
+    if (!searchInput) return;
+
+    const filterText = searchInput.value.toLowerCase().trim();
     const toolCards = document.querySelectorAll(".tool-card");
 
     toolCards.forEach(card => {
-        const title = card.querySelector("h3").innerText.toLowerCase();
-        const description = card.querySelector("p").innerText.toLowerCase();
-        const category = card.getAttribute("data-category").toLowerCase();
+        const titleEl = card.querySelector("h3");
+        const descEl = card.querySelector("p");
+        
+        const title = titleEl ? titleEl.innerText.toLowerCase() : "";
+        const description = descEl ? descEl.innerText.toLowerCase() : "";
+        const category = card.getAttribute("data-category") ? card.getAttribute("data-category").toLowerCase() : "";
 
-        if (title.includes(searchInput) || description.includes(searchInput) || category.includes(searchInput)) {
+        if (title.includes(filterText) || description.includes(filterText) || category.includes(filterText)) {
             card.style.display = "flex";
         } else {
             card.style.display = "none";
@@ -72,24 +80,52 @@ function filterTools() {
 /* --------------------------------------------------------------------------
    3. Category Filtering Engine
    -------------------------------------------------------------------------- */
-/* ==========================================================================
-   1. Category Filtering Engine & Global Scripts
-   ========================================================================== */
-
-function filterCategory(categoryName) {
+function filterCategory(categoryName, element = null) {
     const filterButtons = document.querySelectorAll(".filter-btn");
     const toolCards = document.querySelectorAll(".tool-card");
+    const searchInput = document.getElementById("tool-search");
 
+    // Clear search box when clicking categories
+    if (searchInput) searchInput.value = "";
+
+    // Active button class toggle
     filterButtons.forEach(btn => btn.classList.remove("active"));
-    if (event && event.target) {
-        event.target.classList.add("active");
+    if (element) {
+        element.classList.add("active");
     }
+
+    // Show/Hide relevant tool cards
+    toolCards.forEach(card => {
+        const cardCategory = card.getAttribute("data-category");
+
+        if (categoryName === "all" || cardCategory === categoryName) {
+            card.style.display = "flex";
+        } else {
+            card.style.display = "none";
+        }
+    });
+}
+
+// Bind search input and category buttons safely
+function initSearchAndCategory() {
+    const searchInput = document.getElementById("tool-search");
+    if (searchInput) {
+        searchInput.addEventListener("keyup", filterTools);
+        searchInput.addEventListener("input", filterTools);
+    }
+
+    const filterButtons = document.querySelectorAll(".filter-btn");
+    filterButtons.forEach(btn => {
+        btn.addEventListener("click", function(e) {
+            const category = this.getAttribute("data-category") || "all";
+            filterCategory(category, this);
+        });
+    });
 }
 
 /* ==========================================================================
-   2. Universal Omni-Export Engine (Print, PDF, JPG, PNG & Share)
+   4. Universal Omni-Export Engine (Print, PDF, JPG, PNG & Share)
    ========================================================================== */
-
 function exportToolContent(contentElementId, actionType = 'print', title = 'OmniKitHub Document') {
     const element = document.getElementById(contentElementId);
     if (!element) {
@@ -104,11 +140,11 @@ function exportToolContent(contentElementId, actionType = 'print', title = 'Omni
         return;
     }
 
-    // A4 পেজ ও প্যারাগ্রাফ অনুযায়ী স্মার্ট টেক্সট ফরম্যাটিং (অটো পেজ ব্রেক)
+    // A4 পেজ ও প্যারাগ্রাফ অনুযায়ী স্মার্ট টেক্সট ফরম্যাটিং
     let paragraphs = rawContent.split(/\r?\n\r?\n/);
     let formattedHTML = paragraphs.map(p => `<p>${p.replace(/\n/g, '<br>')}</p>`).join('');
 
-    // যদি ব্যবহারকারী শেয়ার করতে চায়
+    // শেয়ার অপশন
     if (actionType === 'share') {
         if (navigator.share) {
             navigator.share({
@@ -118,13 +154,17 @@ function exportToolContent(contentElementId, actionType = 'print', title = 'Omni
             }).catch(() => {});
         } else {
             navigator.clipboard.writeText(rawContent);
-            alert("টেক্সট ক্লিপবোর্ডে কপি হয়ে গেছে!");
+            alert("টেক্সট ক্লিপবোর্ডে কপি হয়ে গেছে!");
         }
         return;
     }
 
     // নতুন প্রিন্ট ও এক্সপোর্ট উইন্ডো তৈরি
     const exportWindow = window.open('', '', 'height=800,width=1000');
+    if (!exportWindow) {
+        alert("পপআপ ব্লক করা আছে, অনুগ্রহ করে পপআপ অনুমোদন করুন।");
+        return;
+    }
 
     exportWindow.document.write(`
         <!DOCTYPE html>
@@ -132,14 +172,12 @@ function exportToolContent(contentElementId, actionType = 'print', title = 'Omni
         <head>
             <meta charset="UTF-8">
             <title>${title}</title>
-            <!-- Image Conversion Library (html2canvas) -->
             <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"><\/script>
             <style>
                 @page {
                     size: A4 portrait;
                     margin: 20mm 15mm 20mm 15mm;
                 }
-                
                 html, body {
                     width: 210mm;
                     background-color: #ffffff;
@@ -150,14 +188,12 @@ function exportToolContent(contentElementId, actionType = 'print', title = 'Omni
                     margin: 0;
                     padding: 0;
                 }
-
                 .export-page {
                     width: 100%;
                     box-sizing: border-box;
                     padding: 10mm;
                     background: #ffffff;
                 }
-
                 .header {
                     border-bottom: 2px solid #222222;
                     padding-bottom: 8px;
@@ -166,19 +202,16 @@ function exportToolContent(contentElementId, actionType = 'print', title = 'Omni
                     justify-content: space-between;
                     align-items: center;
                 }
-
                 .header h1 {
                     font-size: 15pt;
                     margin: 0;
                     color: #000000;
                 }
-
                 .content {
                     word-wrap: break-word;
                     overflow-wrap: break-word;
                     text-align: justify;
                 }
-
                 p {
                     margin-bottom: 14px;
                     page-break-inside: avoid;
@@ -186,12 +219,10 @@ function exportToolContent(contentElementId, actionType = 'print', title = 'Omni
                     orphans: 3;
                     widows: 3;
                 }
-
                 .action-bar {
                     margin-top: 20px;
                     text-align: center;
                 }
-
                 .action-bar button {
                     padding: 10px 20px;
                     margin: 0 5px;
@@ -205,7 +236,6 @@ function exportToolContent(contentElementId, actionType = 'print', title = 'Omni
                 .action-bar button:hover {
                     background: #0056b3;
                 }
-
                 @media print {
                     .action-bar { display: none; }
                     body { -webkit-print-color-adjust: exact; }
@@ -235,7 +265,7 @@ function exportToolContent(contentElementId, actionType = 'print', title = 'Omni
                     const captureElement = document.getElementById('captureArea');
                     html2canvas(captureElement, { scale: 2 }).then(canvas => {
                         const link = document.createElement('a');
-                        link.download = '${title.toLowerCase().replace(/\\s+/g, '_')}.' + type;
+                        link.download = '${title.toLowerCase().replace(/\s+/g, '_')}.' + type;
                         link.href = canvas.toDataURL('image/' + (type === 'jpg' ? 'jpeg' : 'png'));
                         link.click();
                     });
@@ -256,14 +286,12 @@ function exportToolContent(contentElementId, actionType = 'print', title = 'Omni
 }
 
 /* ==========================================================================
-   3. Auto-Injection Engine: Automatically injects buttons & binds actions
+   5. Auto-Injection Engine: Automatically injects buttons & binds actions
    ========================================================================== */
-document.addEventListener("DOMContentLoaded", () => {
-    // ওয়েবসাইট লোড হওয়ার সাথে সাথে ইনপুট বক্স খুঁজে বের করা
+function initAutoExportButtons() {
     const targetInput = document.getElementById("user-input") || document.querySelector("textarea") || document.querySelector(".tool-output");
 
     if (targetInput && !document.querySelector(".omnikit-auto-buttons")) {
-        // নতুন ৪টি বাটন ধারণকারী কন্টেইনার জেনারেট করা
         const buttonContainer = document.createElement("div");
         buttonContainer.className = "omnikit-auto-buttons";
         buttonContainer.style.cssText = "margin-top: 15px; display: flex; gap: 10px; flex-wrap: wrap;";
@@ -275,14 +303,16 @@ document.addEventListener("DOMContentLoaded", () => {
             <button class="share-btn" style="padding: 9px 16px; background: #17a2b8; color: white; border: none; border-radius: 4px; cursor: pointer; font-weight: 500;">🔗 Share</button>
         `;
 
-        // বাটনগুলো ইনপুট বক্সের নিচে অটোমেটিক যুক্ত করা
-        targetInput.parentNode.insertBefore(buttonContainer, targetInput.nextSibling);
+        if (targetInput.parentNode) {
+            targetInput.parentNode.insertBefore(buttonContainer, targetInput.nextSibling);
+        }
     }
 
-    // গ্লোবাল ক্লিক ইভেন্ট হ্যান্ডলার
+    // Event Delegation for auto buttons
     document.body.addEventListener("click", (e) => {
+        const activeTarget = document.getElementById("user-input") || document.querySelector("textarea") || document.querySelector(".tool-output");
         const title = document.title || "OmniKitHub Document";
-        const targetId = targetInput ? targetInput.id || "user-input" : "user-input";
+        const targetId = activeTarget ? activeTarget.id || "user-input" : "user-input";
 
         if (e.target.classList.contains("print-btn")) {
             exportToolContent(targetId, 'print', title);
@@ -292,22 +322,6 @@ document.addEventListener("DOMContentLoaded", () => {
             exportToolContent(targetId, 'jpg', title);
         } else if (e.target.classList.contains("share-btn")) {
             exportToolContent(targetId, 'share', title);
-        }
-    });
-});
- 
-    // Clear search box when clicking categories
-    const searchInput = document.getElementById("tool-search");
-    if (searchInput) searchInput.value = "";
-
-    // Show/Hide relevant tool cards
-    toolCards.forEach(card => {
-        const cardCategory = card.getAttribute("data-category");
-
-        if (categoryName === "all" || cardCategory === categoryName) {
-            card.style.display = "flex";
-        } else {
-            card.style.display = "none";
         }
     });
 }
