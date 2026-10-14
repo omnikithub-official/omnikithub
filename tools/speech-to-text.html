@@ -64,11 +64,70 @@
         body {
             background-color: var(--bg-color);
             color: var(--text-color);
-            padding: 20px;
+            display: flex;
+            flex-direction: column;
+            min-height: 100vh;
+            transition: background-color 0.3s, color 0.3s;
+        }
+
+        /* Global Header Layout */
+        .site-header {
+            background: var(--card-bg);
+            border-bottom: 1px solid var(--border-color);
+            padding: 15px 25px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+            margin-bottom: 20px;
+        }
+
+        .site-logo {
+            font-size: 22px;
+            font-weight: 800;
+            color: var(--primary-color);
+            text-decoration: none;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 18px;
+            align-items: center;
+        }
+
+        .nav-links a {
+            text-decoration: none;
+            color: var(--text-color);
+            font-size: 14px;
+            font-weight: 600;
+        }
+
+        .page-container {
+            max-width: 950px;
+            width: 100%;
+            margin: 0 auto;
+            padding: 0 20px;
+            flex: 1;
             display: flex;
             flex-direction: column;
             align-items: center;
-            transition: background-color 0.3s, color 0.3s;
+        }
+
+        .ad-slot-box {
+            width: 100%;
+            min-height: 90px;
+            background: rgba(0,0,0,0.02);
+            border: 1px dashed var(--border-color);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 8px;
+            margin: 15px 0;
+            font-size: 12px;
+            color: #94a3b8;
         }
 
         .container {
@@ -78,7 +137,8 @@
             border-radius: 12px;
             box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
             padding: 30px;
-            margin-top: 10px;
+            border: 1px solid var(--border-color);
+            margin-bottom: 20px;
         }
 
         .seo-content-card {
@@ -88,7 +148,7 @@
             border-radius: 12px;
             box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
             padding: 25px;
-            margin-top: 25px;
+            margin-bottom: 25px;
             border: 1px solid var(--border-color);
             line-height: 1.7;
         }
@@ -107,7 +167,7 @@
 
         .header h1 {
             color: var(--primary-color);
-            font-size: 26px;
+            font-size: 24px;
         }
 
         .theme-toggle-btn {
@@ -234,104 +294,151 @@
             100% { opacity: 1; }
         }
 
+        /* Global Footer */
+        .site-footer {
+            background: var(--card-bg);
+            border-top: 1px solid var(--border-color);
+            padding: 25px 20px;
+            text-align: center;
+            font-size: 13px;
+            color: #64748b;
+            margin-top: auto;
+        }
+
+        .site-footer a { color: var(--primary-color); text-decoration: none; margin: 0 5px; }
+
         @media print {
             body * { visibility: hidden; }
             #editor, #editor * { visibility: visible; }
             #editor { position: absolute; left: 0; top: 0; width: 100%; border: none; }
-            .seo-content-card { display: none; }
+            .seo-content-card, .site-header, .site-footer, .ad-slot-box { display: none; }
         }
     </style>
 </head>
 <body>
 
-<div class="container">
-    <div class="header">
-        <h1>🎙️ Speech to Text (Voice Typing)</h1>
+<!-- Header Navigation -->
+<header class="site-header">
+    <a href="/" class="site-logo">🎙️ OmniKitHub</a>
+    <nav class="nav-links">
+        <a href="/">Home</a>
+        <a href="/#tools">All Tools</a>
         <button id="themeToggle" class="theme-toggle-btn">🌙 Dark Mode</button>
-    </div>
-    <p class="description">AI-powered Voice Typing with automatic punctuation, Banglish-to-Bangla conversion, text-to-speech playback, PDF generation, and universal sharing.</p>
+    </nav>
+</header>
 
-    <div class="controls">
-        <select id="languageSelect">
-            <option value="bn-BD">Bangla (Bangladesh) - বাংলা</option>
-            <option value="bn-IN">Bangla (India) - বাংলা</option>
-            <option value="banglish">Banglish to Bangla (Phonetic)</option>
-            <option value="en-US" selected>English (United States)</option>
-            <option value="en-GB">English (United Kingdom)</option>
-        </select>
+<div class="page-container">
 
-        <button id="startBtn" class="btn-primary">🎤 Start Listening</button>
-        <button id="stopBtn" class="btn-danger" disabled>🛑 Stop</button>
-        <button id="clearBtn" class="btn-secondary">🗑️ Clear</button>
+    <!-- Top Advertisement Area -->
+    <div class="ad-slot-box">
+        <span>-- Google AdSense Advertisement Slot --</span>
     </div>
 
-    <div class="options-bar">
-        <label><input type="checkbox" id="autoPunctuation" checked> Smart Auto Punctuation (। , ?)</label>
-        <label><input type="checkbox" id="autoSpaces" checked> Clean Extra Spaces</label>
-    </div>
+    <div class="container">
+        <div class="header">
+            <h1>Speech to Text (Voice Typing)</h1>
+        </div>
+        <p class="description">AI-powered Voice Typing with automatic punctuation, Banglish-to-Bangla conversion, text-to-speech playback, PDF generation, and universal sharing.</p>
 
-    <!-- Formatting Toolbar -->
-    <div class="formatting-toolbar">
-        <button onclick="execCmd('bold')"><b>B</b></button>
-        <button onclick="execCmd('italic')"><i>I</i></button>
-        <button onclick="execCmd('underline')"><u>U</u></button>
-        
-        <select onchange="execCmd('fontSize', this.value)">
-            <option value="3">Normal Size</option>
-            <option value="4">Medium</option>
-            <option value="5">Large</option>
-            <option value="6">Extra Large</option>
-        </select>
+        <div class="controls">
+            <select id="languageSelect">
+                <option value="bn-BD">Bangla (Bangladesh) - বাংলা</option>
+                <option value="bn-IN">Bangla (India) - বাংলা</option>
+                <option value="banglish">Banglish to Bangla (Phonetic)</option>
+                <option value="en-US" selected>English (United States)</option>
+                <option value="en-GB">English (United Kingdom)</option>
+            </select>
 
-        <input type="color" onchange="execCmd('foreColor', this.value)" value="#2563eb" title="Text Color">
+            <button id="startBtn" class="btn-primary">🎤 Start Listening</button>
+            <button id="stopBtn" class="btn-danger" disabled>🛑 Stop</button>
+            <button id="clearBtn" class="btn-secondary">🗑️ Clear</button>
+        </div>
 
-        <button onclick="changeCase('upper')">AA</button>
-        <button onclick="changeCase('lower')">aa</button>
-        <button onclick="cleanFormatting()" title="Remove Extra Spaces">🧹 Clean Space</button>
-    </div>
+        <div class="options-bar">
+            <label><input type="checkbox" id="autoPunctuation" checked> Smart Auto Punctuation (। , ?)</label>
+            <label><input type="checkbox" id="autoSpaces" checked> Clean Extra Spaces</label>
+        </div>
 
-    <!-- Editable Editor -->
-    <div id="editor" contenteditable="true" placeholder="Your spoken text will appear here in real-time..."></div>
+        <!-- Formatting Toolbar -->
+        <div class="formatting-toolbar">
+            <button onclick="execCmd('bold')"><b>B</b></button>
+            <button onclick="execCmd('italic')"><i>I</i></button>
+            <button onclick="execCmd('underline')"><u>U</u></button>
+            
+            <select onchange="execCmd('fontSize', this.value)">
+                <option value="3">Normal Size</option>
+                <option value="4">Medium</option>
+                <option value="5">Large</option>
+                <option value="6">Extra Large</option>
+            </select>
 
-    <div class="status-bar">
-        <div>Words: <span id="wordCount">0</span> | Characters: <span id="charCount">0</span></div>
-        <div id="recordingStatus" class="recording-indicator">
-            <span class="dot"></span> Listening & Processing...
+            <input type="color" onchange="execCmd('foreColor', this.value)" value="#2563eb" title="Text Color">
+
+            <button onclick="changeCase('upper')">AA</button>
+            <button onclick="changeCase('lower')">aa</button>
+            <button onclick="cleanFormatting()" title="Remove Extra Spaces">🧹 Clean Space</button>
+        </div>
+
+        <!-- Editable Editor -->
+        <div id="editor" contenteditable="true" placeholder="Your spoken text will appear here in real-time..."></div>
+
+        <div class="status-bar">
+            <div>Words: <span id="wordCount">0</span> | Characters: <span id="charCount">0</span></div>
+            <div id="recordingStatus" class="recording-indicator">
+                <span class="dot"></span> Listening & Processing...
+            </div>
+        </div>
+
+        <!-- Export & Share Actions -->
+        <div class="controls" style="margin-top: 20px; border-top: 1px solid var(--border-color); padding-top: 15px;">
+            <button id="speakBtn" class="btn-secondary">🔊 Read Aloud (Listen)</button>
+            <button id="copyBtn" class="btn-secondary">📋 Copy Text</button>
+            <button id="downloadTxtBtn" class="btn-secondary">📥 Download .TXT</button>
+            <button id="downloadPdfBtn" class="btn-secondary">📄 Download PDF</button>
+            <button id="printBtn" class="btn-secondary">🖨️ Print</button>
+            <button id="shareBtn" class="btn-share">🔗 Share Anywhere</button>
         </div>
     </div>
 
-    <!-- Export & Share Actions -->
-    <div class="controls" style="margin-top: 20px; border-top: 1px solid var(--border-color); padding-top: 15px;">
-        <button id="speakBtn" class="btn-secondary">🔊 Read Aloud (Listen)</button>
-        <button id="copyBtn" class="btn-secondary">📋 Copy Text</button>
-        <button id="downloadTxtBtn" class="btn-secondary">📥 Download .TXT</button>
-        <button id="downloadPdfBtn" class="btn-secondary">📄 Download PDF</button>
-        <button id="printBtn" class="btn-secondary">🖨️ Print</button>
-        <button id="shareBtn" class="btn-share">🔗 Share Anywhere</button>
+    <!-- Bottom Advertisement Area -->
+    <div class="ad-slot-box">
+        <span>-- Google AdSense Advertisement Slot --</span>
     </div>
+
+    <!-- AdSense Friendly SEO Content Section -->
+    <div class="seo-content-card">
+        <h2>About Free Speech to Text (Voice Typing) Tool</h2>
+        <p>Welcome to OmniKitHub's advanced online Speech-to-Text dictation utility. This tool empowers users to convert spoken words into structured written text instantly using modern speech recognition algorithms. Whether you are typing long academic documents, composing emails, or taking quick notes in Bangla or English, this tool makes the process effortless.</p>
+        
+        <h3>Key Features & Capabilities</h3>
+        <ul>
+            <li><strong>Multi-Language Voice Recognition:</strong> Supports Bangla (Bangladesh/India), Banglish phonetic conversion, and English variants seamlessly.</li>
+            <li><strong>Smart Auto Punctuation:</strong> Automatically detects sentence pauses and inputs accurate punctuation marks like full stops, commas, and question marks.</li>
+            <li><strong>Rich Text Formatting & Audio Playback:</strong> Format text with bold, italic, custom font colors, or listen back to your dictation using built-in text-to-speech synthesis.</li>
+            <li><strong>Instant Export & Sharing:</strong> Download text files, export documents directly to clean PDFs, print physically, or share across platforms instantly.</li>
+        </ul>
+
+        <h3>How to Use Voice Typing Effectively</h3>
+        <ol>
+            <li>Select your preferred spoken language or phonetic input mode from the dropdown menu.</li>
+            <li>Click the <strong>Start Listening</strong> button and grant microphone permission when prompted by your browser.</li>
+            <li>Speak clearly into your microphone; your words will populate in real time inside the editable canvas.</li>
+            <li>Use formatting tools to edit text, then save as PDF, download as TXT, or copy to your clipboard.</li>
+        </ol>
+    </div>
+
 </div>
 
-<!-- AdSense Friendly SEO Content Section -->
-<div class="seo-content-card">
-    <h2>About Free Speech to Text (Voice Typing) Tool</h2>
-    <p>Welcome to OmniKitHub's advanced online Speech-to-Text dictation utility. This tool empowers users to convert spoken words into structured written text instantly using modern speech recognition algorithms. Whether you are typing long academic documents, composing emails, or taking quick notes in Bangla or English, this tool makes the process effortless.</p>
-    
-    <h3>Key Features & Capabilities</h3>
-    <ul>
-        <li><strong>Multi-Language Voice Recognition:</strong> Supports Bangla (Bangladesh/India), Banglish phonetic conversion, and English variants seamlessly.</li>
-        <li><strong>Smart Auto Punctuation:</strong> Automatically detects sentence pauses and inputs accurate punctuation marks like full stops, commas, and question marks.</li>
-        <li><strong>Rich Text Formatting & Audio Playback:</strong> Format text with bold, italic, custom font colors, or listen back to your dictation using built-in text-to-speech synthesis.</li>
-        <li><strong>Instant Export & Sharing:</strong> Download text files, export documents directly to clean PDFs, print physically, or share across platforms instantly.</li>
-    </ul>
-
-    <h3>How to Use Voice Typing Effectively</h3>
-    <ol>
-        <li>Select your preferred spoken language or phonetic input mode from the dropdown menu.</li>
-        <li>Click the <strong>Start Listening</strong> button and grant microphone permission when prompted by your browser.</li>
-        <li>Speak clearly into your microphone; your words will populate in real time inside the editable canvas.</li>
-        <li>Use formatting tools to edit text, then save as PDF, download as TXT, or copy to your clipboard.</li>
-    </ol>
-</div>
+<!-- Footer Navigation -->
+<footer class="site-footer">
+    <p>© 2026 <strong>OmniKitHub.com</strong>. All rights reserved.</p>
+    <div style="margin-top: 8px;">
+        <a href="/">Home</a> | 
+        <a href="/privacy-policy.html">Privacy Policy</a> | 
+        <a href="/terms.html">Terms of Service</a> | 
+        <a href="/contact.html">Contact Us</a>
+    </div>
+</footer>
 
 <script>
     const startBtn = document.getElementById('startBtn');
