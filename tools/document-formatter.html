@@ -15,6 +15,10 @@
     <meta property="og:url" content="https://omnikithub.com/tools/document-formatter.html">
     <meta property="og:type" content="website">
 
+    <!-- External CSS & Icons -->
+    <link rel="stylesheet" href="../style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
     <!-- html2pdf Library -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
 
@@ -61,11 +65,17 @@
         }
 
         * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; }
-        body { background-color: var(--bg-color); color: var(--text-color); padding: 20px; transition: all 0.3s ease; }
+        body { background-color: var(--bg-color); color: var(--text-color); display: flex; flex-direction: column; min-height: 100vh; transition: all 0.3s ease; }
+
+        .main-wrapper {
+            flex: 1;
+            max-width: 1350px;
+            width: 100%;
+            margin: 20px auto;
+            padding: 0 20px;
+        }
 
         .app-container {
-            max-width: 1350px;
-            margin: 0 auto;
             display: grid;
             grid-template-columns: 1fr 1.1fr;
             gap: 25px;
@@ -75,7 +85,7 @@
             .app-container { grid-template-columns: 1fr; }
         }
 
-        .editor-card, .preview-card, .seo-content-card {
+        .editor-card, .preview-card {
             background: var(--card-bg);
             border-radius: 12px;
             padding: 25px;
@@ -83,29 +93,8 @@
             border: 1px solid var(--border-color);
         }
 
-        .seo-content-card {
-            grid-column: 1 / -1;
-            margin-top: 25px;
-            line-height: 1.7;
-        }
-
-        .seo-content-card h2 { font-size: 18px; color: var(--primary-color); margin-bottom: 12px; }
-        .seo-content-card h3 { font-size: 15px; color: var(--heading-color); margin: 15px 0 8px 0; }
-        .seo-content-card p, .seo-content-card li { font-size: 13.5px; margin-bottom: 8px; color: var(--text-color); }
-        .seo-content-card ul { padding-left: 20px; margin-bottom: 10px; }
-
         .header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 15px; }
         .header h1 { font-size: 20px; color: var(--primary-color); }
-
-        .theme-btn {
-            background: transparent;
-            border: 1px solid var(--border-color);
-            color: var(--text-color);
-            padding: 6px 12px;
-            border-radius: 20px;
-            cursor: pointer;
-            font-size: 13px;
-        }
 
         .section-title {
             font-size: 13px;
@@ -292,76 +281,124 @@
         .btn-primary:hover { background: var(--primary-hover); }
         .btn-share { background: #10b981; color: white; border: none; }
 
+        /* Ad Slots & SEO Card Styling */
+        .ad-placeholder {
+            border: 1px dashed #cbd5e1;
+            background: rgba(0,0,0,0.01);
+            padding: 15px;
+            border-radius: 10px;
+            text-align: center;
+            color: #64748b;
+            font-size: 13px;
+            margin: 20px 0;
+        }
+
+        .seo-content-card {
+            background: var(--card-bg);
+            border-radius: 12px;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.08);
+            padding: 30px;
+            margin-top: 30px;
+            border: 1px solid var(--border-color);
+            line-height: 1.7;
+        }
+
+        .seo-content-card h2 { font-size: 1.4rem; color: var(--primary-color); margin-bottom: 12px; }
+        .seo-content-card h3 { font-size: 1.1rem; color: var(--text-color); margin: 15px 0 8px 0; }
+        .seo-content-card p, .seo-content-card li { font-size: 0.95rem; margin-bottom: 8px; color: #64748b; }
+        .seo-content-card ul { padding-left: 20px; margin-bottom: 10px; }
+
         @media print {
             body * { visibility: hidden; }
             #docPaper, #docPaper * { visibility: visible; }
             #docPaper { position: absolute; left: 0; top: 0; width: 100%; box-shadow: none; border: none; }
-            .editor-card, .header, .action-bar, .seo-content-card { display: none; }
+            .editor-card, .header, .action-bar, .seo-content-card, .navbar, .footer, .ad-placeholder { display: none; }
             .page-break-divider { page-break-after: always; border: none; }
         }
     </style>
 </head>
-<body>
+<body class="light-theme">
 
-<div class="app-container">
-    <!-- Left Editor -->
-    <div class="editor-card">
-        <div class="header">
-            <h1>📝 Pro Assignment Formatter</h1>
-            <button id="themeToggle" class="theme-btn">🌙 Dark Mode</button>
+    <!-- Navigation Header -->
+    <header class="navbar">
+        <div class="container nav-container">
+            <a href="../index.html" class="logo">
+                <i class="fa-solid fa-toolbox logo-icon"></i>
+                <span class="logo-text">OmniKit<span class="highlight">Hub</span></span>
+            </a>
+            <div class="nav-actions">
+                <button id="theme-toggle" class="icon-btn" aria-label="Toggle Theme">
+                    <i class="fa-solid fa-moon"></i>
+                </button>
+            </div>
         </div>
+    </header>
 
-        <div class="section-title">1. University Cover Page Setup</div>
-        <div class="form-group">
-            <label>University / Institute Name:</label>
-            <input type="text" id="uniInput" value="World University of Bangladesh">
-        </div>
-        <div class="settings-grid">
-            <div class="form-group">
-                <label>Report / Exp No:</label>
-                <input type="text" id="expNoInput" value="Exp No: 01">
-            </div>
-            <div class="form-group">
-                <label>Assignment Type:</label>
-                <input type="text" id="expNameInput" value="Lab Assignment / Project">
-            </div>
-        </div>
-        <div class="settings-grid">
-            <div class="form-group">
-                <label>Course Name:</label>
-                <input type="text" id="courseNameInput" value="Computer Programming & Web Technologies">
-            </div>
-            <div class="form-group">
-                <label>Course Code:</label>
-                <input type="text" id="courseCodeInput" value="CSE-321">
-            </div>
-        </div>
+<div class="main-wrapper">
 
-        <div class="settings-grid">
+    <!-- Top Advertisement Slot -->
+    <div class="ad-placeholder">
+        <span>Responsive Advertisement Space (Google AdSense)</span>
+    </div>
+
+    <div class="app-container">
+        <!-- Left Editor -->
+        <div class="editor-card">
+            <div class="header">
+                <h1>📝 Pro Assignment Formatter</h1>
+            </div>
+
+            <div class="section-title">1. University Cover Page Setup</div>
             <div class="form-group">
-                <label>Submitted By (Name, Roll, Batch, Dept):</label>
-                <textarea id="subByInput" style="height: 60px;">MD. ALIMUL HASAN
+                <label>University / Institute Name:</label>
+                <input type="text" id="uniInput" value="World University of Bangladesh">
+            </div>
+            <div class="settings-grid">
+                <div class="form-group">
+                    <label>Report / Exp No:</label>
+                    <input type="text" id="expNoInput" value="Exp No: 01">
+                </div>
+                <div class="form-group">
+                    <label>Assignment Type:</label>
+                    <input type="text" id="expNameInput" value="Lab Assignment / Project">
+                </div>
+            </div>
+            <div class="settings-grid">
+                <div class="form-group">
+                    <label>Course Name:</label>
+                    <input type="text" id="courseNameInput" value="Computer Programming & Web Technologies">
+                </div>
+                <div class="form-group">
+                    <label>Course Code:</label>
+                    <input type="text" id="courseCodeInput" value="CSE-321">
+                </div>
+            </div>
+
+            <div class="settings-grid">
+                <div class="form-group">
+                    <label>Submitted By (Name, Roll, Batch, Dept):</label>
+                    <textarea id="subByInput" style="height: 60px;">MD. ALIMUL HASAN
 Roll: 4595 | Batch: Evening (70B)
 Department: CSE</textarea>
-            </div>
-            <div class="form-group">
-                <label>Submitted To (Teacher Name, Dept):</label>
-                <textarea id="subToInput" style="height: 60px;">Mst. Nishita Aktar
+                </div>
+                <div class="form-group">
+                    <label>Submitted To (Teacher Name, Dept):</label>
+                    <textarea id="subToInput" style="height: 60px;">Mst. Nishita Aktar
 Lecturer, Department of CSE</textarea>
+                </div>
             </div>
-        </div>
 
-        <div class="section-title">2. Document Body & AI Humanizer</div>
-        <div class="toolbar-btns">
-            <span class="tool-chip" onclick="insertTag('<h3>Heading Title</h3>')">+ Add Heading</span>
-            <span class="tool-chip" onclick="insertTag('• Bullet Point Item')">+ Bullet Point</span>
-            <span class="tool-chip" onclick="insertTag('<b>Key Concept:</b> ')">+ Bold Tag</span>
-        </div>
-        <button type="button" id="humanizeBtn" class="humanize-btn">🪄 Humanize & Naturalize Text</button>
+            <div class="section-title">2. Document Body & AI Humanizer</div>
+            <div class="toolbar-btns">
+                <span class="tool-chip" onclick="insertTag('<h3>Heading Title</h3>')">+ Add Heading</span>
+                <span class="tool-chip" onclick="insertTag('• Bullet Point Item')">+ Bullet Point</span>
+                <span class="tool-chip" onclick="insertTag('<b>Key Concept:</b> ')">+ Bold Tag</span>
+            </div>
+            <button type="button" id="humanizeBtn" class="humanize-btn">🪄 Humanize & Naturalize Text</button>
 
-        <div class="form-group">
-            <label>Assignment Text / Report Body:</label>
-            <textarea id="contentInput" placeholder="Write or paste your assignment text here..."><h3>1. Introduction</h3>
+            <div class="form-group">
+                <label>Assignment Text / Report Body:</label>
+                <textarea id="contentInput" placeholder="Write or paste your assignment text here..."><h3>1. Introduction</h3>
 Web technologies encompass a wide range of tools and techniques utilized in the process of communication between different types of devices over the internet.
 
 <h3>2. Objective</h3>
@@ -370,116 +407,122 @@ Web technologies encompass a wide range of tools and techniques utilized in the 
 
 <h3>3. Implementation & Analysis</h3>
 The development lifecycle followed modular component structures, ensuring cross-browser compatibility and optimized execution speed.</textarea>
-        </div>
+            </div>
 
-        <div class="form-group">
-            <label>Upload Diagram / Circuit Image (PNG/JPG):</label>
-            <input type="file" id="imageInput" accept="image/*">
-        </div>
-
-        <div class="section-title">3. Page Setup, Margins & Typography</div>
-        <div class="settings-grid">
             <div class="form-group">
-                <label>Words Limit Per A4 Page:</label>
-                <select id="pageLimitPicker">
-                    <option value="200">200 Words / Page (Spacious)</option>
-                    <option value="250" selected>250 Words / Page (Standard)</option>
-                    <option value="350">350 Words / Page (Compact)</option>
-                    <option value="99999">Disable Auto Page Split</option>
+                <label>Upload Diagram / Circuit Image (PNG/JPG):</label>
+                <input type="file" id="imageInput" accept="image/*">
+            </div>
+
+            <div class="section-title">3. Page Setup, Margins & Typography</div>
+            <div class="settings-grid">
+                <div class="form-group">
+                    <label>Words Limit Per A4 Page:</label>
+                    <select id="pageLimitPicker">
+                        <option value="200">200 Words / Page (Spacious)</option>
+                        <option value="250" selected>250 Words / Page (Standard)</option>
+                        <option value="350">350 Words / Page (Compact)</option>
+                        <option value="99999">Disable Auto Page Split</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label>Page Border Style:</label>
+                    <select id="borderPicker">
+                        <option value="1px solid #94a3b8">Classic Box Border</option>
+                        <option value="3px double #1e3a8a">Elegant Double Line</option>
+                        <option value="2px solid #2563eb">Modern Blue Border</option>
+                        <option value="none">No Border (Clean)</option>
+                    </select>
+                </div>
+            </div>
+
+            <div class="settings-grid">
+                <div class="form-group">
+                    <label>Page Margin / Padding:</label>
+                    <select id="paddingPicker">
+                        <option value="30px">Compact (30px)</option>
+                        <option value="40px" selected>Standard (40px)</option>
+                        <option value="55px">Wide Margin (55px)</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label>Heading Underline:</label>
+                    <select id="underlinePicker">
+                        <option value="2px solid #2563eb" selected>Solid Colored Line</option>
+                        <option value="1px dashed #64748b">Dashed Line</option>
+                        <option value="none">No Underline</option>
+                    </select>
+                </div>
+            </div>
+
+            <div class="form-group">
+                <label>Typography / Font Style:</label>
+                <select id="fontPicker">
+                    <option value="'Georgia', serif" selected>Georgia (Academic Formal)</option>
+                    <option value="'Courier New', monospace">Courier New (Handwritten/Typewriter)</option>
+                    <option value="'Times New Roman', serif">Times New Roman</option>
+                    <option value="Arial, sans-serif">Arial</option>
                 </select>
             </div>
-            <div class="form-group">
-                <label>Page Border Style:</label>
-                <select id="borderPicker">
-                    <option value="1px solid #94a3b8">Classic Box Border</option>
-                    <option value="3px double #1e3a8a">Elegant Double Line</option>
-                    <option value="2px solid #2563eb">Modern Blue Border</option>
-                    <option value="none">No Border (Clean)</option>
-                </select>
+
+            <div class="action-bar">
+                <button id="downloadPdfBtn" class="btn btn-primary">📥 Save Assignment PDF</button>
+                <button id="printBtn" class="btn">🖨️ Print</button>
+                <button id="shareBtn" class="btn btn-share">🔗 Share Tool</button>
+                <button id="clearBtn" class="btn">🗑️ Clear All</button>
             </div>
         </div>
 
-        <div class="settings-grid">
-            <div class="form-group">
-                <label>Page Margin / Padding:</label>
-                <select id="paddingPicker">
-                    <option value="30px">Compact (30px)</option>
-                    <option value="40px" selected>Standard (40px)</option>
-                    <option value="55px">Wide Margin (55px)</option>
-                </select>
+        <!-- Right Live Preview -->
+        <div class="preview-card">
+            <h3 style="margin-bottom: 10px; color: var(--primary-color);">Live Formatted Preview (A4 Paper)</h3>
+            <div class="stats-bar">
+                <span id="wordCount">Words: 0</span>
+                <span id="pageCount">Estimated Pages: 1</span>
             </div>
-            <div class="form-group">
-                <label>Heading Underline:</label>
-                <select id="underlinePicker">
-                    <option value="2px solid #2563eb" selected>Solid Colored Line</option>
-                    <option value="1px dashed #64748b">Dashed Line</option>
-                    <option value="none">No Underline</option>
-                </select>
+            
+            <div class="doc-paper" id="docPaper">
+                <!-- Cover Page Preview -->
+                <div class="cover-page">
+                    <div class="uni-name" id="prevUni">World University of Bangladesh</div>
+                    <div class="doc-type" id="prevExpName">Lab Assignment / Project</div>
+                    <div style="font-size: 13px; font-weight: bold; margin-bottom: 10px;" id="prevExpNo">Exp No: 01</div>
+                    <div class="course-box" id="prevCourse">Course Name: Computer Programming & Web Technologies<br>Course Code: CSE-321</div>
+
+                    <table class="cover-table">
+                        <tr>
+                            <th width="50%">Submitted By</th>
+                            <th width="50%">Submitted To</th>
+                        </tr>
+                        <tr>
+                            <td id="prevSubBy" style="white-space: pre-line;">MD. ALIMUL HASAN...</td>
+                            <td id="prevSubTo" style="white-space: pre-line;">Mst. Nishita Aktar...</td>
+                        </tr>
+                    </table>
+                </div>
+
+                <!-- Main Content Preview with Page Setup -->
+                <div class="doc-content" id="prevContent">
+                    Assignment body content will appear here...
+                </div>
+
+                <!-- Diagram Image Preview -->
+                <div class="preview-img-box">
+                    <img id="prevImg" alt="Diagram / Circuit Preview">
+                </div>
             </div>
-        </div>
-
-        <div class="form-group">
-            <label>Typography / Font Style:</label>
-            <select id="fontPicker">
-                <option value="'Georgia', serif" selected>Georgia (Academic Formal)</option>
-                <option value="'Courier New', monospace">Courier New (Handwritten/Typewriter)</option>
-                <option value="'Times New Roman', serif">Times New Roman</option>
-                <option value="Arial, sans-serif">Arial</option>
-            </select>
-        </div>
-
-        <div class="action-bar">
-            <button id="downloadPdfBtn" class="btn btn-primary">📥 Save Assignment PDF</button>
-            <button id="printBtn" class="btn">🖨️ Print</button>
-            <button id="shareBtn" class="btn btn-share">🔗 Share Tool</button>
-            <button id="clearBtn" class="btn">🗑️ Clear All</button>
         </div>
     </div>
 
-    <!-- Right Live Preview -->
-    <div class="preview-card">
-        <h3 style="margin-bottom: 10px; color: var(--primary-color);">Live Formatted Preview (A4 Paper)</h3>
-        <div class="stats-bar">
-            <span id="wordCount">Words: 0</span>
-            <span id="pageCount">Estimated Pages: 1</span>
-        </div>
-        
-        <div class="doc-paper" id="docPaper">
-            <!-- Cover Page Preview -->
-            <div class="cover-page">
-                <div class="uni-name" id="prevUni">World University of Bangladesh</div>
-                <div class="doc-type" id="prevExpName">Lab Assignment / Project</div>
-                <div style="font-size: 13px; font-weight: bold; margin-bottom: 10px;" id="prevExpNo">Exp No: 01</div>
-                <div class="course-box" id="prevCourse">Course Name: Computer Programming & Web Technologies<br>Course Code: CSE-321</div>
-
-                <table class="cover-table">
-                    <tr>
-                        <th width="50%">Submitted By</th>
-                        <th width="50%">Submitted To</th>
-                    </tr>
-                    <tr>
-                        <td id="prevSubBy" style="white-space: pre-line;">MD. ALIMUL HASAN...</td>
-                        <td id="prevSubTo" style="white-space: pre-line;">Mst. Nishita Aktar...</td>
-                    </tr>
-                </table>
-            </div>
-
-            <!-- Main Content Preview with Page Setup -->
-            <div class="doc-content" id="prevContent">
-                Assignment body content will appear here...
-            </div>
-
-            <!-- Diagram Image Preview -->
-            <div class="preview-img-box">
-                <img id="prevImg" alt="Diagram / Circuit Preview">
-            </div>
-        </div>
+    <!-- Bottom Advertisement Slot -->
+    <div class="ad-placeholder">
+        <span>Responsive Advertisement Space (Google AdSense)</span>
     </div>
 
     <!-- AdSense Friendly SEO Content Section -->
     <div class="seo-content-card">
         <h2>About Ultimate Pro Assignment & Report Formatter</h2>
-        <p>Welcome to OmniKitHub's Advanced Assignment and Lab Report Formatter. This professional online web utility is designed specifically for university students, researchers, and academic professionals who need to generate clean, structured, and standard A4-sized documents instantly without complex desktop software.</p>
+        <p>OmniKitHub's Advanced Assignment and Lab Report Formatter is a professional online utility designed specifically for university students, researchers, and academic professionals who need to generate clean, structured, and standard A4-sized documents instantly without complex desktop software.</p>
         
         <h3>Key Features & Benefits</h3>
         <ul>
@@ -497,8 +540,38 @@ The development lifecycle followed modular component structures, ensuring cross-
             <li>Configure your preferred font style, borders, and margins, then click <strong>Save Assignment PDF</strong> or <strong>Print</strong>.</li>
         </ol>
     </div>
+
 </div>
 
+<!-- Footer Section -->
+<footer class="footer">
+    <div class="container footer-container">
+        <div class="footer-brand">
+            <a href="../index.html" class="logo">
+                <i class="fa-solid fa-toolbox logo-icon"></i>
+                <span class="logo-text">OmniKit<span class="highlight">Hub</span></span>
+            </a>
+            <p>Your ultimate free online toolkit for daily developer, text, media, PDF, and web tasks.</p>
+        </div>
+        
+        <div class="footer-links">
+            <h4>Legal & Pages</h4>
+            <ul>
+                <li><a href="../pages/about.html">About Us</a></li>
+                <li><a href="../pages/contact.html">Contact Us</a></li>
+                <li><a href="../pages/privacy-policy.html">Privacy Policy</a></li>
+                <li><a href="../pages/terms.html">Terms of Service</a></li>
+            </ul>
+        </div>
+    </div>
+    <div class="footer-bottom">
+        <div class="container">
+            <p>&copy; 2026 OmniKitHub.com. All rights reserved.</p>
+        </div>
+    </div>
+</footer>
+
+<script src="../script.js"></script>
 <script>
     const uniInput = document.getElementById('uniInput');
     const expNoInput = document.getElementById('expNoInput');
@@ -528,7 +601,7 @@ The development lifecycle followed modular component structures, ensuring cross-
     const docPaper = document.getElementById('docPaper');
     const wordCount = document.getElementById('wordCount');
     const pageCount = document.getElementById('pageCount');
-    const themeToggle = document.getElementById('themeToggle');
+    const themeToggle = document.getElementById('theme-toggle');
     const humanizeBtn = document.getElementById('humanizeBtn');
 
     function updatePreview() {
@@ -635,21 +708,15 @@ The development lifecycle followed modular component structures, ensuring cross-
         docPaper.style.setProperty('--doc-font', e.target.value);
     });
 
-    // Dark Mode
-    themeToggle.addEventListener('click', () => {
-        document.body.classList.toggle('dark-mode');
-        themeToggle.innerText = document.body.classList.contains('dark-mode') ? '☀️ Light Mode' : '🌙 Dark Mode';
-    });
-
     // Actions
     document.getElementById('downloadPdfBtn').addEventListener('click', () => {
         const element = document.getElementById('docPaper');
         const opt = {
-            margin:       0.4,
-            filename:     'Professional_Assignment_Report.pdf',
-            image:        { type: 'jpeg', quality: 0.98 },
+            margin:        0.4,
+            filename:      'Professional_Assignment_Report.pdf',
+            image:         { type: 'jpeg', quality: 0.98 },
             html2canvas:  { scale: 2, useCORS: true },
-            jsPDF:        { unit: 'in', format: 'a4', orientation: 'portrait' }
+            jsPDF:         { unit: 'in', format: 'a4', orientation: 'portrait' }
         };
         html2pdf().set(opt).from(element).save();
     });
