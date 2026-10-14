@@ -11,7 +11,7 @@
     <style>
         .tool-container {
             max-width: 900px;
-            margin: 40px auto;
+            margin: 30px auto;
             background: var(--bg-surface);
             border: 1px solid var(--card-border);
             border-radius: 16px;
@@ -86,6 +86,33 @@
             margin-top: 6px;
         }
 
+        /* Ad Slots & SEO Card Layout */
+        .ad-placeholder {
+            border: 1px dashed #cbd5e1;
+            background: rgba(0,0,0,0.01);
+            padding: 15px;
+            border-radius: 10px;
+            text-align: center;
+            color: #64748b;
+            font-size: 13px;
+        }
+
+        .seo-content-card {
+            max-width: 900px;
+            margin: 30px auto;
+            background: var(--bg-surface);
+            border: 1px solid var(--card-border);
+            border-radius: 16px;
+            padding: 30px;
+            box-shadow: var(--card-shadow);
+            line-height: 1.7;
+        }
+
+        .seo-content-card h2 { font-size: 1.4rem; color: var(--accent-color); margin-bottom: 12px; }
+        .seo-content-card h3 { font-size: 1.1rem; color: var(--text-primary); margin: 15px 0 8px 0; }
+        .seo-content-card p, .seo-content-card li { font-size: 0.95rem; margin-bottom: 8px; color: var(--text-secondary); }
+        .seo-content-card ul { padding-left: 20px; margin-bottom: 10px; }
+
         @media (max-width: 768px) {
             .form-grid { grid-template-columns: 1fr; }
         }
@@ -93,6 +120,7 @@
 </head>
 <body class="light-theme">
 
+    <!-- Navigation Header -->
     <header class="navbar">
         <div class="container nav-container">
             <a href="../index.html" class="logo">
@@ -107,6 +135,14 @@
         </div>
     </header>
 
+    <!-- Top Ad Banner -->
+    <div class="container ad-wrapper" style="margin: 20px auto; max-width: 900px;">
+        <div class="ad-placeholder">
+            <span>Responsive Advertisement Space (Google AdSense)</span>
+        </div>
+    </div>
+
+    <!-- Main Tool Container -->
     <main class="container">
         <div class="tool-container">
             <h1 style="font-size: 1.8rem; margin-bottom: 8px;">Age & Date Calculator</h1>
@@ -146,7 +182,57 @@
         </div>
     </main>
 
+    <!-- Bottom Ad Banner -->
+    <div class="container ad-wrapper" style="margin: 20px auto; max-width: 900px;">
+        <div class="ad-placeholder">
+            <span>Responsive Advertisement Space (Google AdSense)</span>
+        </div>
+    </div>
+
+    <!-- AdSense Friendly SEO Content Section -->
+    <section class="container">
+        <div class="seo-content-card">
+            <h2>About Age & Date Difference Calculator</h2>
+            <p>Welcome to OmniKitHub's free online Age and Date Calculator. This utility is designed to help users determine their precise age in years, months, days, and total hours based on their date of birth. Additionally, it serves as an efficient date interval finder for professional or personal scheduling needs.</p>
+            
+            <h3>Key Features & Benefits</h3>
+            <ul>
+                <li><strong>Exact Chronological Breakdown:</strong> Computes exact age accounting for varying month lengths and leap years.</li>
+                <li><strong>Custom Target Date Selection:</strong> Calculate your age relative to any past or future date, not just today.</li>
+                <li><strong>Total Hour Computation:</strong> Instantly translates elapsed time into total hours for precise duration tracking.</li>
+                <li><strong>100% Free & Instant:</strong> Operates entirely client-side with lightning-fast execution and total privacy.</li>
+            </ul>
+
+            <h3>How to Use This Calculator</h3>
+            <ol>
+                <li>Enter or select your correct <strong>Date of Birth</strong> in the first date picker field.</li>
+                <li>Choose the target date in the <strong>Calculate Age As Of</strong> field (defaults to today's date automatically).</li>
+                <li>Click the <strong>Calculate Exact Age</strong> button to view your complete breakdown in years, months, days, and hours.</li>
+            </ol>
+        </div>
+    </section>
+
+    <!-- Footer Section -->
     <footer class="footer">
+        <div class="container footer-container">
+            <div class="footer-brand">
+                <a href="../index.html" class="logo">
+                    <i class="fa-solid fa-toolbox logo-icon"></i>
+                    <span class="logo-text">OmniKit<span class="highlight">Hub</span></span>
+                </a>
+                <p>Your ultimate free online toolkit for daily developer, text, media, PDF, and web tasks.</p>
+            </div>
+            
+            <div class="footer-links">
+                <h4>Legal & Pages</h4>
+                <ul>
+                    <li><a href="../pages/about.html">About Us</a></li>
+                    <li><a href="../pages/contact.html">Contact Us</a></li>
+                    <li><a href="../pages/privacy-policy.html">Privacy Policy</a></li>
+                    <li><a href="../pages/terms.html">Terms of Service</a></li>
+                </ul>
+            </div>
+        </div>
         <div class="footer-bottom">
             <div class="container">
                 <p>&copy; 2026 OmniKitHub.com. All rights reserved.</p>
@@ -156,7 +242,7 @@
 
     <script src="../script.js"></script>
     <script>
-        // Set default target date to today (2026-10-13)
+        // Set default target date to today
         const today = new Date().toISOString().split('T')[0];
         document.getElementById('target-input').value = today;
 
