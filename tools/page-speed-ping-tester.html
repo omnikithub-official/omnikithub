@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Website Speed & Meta SEO Inspector | OmniKitHub</title>
+    <title>Website Speed & Meta SEO Inspector Online | OmniKitHub</title>
     <meta name="description" content="Free online Website Speed, Meta Tag, Open Graph, and SEO Inspector. Analyze performance, preview Google search results, check headings, and download instant PDF audit reports.">
     <meta name="keywords" content="seo meta inspector, page speed test online, google search preview tool, open graph inspector, image alt checker, website audit report free">
     <meta name="robots" content="index, follow">
@@ -15,8 +15,29 @@
     <meta property="og:url" content="https://omnikithub.com/tools/page-speed-ping-tester.html">
     <meta property="og:type" content="website">
 
+    <!-- External CSS & Icons -->
+    <link rel="stylesheet" href="../style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
     <!-- html2pdf Library for Instant Audit Report -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
+
+    <!-- Schema.org Markup -->
+    <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@type": "WebApplication",
+      "name": "Website Speed & Meta SEO Inspector",
+      "url": "https://omnikithub.com/tools/page-speed-ping-tester.html",
+      "applicationCategory": "UtilitiesApplication",
+      "operatingSystem": "All",
+      "offers": {
+        "@type": "Offer",
+        "price": "0",
+        "priceCurrency": "USD"
+      }
+    }
+    </script>
 
     <style>
         :root {
@@ -42,11 +63,17 @@
         }
 
         * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Segoe UI', system-ui, -apple-system, sans-serif; }
-        body { background-color: var(--bg-color); color: var(--text-color); padding: 20px; transition: all 0.3s ease; }
+        body { background-color: var(--bg-color); color: var(--text-color); display: flex; flex-direction: column; min-height: 100vh; transition: all 0.3s ease; }
+
+        .main-wrapper {
+            flex: 1;
+            max-width: 1200px;
+            width: 100%;
+            margin: 20px auto;
+            padding: 0 20px;
+        }
 
         .app-container {
-            max-width: 1200px;
-            margin: 0 auto;
             background: var(--card-bg);
             border-radius: 16px;
             padding: 30px;
@@ -56,17 +83,6 @@
 
         .header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px; }
         .header h1 { font-size: 24px; color: var(--primary-color); display: flex; align-items: center; gap: 10px; }
-
-        .theme-btn {
-            background: transparent;
-            border: 1px solid var(--border-color);
-            color: var(--text-color);
-            padding: 8px 16px;
-            border-radius: 20px;
-            cursor: pointer;
-            font-size: 13px;
-            font-weight: 600;
-        }
 
         .description { color: #64748b; font-size: 14px; margin-bottom: 25px; }
 
@@ -180,86 +196,134 @@
         .action-bar { display: flex; gap: 12px; margin-top: 20px; }
         .btn-success { background: var(--success-color); }
         .btn-outline { background: transparent; border: 1px solid var(--border-color); color: var(--text-color); }
+
+        /* Ad Slots & SEO Card Styling */
+        .ad-placeholder {
+            border: 1px dashed #cbd5e1;
+            background: rgba(0,0,0,0.01);
+            padding: 15px;
+            border-radius: 10px;
+            text-align: center;
+            color: #64748b;
+            font-size: 13px;
+            margin: 20px 0;
+        }
+
+        .seo-content-card {
+            background: var(--card-bg);
+            border-radius: 16px;
+            box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.05);
+            padding: 30px;
+            margin-top: 30px;
+            border: 1px solid var(--border-color);
+            line-height: 1.7;
+        }
+
+        .seo-content-card h2 { font-size: 1.4rem; color: var(--primary-color); margin-bottom: 12px; }
+        .seo-content-card h3 { font-size: 1.1rem; color: var(--text-color); margin: 15px 0 8px 0; }
+        .seo-content-card p, .seo-content-card li { font-size: 0.95rem; margin-bottom: 8px; color: #64748b; }
+        .seo-content-card ul { padding-left: 20px; margin-bottom: 10px; }
     </style>
 </head>
-<body>
+<body class="light-theme">
 
-<div class="app-container" id="auditReport">
-    <div class="header">
-        <h1>🔍 Pro Speed, Meta & SEO Inspector</h1>
-        <button id="themeToggle" class="theme-btn">🌙 Dark Mode</button>
-    </div>
-    <p class="description">Analyze site speed, preview Google search snippets, verify meta tags, heading hierarchy, and download instant SEO reports.</p>
-
-    <!-- Input Form -->
-    <div class="input-group">
-        <input type="text" id="urlInput" placeholder="Enter website URL (e.g., https://omnikithub.com)" value="https://omnikithub.com">
-        <button id="inspectBtn" class="btn">⚡ Inspect & Audit</button>
-    </div>
-
-    <!-- Metrics Bar -->
-    <div class="metrics-grid">
-        <div class="metric-card">
-            <div class="metric-title">SEO Health Score</div>
-            <div class="metric-value" id="seoScore">98 / 100</div>
-        </div>
-        <div class="metric-card">
-            <div class="metric-title">Server Response Time</div>
-            <div class="metric-value" id="pingVal" style="color: #10b981;">124 ms</div>
-        </div>
-        <div class="metric-card">
-            <div class="metric-title">Page Load Speed</div>
-            <div class="metric-value" id="loadSpeed" style="color: #10b981;">0.8 sec</div>
-        </div>
-        <div class="metric-card">
-            <div class="metric-title">Image Alt Tags</div>
-            <div class="metric-value" id="altTagVal" style="color: #10b981;">100% Passed</div>
-        </div>
-    </div>
-
-    <!-- Previews Grid -->
-    <div class="preview-grid">
-        <!-- Live Google Search Preview -->
-        <div class="preview-card">
-            <h3>🔎 Live Google Search Snippet Preview</h3>
-            <div class="serp-box">
-                <div class="serp-url"><span id="serpFavicon">🌐</span> <span id="serpUrl">https://omnikithub.com</span></div>
-                <div class="serp-title" id="serpTitle">OmniKitHub - Ultimate Free Online Tools Platform</div>
-                <div class="serp-desc" id="serpDesc">Free high-performance online tools for developers, students, and professionals. Instant conversion, formatting, and SEO utilities.</div>
+    <!-- Navigation Header -->
+    <header class="navbar">
+        <div class="container nav-container" style="max-width: 100% !important; padding: 0 !important;">
+            <a href="../index.html" class="logo">
+                <i class="fa-solid fa-toolbox logo-icon"></i>
+                <span class="logo-text">OmniKit<span class="highlight">Hub</span></span>
+            </a>
+            <div class="nav-actions">
+                <button id="theme-toggle" class="icon-btn" aria-label="Toggle Theme">
+                    <i class="fa-solid fa-moon"></i>
+                </button>
             </div>
-            <p style="font-size: 11px; color: #64748b; margin-top: 10px;">Title length: <span id="titleLen" style="color:#10b981; font-weight:700;">52 chars (Optimal)</span></p>
+        </div>
+    </header>
+
+<div class="main-wrapper">
+
+    <!-- Top Advertisement Slot -->
+    <div class="ad-placeholder">
+        <span>Responsive Advertisement Space (Google AdSense)</span>
+    </div>
+
+    <div class="app-container" id="auditReport">
+        <div class="header">
+            <h1>🔍 Pro Speed, Meta & SEO Inspector</h1>
+        </div>
+        <p class="description">Analyze site speed, preview Google search snippets, verify meta tags, heading hierarchy, and download instant SEO reports.</p>
+
+        <!-- Input Form -->
+        <div class="input-group">
+            <input type="text" id="urlInput" placeholder="Enter website URL (e.g., https://omnikithub.com)" value="https://omnikithub.com">
+            <button id="inspectBtn" class="btn">⚡ Inspect & Audit</button>
         </div>
 
-        <!-- Social Media Card Preview -->
-        <div class="preview-card">
-            <h3>🌐 Social Media Card Preview (OG Tags)</h3>
-            <div class="og-card-preview">
-                <div class="og-img-holder">🖼️ Open Graph Banner Preview (1200x630)</div>
-                <div class="og-content">
-                    <div class="og-domain" id="ogDomain">OMNIKITHUB.COM</div>
-                    <div class="og-title" id="ogTitle">OmniKitHub - Web Tools Platform</div>
-                    <div class="og-desc" id="ogDesc">Browser-based high performance utilities for everyday tasks.</div>
+        <!-- Metrics Bar -->
+        <div class="metrics-grid">
+            <div class="metric-card">
+                <div class="metric-title">SEO Health Score</div>
+                <div class="metric-value" id="seoScore">98 / 100</div>
+            </div>
+            <div class="metric-card">
+                <div class="metric-title">Server Response Time</div>
+                <div class="metric-value" id="pingVal" style="color: #10b981;">124 ms</div>
+            </div>
+            <div class="metric-card">
+                <div class="metric-title">Page Load Speed</div>
+                <div class="metric-value" id="loadSpeed" style="color: #10b981;">0.8 sec</div>
+            </div>
+            <div class="metric-card">
+                <div class="metric-title">Image Alt Tags</div>
+                <div class="metric-value" id="altTagVal" style="color: #10b981;">100% Passed</div>
+            </div>
+        </div>
+
+        <!-- Previews Grid -->
+        <div class="preview-grid">
+            <!-- Live Google Search Preview -->
+            <div class="preview-card">
+                <h3>🔎 Live Google Search Snippet Preview</h3>
+                <div class="serp-box">
+                    <div class="serp-url"><span id="serpFavicon">🌐</span> <span id="serpUrl">https://omnikithub.com</span></div>
+                    <div class="serp-title" id="serpTitle">OmniKitHub - Ultimate Free Online Tools Platform</div>
+                    <div class="serp-desc" id="serpDesc">Free high-performance online tools for developers, students, and professionals. Instant conversion, formatting, and SEO utilities.</div>
+                </div>
+                <p style="font-size: 11px; color: #64748b; margin-top: 10px;">Title length: <span id="titleLen" style="color:#10b981; font-weight:700;">52 chars (Optimal)</span></p>
+            </div>
+
+            <!-- Social Media Card Preview -->
+            <div class="preview-card">
+                <h3>🌐 Social Media Card Preview (OG Tags)</h3>
+                <div class="og-card-preview">
+                    <div class="og-img-holder">🖼️ Open Graph Banner Preview (1200x630)</div>
+                    <div class="og-content">
+                        <div class="og-domain" id="ogDomain">OMNIKITHUB.COM</div>
+                        <div class="og-title" id="ogTitle">OmniKitHub - Web Tools Platform</div>
+                        <div class="og-desc" id="ogDesc">Browser-based high performance utilities for everyday tasks.</div>
+                    </div>
                 </div>
             </div>
         </div>
-    </div>
 
-    <!-- Technical Inspection Grid -->
-    <div class="preview-grid">
-        <div class="preview-card">
-            <h3>📌 Meta Tags & Heading Structure</h3>
-            <ul class="detail-list">
-                <li><b>Robots Directives:</b> <span id="metaRobots" style="color:#10b981; font-weight:600;">index, follow</span></li>
-                <li><b>Canonical Tag:</b> <span id="metaCanonical">https://omnikithub.com</span></li>
-                <li><b>Heading Tags:</b> <span id="headingCount">H1: 1 | H2: 5 | H3: 12</span></li>
-                <li><b>Viewport Configuration:</b> <span style="color:#10b981;">width=device-width</span></li>
-                <li><b>SSL / HTTPS Security:</b> <span style="color:#10b981;">🔒 Secure (256-bit)</span></li>
-            </ul>
-        </div>
+        <!-- Technical Inspection Grid -->
+        <div class="preview-grid">
+            <div class="preview-card">
+                <h3>📌 Meta Tags & Heading Structure</h3>
+                <ul class="detail-list">
+                    <li><b>Robots Directives:</b> <span id="metaRobots" style="color:#10b981; font-weight:600;">index, follow</span></li>
+                    <li><b>Canonical Tag:</b> <span id="metaCanonical">https://omnikithub.com</span></li>
+                    <li><b>Heading Tags:</b> <span id="headingCount">H1: 1 | H2: 5 | H3: 12</span></li>
+                    <li><b>Viewport Configuration:</b> <span style="color:#10b981;">width=device-width</span></li>
+                    <li><b>SSL / HTTPS Security:</b> <span style="color:#10b981;">🔒 Secure (256-bit)</span></li>
+                </ul>
+            </div>
 
-        <div class="preview-card">
-            <h3>💻 Clean HTML Source Preview</h3>
-            <div class="code-box" id="codeViewer">&lt;!DOCTYPE html&gt;
+            <div class="preview-card">
+                <h3>💻 Clean HTML Source Preview</h3>
+                <div class="code-box" id="codeViewer">&lt;!DOCTYPE html&gt;
 &lt;html lang="en"&gt;
 &lt;head&gt;
     &lt;meta charset="UTF-8"&gt;
@@ -270,17 +334,75 @@
     &lt;h1&gt;OmniKitHub Platform&lt;/h1&gt;
 &lt;/body&gt;
 &lt;/html&gt;</div>
+            </div>
+        </div>
+
+        <!-- Action Bar -->
+        <div class="action-bar">
+            <button id="downloadReportBtn" class="btn btn-success" style="flex: 1;">📥 Download PDF Audit Report</button>
+            <button id="copyCodeBtn" class="btn btn-outline">📋 Copy HTML Source</button>
+            <button id="shareBtn" class="btn btn-outline">🔗 Share Tool</button>
         </div>
     </div>
 
-    <!-- Action Bar -->
-    <div class="action-bar">
-        <button id="downloadReportBtn" class="btn btn-success" style="flex: 1;">📥 Download PDF Audit Report</button>
-        <button id="copyCodeBtn" class="btn btn-outline">📋 Copy HTML Source</button>
-        <button id="shareBtn" class="btn btn-outline">🔗 Share Tool</button>
+    <!-- Bottom Advertisement Slot -->
+    <div class="ad-placeholder">
+        <span>Responsive Advertisement Space (Google AdSense)</span>
     </div>
+
+    <!-- Helpful Tutorial Video Carousel -->
+    <div style="margin: 30px 0;">
+        <h3 style="font-size: 1.2rem; color: var(--text-color); margin-bottom: 12px;"><i class="fa-solid fa-video" style="color: var(--primary-color);"></i> Recommended SEO Audit & Speed Optimization Guides</h3>
+        <Carousel>
+          <Video source="youtube" query="how to do an seo audit and speed optimization" count="3"/>
+        </Carousel>
+    </div>
+
+    <!-- AdSense Friendly SEO Content Section -->
+    <div class="seo-content-card">
+        <h2>About Website Speed & Meta SEO Inspector</h2>
+        <p>OmniKitHub's SEO & Speed Inspector is a comprehensive web performance audit tool. Analyze site speed, verify title tags, inspect Open Graph social cards, check heading hierarchies, and download complete PDF audit reports instantly.</p>
+        
+        <h3>Key Features & Capabilities</h3>
+        <ul>
+            <li><strong>Performance & Speed Test:</strong> Measure server response times and page load speeds accurately.</li>
+            <li><strong>Google SERP Preview:</strong> See exactly how your title and meta description appear in Google search results.</li>
+            <li><strong>Open Graph Social Inspector:</strong> Validate Facebook, Twitter, and LinkedIn card displays.</li>
+            <li><strong>Instant PDF Audit Reports:</strong> Generate and download professional website SEO reports in one click.</li>
+        </ul>
+    </div>
+
 </div>
 
+<!-- Footer Section -->
+<footer class="footer">
+    <div class="container footer-container" style="max-width: 100% !important;">
+        <div class="footer-brand">
+            <a href="../index.html" class="logo">
+                <i class="fa-solid fa-toolbox logo-icon"></i>
+                <span class="logo-text">OmniKit<span class="highlight">Hub</span></span>
+            </a>
+            <p>Your ultimate free online toolkit for daily developer, text, media, PDF, and web tasks.</p>
+        </div>
+        
+        <div class="footer-links">
+            <h4>Legal & Pages</h4>
+            <ul>
+                <li><a href="../pages/about.html">About Us</a></li>
+                <li><a href="../pages/contact.html">Contact Us</a></li>
+                <li><a href="../pages/privacy-policy.html">Privacy Policy</a></li>
+                <li><a href="../pages/terms.html">Terms of Service</a></li>
+            </ul>
+        </div>
+    </div>
+    <div class="footer-bottom">
+        <div class="container">
+            <p>&copy; 2026 OmniKitHub.com. All rights reserved.</p>
+        </div>
+    </div>
+</footer>
+
+<script src="../script.js"></script>
 <script>
     const urlInput = document.getElementById('urlInput');
     const inspectBtn = document.getElementById('inspectBtn');
@@ -292,7 +414,7 @@
     const ogDomain = document.getElementById('ogDomain');
     const titleLen = document.getElementById('titleLen');
     const codeViewer = document.getElementById('codeViewer');
-    const themeToggle = document.getElementById('themeToggle');
+    const themeToggle = document.getElementById('theme-toggle');
 
     inspectBtn.addEventListener('click', () => {
         let url = urlInput.value.trim();
