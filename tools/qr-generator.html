@@ -15,6 +15,10 @@
     <meta property="og:url" content="https://omnikithub.com/tools/qr-generator.html">
     <meta property="og:type" content="website">
 
+    <!-- External CSS & Icons -->
+    <link rel="stylesheet" href="../style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
     <!-- QRCode.js Library -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
 
@@ -55,11 +59,17 @@
         }
 
         * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Segoe UI', system-ui, -apple-system, sans-serif; }
-        body { background-color: var(--bg-color); color: var(--text-color); padding: 20px; transition: all 0.3s ease; }
+        body { background-color: var(--bg-color); color: var(--text-color); display: flex; flex-direction: column; min-height: 100vh; transition: all 0.3s ease; }
+
+        .main-wrapper {
+            flex: 1;
+            max-width: 1050px;
+            width: 100%;
+            margin: 20px auto;
+            padding: 0 20px;
+        }
 
         .app-container {
-            max-width: 1050px;
-            margin: 0 auto;
             background: var(--card-bg);
             border-radius: 16px;
             padding: 30px;
@@ -69,17 +79,6 @@
 
         .header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px; }
         .header h1 { font-size: 24px; color: var(--primary-color); display: flex; align-items: center; gap: 10px; }
-
-        .theme-btn {
-            background: transparent;
-            border: 1px solid var(--border-color);
-            color: var(--text-color);
-            padding: 8px 16px;
-            border-radius: 20px;
-            cursor: pointer;
-            font-size: 13px;
-            font-weight: 600;
-        }
 
         .description { color: #64748b; font-size: 14px; margin-bottom: 25px; }
 
@@ -192,74 +191,180 @@
 
         .btn:hover { background: var(--primary-hover); }
         .btn-outline { background: transparent; border: 1px solid var(--border-color); color: var(--text-color); margin-top: 10px; }
+
+        /* Ad Slots & SEO Card Styling */
+        .ad-placeholder {
+            border: 1px dashed #cbd5e1;
+            background: rgba(0,0,0,0.01);
+            padding: 15px;
+            border-radius: 10px;
+            text-align: center;
+            color: #64748b;
+            font-size: 13px;
+            margin: 20px 0;
+        }
+
+        .seo-content-card {
+            background: var(--card-bg);
+            border-radius: 12px;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.08);
+            padding: 30px;
+            margin-top: 30px;
+            border: 1px solid var(--border-color);
+            line-height: 1.7;
+        }
+
+        .seo-content-card h2 { font-size: 1.4rem; color: var(--primary-color); margin-bottom: 12px; }
+        .seo-content-card h3 { font-size: 1.1rem; color: var(--text-color); margin: 15px 0 8px 0; }
+        .seo-content-card p, .seo-content-card li { font-size: 0.95rem; margin-bottom: 8px; color: #64748b; }
+        .seo-content-card ul { padding-left: 20px; margin-bottom: 10px; }
     </style>
 </head>
-<body>
+<body class="light-theme">
 
-<div class="app-container">
-    <div class="header">
-        <h1>📱 Pro Interactive QR Code Studio</h1>
-        <button id="themeToggle" class="theme-btn">🌙 Dark Mode</button>
-    </div>
-    <p class="description">Generate custom branded QR codes for URLs, WiFi networks, contacts, emails, and custom text with custom colors.</p>
-
-    <div class="workspace">
-        <!-- Controls -->
-        <div class="control-panel">
-            <!-- Type Tabs -->
-            <div class="type-tabs">
-                <button class="tab-btn active" onclick="switchType('url')">🌐 URL</button>
-                <button class="tab-btn" onclick="switchType('text')">📝 Plain Text</button>
-                <button class="tab-btn" onclick="switchType('wifi')">📶 Wi-Fi Network</button>
-                <button class="tab-btn" onclick="switchType('email')">✉️ Email</button>
-            </div>
-
-            <!-- Dynamic Input Area -->
-            <div id="dynamicInputs">
-                <div class="input-group">
-                    <label>Website URL:</label>
-                    <input type="text" id="qrInput" value="https://omnikithub.com" placeholder="Enter URL e.g. https://omnikithub.com">
-                </div>
-            </div>
-
-            <!-- Color Options -->
-            <div class="color-grid">
-                <div class="input-group">
-                    <label>QR Foreground Color:</label>
-                    <input type="color" id="fgColor" value="#000000">
-                </div>
-                <div class="input-group">
-                    <label>Background Color:</label>
-                    <input type="color" id="bgColor" value="#ffffff">
-                </div>
-            </div>
-
-            <!-- Resolution Size -->
-            <div class="input-group">
-                <label>QR Code Size (Pixels):</label>
-                <select id="qrSize">
-                    <option value="200">Medium (200 x 200)</option>
-                    <option value="300" selected>High (300 x 300)</option>
-                    <option value="400">Ultra High (400 x 400)</option>
-                </select>
+    <!-- Navigation Header -->
+    <header class="navbar">
+        <div class="container nav-container" style="max-width: 100% !important; padding: 0 !important;">
+            <a href="../index.html" class="logo">
+                <i class="fa-solid fa-toolbox logo-icon"></i>
+                <span class="logo-text">OmniKit<span class="highlight">Hub</span></span>
+            </a>
+            <div class="nav-actions">
+                <button id="theme-toggle" class="icon-btn" aria-label="Toggle Theme">
+                    <i class="fa-solid fa-moon"></i>
+                </button>
             </div>
         </div>
+    </header>
 
-        <!-- Live Preview -->
-        <div class="preview-panel">
-            <div class="qr-box" id="qrcode"></div>
-            <button id="downloadBtn" class="btn">📥 Download High Quality PNG</button>
-            <button id="shareBtn" class="btn btn-outline">🔗 Share Tool</button>
+<div class="main-wrapper">
+
+    <!-- Top Advertisement Slot -->
+    <div class="ad-placeholder">
+        <span>Responsive Advertisement Space (Google AdSense)</span>
+    </div>
+
+    <div class="app-container">
+        <div class="header">
+            <h1>📱 Pro Interactive QR Code Studio</h1>
+        </div>
+        <p class="description">Generate custom branded QR codes for URLs, WiFi networks, contacts, emails, and custom text with custom colors.</p>
+
+        <div class="workspace">
+            <!-- Controls -->
+            <div class="control-panel">
+                <!-- Type Tabs -->
+                <div class="type-tabs">
+                    <button class="tab-btn active" onclick="switchType('url', event)">🌐 URL</button>
+                    <button class="tab-btn" onclick="switchType('text', event)">📝 Plain Text</button>
+                    <button class="tab-btn" onclick="switchType('wifi', event)">📶 Wi-Fi Network</button>
+                    <button class="tab-btn" onclick="switchType('email', event)">✉️ Email</button>
+                </div>
+
+                <!-- Dynamic Input Area -->
+                <div id="dynamicInputs">
+                    <div class="input-group">
+                        <label>Website URL:</label>
+                        <input type="text" id="qrInput" value="https://omnikithub.com" placeholder="Enter URL e.g. https://omnikithub.com">
+                    </div>
+                </div>
+
+                <!-- Color Options -->
+                <div class="color-grid">
+                    <div class="input-group">
+                        <label>QR Foreground Color:</label>
+                        <input type="color" id="fgColor" value="#000000">
+                    </div>
+                    <div class="input-group">
+                        <label>Background Color:</label>
+                        <input type="color" id="bgColor" value="#ffffff">
+                    </div>
+                </div>
+
+                <!-- Resolution Size -->
+                <div class="input-group">
+                    <label>QR Code Size (Pixels):</label>
+                    <select id="qrSize">
+                        <option value="200">Medium (200 x 200)</option>
+                        <option value="300" selected>High (300 x 300)</option>
+                        <option value="400">Ultra High (400 x 400)</option>
+                    </select>
+                </div>
+            </div>
+
+            <!-- Live Preview -->
+            <div class="preview-panel">
+                <div class="qr-box" id="qrcode"></div>
+                <button id="downloadBtn" class="btn">📥 Download High Quality PNG</button>
+                <button id="shareBtn" class="btn btn-outline">🔗 Share Tool</button>
+            </div>
         </div>
     </div>
+
+    <!-- Bottom Advertisement Slot -->
+    <div class="ad-placeholder">
+        <span>Responsive Advertisement Space (Google AdSense)</span>
+    </div>
+
+    <!-- Helpful Tutorial Video Carousel -->
+    <div style="margin: 30px 0;">
+        <h3 style="font-size: 1.2rem; color: var(--text-color); margin-bottom: 12px;"><i class="fa-solid fa-video" style="color: var(--primary-color);"></i> Recommended QR Code Generation Tutorials</h3>
+        <Carousel>
+          <Video source="youtube" query="how to make custom qr codes online free" count="3"/>
+        </Carousel>
+    </div>
+
+    <!-- AdSense Friendly SEO Content Section -->
+    <div class="seo-content-card">
+        <h2>About Pro Interactive QR Code Studio</h2>
+        <p>OmniKitHub's free QR Code Generator lets you build custom, scannable QR codes for your website, Wi-Fi network, emails, and custom text messages instantly. Personalize foreground and background colors to match your brand identity.</p>
+        
+        <h3>Key Features & Capabilities</h3>
+        <ul>
+            <li><strong>Multiple Data Types:</strong> Generate codes for URLs, plain text, Wi-Fi configurations, and mailto links.</li>
+            <li><strong>Custom Styling & Colors:</strong> Personalize foreground dots and background shades with custom color pickers.</li>
+            <li><strong>High-Resolution PNG Download:</strong> Export crisp, vector-clear QR code images ready for print or digital sharing.</li>
+            <li><strong>100% Client-Side Processing:</strong> Instant, secure generation directly inside your browser.</li>
+        </ul>
+    </div>
+
 </div>
 
+<!-- Footer Section -->
+<footer class="footer">
+    <div class="container footer-container" style="max-width: 100% !important;">
+        <div class="footer-brand">
+            <a href="../index.html" class="logo">
+                <i class="fa-solid fa-toolbox logo-icon"></i>
+                <span class="logo-text">OmniKit<span class="highlight">Hub</span></span>
+            </a>
+            <p>Your ultimate free online toolkit for daily developer, text, media, PDF, and web tasks.</p>
+        </div>
+        
+        <div class="footer-links">
+            <h4>Legal & Pages</h4>
+            <ul>
+                <li><a href="../pages/about.html">About Us</a></li>
+                <li><a href="../pages/contact.html">Contact Us</a></li>
+                <li><a href="../pages/privacy-policy.html">Privacy Policy</a></li>
+                <li><a href="../pages/terms.html">Terms of Service</a></li>
+            </ul>
+        </div>
+    </div>
+    <div class="footer-bottom">
+        <div class="container">
+            <p>&copy; 2026 OmniKitHub.com. All rights reserved.</p>
+        </div>
+    </div>
+</footer>
+
+<script src="../script.js"></script>
 <script>
     const qrContainer = document.getElementById("qrcode");
     const fgColorInput = document.getElementById("fgColor");
     const bgColorInput = document.getElementById("bgColor");
     const qrSizeInput = document.getElementById("qrSize");
-    const themeToggle = document.getElementById("themeToggle");
+    const themeToggle = document.getElementById("theme-toggle");
     let currentType = 'url';
     let qrcodeObj = null;
 
@@ -295,10 +400,12 @@
         return "https://omnikithub.com";
     }
 
-    function switchType(type) {
+    function switchType(type, event) {
         currentType = type;
         document.querySelectorAll('.tab-btn').forEach(btn => btn.classList.remove('active'));
-        event.target.classList.add('active');
+        if(event && event.target) {
+            event.target.classList.add('active');
+        }
 
         const container = document.getElementById('dynamicInputs');
         if(type === 'url') {
@@ -345,7 +452,7 @@
 
     function attachInputListeners() {
         const inputs = document.querySelectorAll('#dynamicInputs input, #dynamicInputs textarea, #dynamicInputs select');
-        inputs.forEach(input => input.addEventListener('input', generateQR));
+        inputs.exports = inputs.forEach(input => input.addEventListener('input', generateQR));
     }
 
     fgColorInput.addEventListener('change', generateQR);
