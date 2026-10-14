@@ -15,6 +15,10 @@
     <meta property="og:url" content="https://omnikithub.com/tools/internet-speed-test.html">
     <meta property="og:type" content="website">
 
+    <!-- External CSS & Icons -->
+    <link rel="stylesheet" href="../style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
     <!-- Schema.org Markup -->
     <script type="application/ld+json">
     {
@@ -54,11 +58,17 @@
         }
 
         * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Segoe UI', system-ui, -apple-system, sans-serif; }
-        body { background-color: var(--bg-color); color: var(--text-color); padding: 20px; transition: all 0.3s ease; }
+        body { background-color: var(--bg-color); color: var(--text-color); display: flex; flex-direction: column; min-height: 100vh; transition: all 0.3s ease; }
+
+        .main-wrapper {
+            flex: 1;
+            max-width: 900px;
+            width: 100%;
+            margin: 20px auto;
+            padding: 0 20px;
+        }
 
         .app-container {
-            max-width: 900px;
-            margin: 0 auto;
             background: var(--card-bg);
             border-radius: 16px;
             padding: 30px;
@@ -68,17 +78,6 @@
 
         .header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px; }
         .header h1 { font-size: 24px; color: var(--primary-color); display: flex; align-items: center; gap: 10px; }
-
-        .theme-btn {
-            background: transparent;
-            border: 1px solid var(--border-color);
-            color: var(--text-color);
-            padding: 8px 16px;
-            border-radius: 20px;
-            cursor: pointer;
-            font-size: 13px;
-            font-weight: 600;
-        }
 
         .description { color: #64748b; font-size: 14px; margin-bottom: 25px; text-align: center; }
 
@@ -177,69 +176,174 @@
 
         .action-bar { display: flex; gap: 12px; margin-top: 20px; }
         .btn-outline { background: transparent; border: 1px solid var(--border-color); color: var(--text-color); padding: 10px 20px; border-radius: 8px; font-weight: 600; cursor: pointer; flex: 1; }
+
+        /* Ad Slots & SEO Card Styling */
+        .ad-placeholder {
+            border: 1px dashed #cbd5e1;
+            background: rgba(0,0,0,0.01);
+            padding: 15px;
+            border-radius: 10px;
+            text-align: center;
+            color: #64748b;
+            font-size: 13px;
+            margin: 20px 0;
+        }
+
+        .seo-content-card {
+            background: var(--card-bg);
+            border-radius: 16px;
+            box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.05);
+            padding: 30px;
+            margin-top: 30px;
+            border: 1px solid var(--border-color);
+            line-height: 1.7;
+        }
+
+        .seo-content-card h2 { font-size: 1.4rem; color: var(--primary-color); margin-bottom: 12px; }
+        .seo-content-card h3 { font-size: 1.1rem; color: var(--text-color); margin: 15px 0 8px 0; }
+        .seo-content-card p, .seo-content-card li { font-size: 0.95rem; margin-bottom: 8px; color: #64748b; }
+        .seo-content-card ul { padding-left: 20px; margin-bottom: 10px; }
     </style>
 </head>
-<body>
+<body class="light-theme">
 
-<div class="app-container">
-    <div class="header">
-        <h1>⚡ Pro Internet Speed Test</h1>
-        <button id="themeToggle" class="theme-btn">🌙 Dark Mode</button>
-    </div>
-    <p class="description">Measure real-time download bandwidth, upload speed, latency, and network jitter accurately.</p>
-
-    <!-- Metrics Bar -->
-    <div class="metrics-grid">
-        <div class="metric-card">
-            <div class="metric-title">⚡ Ping Latency</div>
-            <div class="metric-value" id="pingVal">--</div>
-            <div class="metric-unit">ms</div>
-        </div>
-        <div class="metric-card">
-            <div class="metric-title">📊 Network Jitter</div>
-            <div class="metric-value" id="jitterVal">--</div>
-            <div class="metric-unit">ms</div>
-        </div>
-        <div class="metric-card">
-            <div class="metric-title">📥 Download</div>
-            <div class="metric-value" id="downVal" style="color: var(--primary-color);">--</div>
-            <div class="metric-unit">Mbps</div>
-        </div>
-        <div class="metric-card">
-            <div class="metric-title">📤 Upload</div>
-            <div class="metric-value" id="upVal" style="color: #10b981;">--</div>
-            <div class="metric-unit">Mbps</div>
-        </div>
-    </div>
-
-    <!-- Speedometer Display -->
-    <div class="gauge-section">
-        <div class="speed-circle" id="speedMeter">
-            <div class="speed-circle-inner">
-                <div class="speed-number" id="speedDisplay">0.0</div>
-                <div class="speed-label" id="statusLabel">READY</div>
+    <!-- Navigation Header -->
+    <header class="navbar">
+        <div class="container nav-container" style="max-width: 100% !important; padding: 0 !important;">
+            <a href="../index.html" class="logo">
+                <i class="fa-solid fa-toolbox logo-icon"></i>
+                <span class="logo-text">OmniKit<span class="highlight">Hub</span></span>
+            </a>
+            <div class="nav-actions">
+                <button id="theme-toggle" class="icon-btn" aria-label="Toggle Theme">
+                    <i class="fa-solid fa-moon"></i>
+                </button>
             </div>
         </div>
+    </header>
+
+<div class="main-wrapper">
+
+    <!-- Top Advertisement Slot -->
+    <div class="ad-placeholder">
+        <span>Responsive Advertisement Space (Google AdSense)</span>
     </div>
 
-    <!-- Start Button -->
-    <div class="action-box">
-        <button id="startBtn" class="btn-test">▶ Start Speed Test</button>
+    <div class="app-container">
+        <div class="header">
+            <h1>⚡ Pro Internet Speed Test</h1>
+        </div>
+        <p class="description">Measure real-time download bandwidth, upload speed, latency, and network jitter accurately.</p>
+
+        <!-- Metrics Bar -->
+        <div class="metrics-grid">
+            <div class="metric-card">
+                <div class="metric-title">⚡ Ping Latency</div>
+                <div class="metric-value" id="pingVal">--</div>
+                <div class="metric-unit">ms</div>
+            </div>
+            <div class="metric-card">
+                <div class="metric-title">📊 Network Jitter</div>
+                <div class="metric-value" id="jitterVal">--</div>
+                <div class="metric-unit">ms</div>
+            </div>
+            <div class="metric-card">
+                <div class="metric-title">📥 Download</div>
+                <div class="metric-value" id="downVal" style="color: var(--primary-color);">--</div>
+                <div class="metric-unit">Mbps</div>
+            </div>
+            <div class="metric-card">
+                <div class="metric-title">📤 Upload</div>
+                <div class="metric-value" id="upVal" style="color: #10b981;">--</div>
+                <div class="metric-unit">Mbps</div>
+            </div>
+        </div>
+
+        <!-- Speedometer Display -->
+        <div class="gauge-section">
+            <div class="speed-circle" id="speedMeter">
+                <div class="speed-circle-inner">
+                    <div class="speed-number" id="speedDisplay">0.0</div>
+                    <div class="speed-label" id="statusLabel">READY</div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Start Button -->
+        <div class="action-box">
+            <button id="startBtn" class="btn-test">▶ Start Speed Test</button>
+        </div>
+
+        <!-- Network Info Bar -->
+        <div class="network-info">
+            <div><b>Client IP:</b> <span id="clientIp">Detecting...</span></div>
+            <div><b>Server Host:</b> <span id="serverHost">Auto Selected (Optimal)</span></div>
+            <div><b>Connection:</b> <span style="color: #10b981; font-weight: 600;">Optimal Ping</span></div>
+        </div>
+
+        <!-- Action Bar -->
+        <div class="action-bar">
+            <button id="shareBtn" class="btn-outline">🔗 Share Test Results</button>
+        </div>
     </div>
 
-    <!-- Network Info Bar -->
-    <div class="network-info">
-        <div><b>Client IP:</b> <span id="clientIp">Detecting...</span></div>
-        <div><b>Server Host:</b> <span id="serverHost">Auto Selected (Optimal)</span></div>
-        <div><b>Connection:</b> <span style="color: #10b981; font-weight: 600;">Optimal Ping</span></div>
+    <!-- Bottom Advertisement Slot -->
+    <div class="ad-placeholder">
+        <span>Responsive Advertisement Space (Google AdSense)</span>
     </div>
 
-    <!-- Action Bar -->
-    <div class="action-bar">
-        <button id="shareBtn" class="btn-outline">🔗 Share Test Results</button>
+    <!-- AdSense Friendly SEO Content Section -->
+    <div class="seo-content-card">
+        <h2>About Pro Internet Speed Test</h2>
+        <p>OmniKitHub's Internet Speed Test is a fast, accurate online utility designed to measure your broadband connection performance, Wi-Fi speed, download bandwidth, upload rate, and ping latency in real-time.</p>
+        
+        <h3>Key Performance Metrics Measured</h3>
+        <ul>
+            <li><strong>Download Speed:</strong> Measures how fast data can be fetched from the internet to your device (crucial for streaming & downloading).</li>
+            <li><strong>Upload Speed:</strong> Evaluates how quickly you can send data from your device to the web (essential for video calls & uploads).</li>
+            <li><strong>Ping & Latency:</strong> Tracks connection response time in milliseconds to ensure lag-free gaming and browsing.</li>
+            <li><strong>Network Jitter:</strong> Monitors packet delay variance for stable voice and video communications.</li>
+        </ul>
+
+        <h3>How to Test Your Internet Speed</h3>
+        <ol>
+            <li>Click the <strong>Start Speed Test</strong> button to initiate the diagnostic sequence.</li>
+            <li>Watch the real-time speedometer gauge measure your ping, download, and upload speeds.</li>
+            <li>Review your complete network performance summary or share results instantly.</li>
+        </ol>
     </div>
+
 </div>
 
+<!-- Footer Section -->
+<footer class="footer">
+    <div class="container footer-container" style="max-width: 100% !important;">
+        <div class="footer-brand">
+            <a href="../index.html" class="logo">
+                <i class="fa-solid fa-toolbox logo-icon"></i>
+                <span class="logo-text">OmniKit<span class="highlight">Hub</span></span>
+            </a>
+            <p>Your ultimate free online toolkit for daily developer, text, media, PDF, and web tasks.</p>
+        </div>
+        
+        <div class="footer-links">
+            <h4>Legal & Pages</h4>
+            <ul>
+                <li><a href="../pages/about.html">About Us</a></li>
+                <li><a href="../pages/contact.html">Contact Us</a></li>
+                <li><a href="../pages/privacy-policy.html">Privacy Policy</a></li>
+                <li><a href="../pages/terms.html">Terms of Service</a></li>
+            </ul>
+        </div>
+    </div>
+    <div class="footer-bottom">
+        <div class="container">
+            <p>&copy; 2026 OmniKitHub.com. All rights reserved.</p>
+        </div>
+    </div>
+</footer>
+
+<script src="../script.js"></script>
 <script>
     const startBtn = document.getElementById('startBtn');
     const speedDisplay = document.getElementById('speedDisplay');
@@ -250,7 +354,7 @@
     const downVal = document.getElementById('downVal');
     const upVal = document.getElementById('upVal');
     const clientIp = document.getElementById('clientIp');
-    const themeToggle = document.getElementById('themeToggle');
+    const themeToggle = document.getElementById('theme-toggle');
 
     // Simulate IP Detection
     setTimeout(() => {
@@ -326,12 +430,6 @@
     function setGaugeDeg(deg) {
         speedMeter.style.background = `conic-gradient(var(--primary-color) ${deg}deg, var(--meter-bg) ${deg}deg)`;
     }
-
-    // Dark Mode Toggle
-    themeToggle.addEventListener('click', () => {
-        document.body.classList.toggle('dark-mode');
-        themeToggle.innerText = document.body.classList.contains('dark-mode') ? '☀️ Light Mode' : '🌙 Dark Mode';
-    });
 
     // Share Tool
     document.getElementById('shareBtn').addEventListener('click', async () => {
