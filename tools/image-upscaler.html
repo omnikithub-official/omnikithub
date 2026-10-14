@@ -15,6 +15,10 @@
     <meta property="og:url" content="https://omnikithub.com/tools/image-upscaler.html">
     <meta property="og:type" content="website">
 
+    <!-- External CSS & Icons -->
+    <link rel="stylesheet" href="../style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
     <!-- Schema.org Markup -->
     <script type="application/ld+json">
     {
@@ -52,11 +56,17 @@
         }
 
         * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; }
-        body { background-color: var(--bg-color); color: var(--text-color); padding: 20px; transition: all 0.3s ease; }
+        body { background-color: var(--bg-color); color: var(--text-color); display: flex; flex-direction: column; min-height: 100vh; transition: all 0.3s ease; }
+
+        .main-wrapper {
+            flex: 1;
+            max-width: 1200px;
+            width: 100%;
+            margin: 20px auto;
+            padding: 0 20px;
+        }
 
         .app-container {
-            max-width: 1200px;
-            margin: 0 auto;
             background: var(--card-bg);
             border-radius: 12px;
             padding: 30px;
@@ -66,16 +76,6 @@
 
         .header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px; }
         .header h1 { font-size: 24px; color: var(--primary-color); }
-
-        .theme-btn {
-            background: transparent;
-            border: 1px solid var(--border-color);
-            color: var(--text-color);
-            padding: 6px 12px;
-            border-radius: 20px;
-            cursor: pointer;
-            font-size: 13px;
-        }
 
         .description { color: #64748b; font-size: 14px; margin-bottom: 25px; }
 
@@ -172,54 +172,159 @@
         .btn-primary { background: var(--primary-color); color: white; border: none; }
         .btn-primary:hover { background: var(--primary-hover); }
         .btn-share { background: #10b981; color: white; border: none; }
+
+        /* Ad Slots & SEO Card Styling */
+        .ad-placeholder {
+            border: 1px dashed #cbd5e1;
+            background: rgba(0,0,0,0.01);
+            padding: 15px;
+            border-radius: 10px;
+            text-align: center;
+            color: #64748b;
+            font-size: 13px;
+            margin: 20px 0;
+        }
+
+        .seo-content-card {
+            background: var(--card-bg);
+            border-radius: 12px;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.08);
+            padding: 30px;
+            margin-top: 30px;
+            border: 1px solid var(--border-color);
+            line-height: 1.7;
+        }
+
+        .seo-content-card h2 { font-size: 1.4rem; color: var(--primary-color); margin-bottom: 12px; }
+        .seo-content-card h3 { font-size: 1.1rem; color: var(--text-color); margin: 15px 0 8px 0; }
+        .seo-content-card p, .seo-content-card li { font-size: 0.95rem; margin-bottom: 8px; color: #64748b; }
+        .seo-content-card ul { padding-left: 20px; margin-bottom: 10px; }
     </style>
 </head>
-<body>
+<body class="light-theme">
 
-<div class="app-container">
-    <div class="header">
-        <h1>🔍 Pro AI Image Upscaler & Enlarger</h1>
-        <button id="themeToggle" class="theme-btn">🌙 Dark Mode</button>
-    </div>
-    <p class="description">Enlarge image resolution by 2x or 4x with smart sharpening and clarity enhancement filters online for free.</p>
-
-    <!-- Dropzone -->
-    <div class="dropzone" onclick="document.getElementById('imageInput').click()">
-        <div style="font-size: 32px;">🖼️</div>
-        <p><b>Click or Drag Image Here to Upscale</b><br>Supports JPG, PNG, WebP</p>
-        <input type="file" id="imageInput" accept="image/*" style="display: none;">
-    </div>
-
-    <!-- Controls -->
-    <div class="controls-bar">
-        <div class="control-group">
-            <label>Upscale Multiplier:</label>
-            <select id="scaleMultiplier">
-                <option value="2">2x HD Upscale (Double Resolution)</option>
-                <option value="4">4x Ultra HD Upscale (Quad Resolution)</option>
-            </select>
+    <!-- Navigation Header -->
+    <header class="navbar">
+        <div class="container nav-container" style="max-width: 100% !important; padding: 0 !important;">
+            <a href="../index.html" class="logo">
+                <i class="fa-solid fa-toolbox logo-icon"></i>
+                <span class="logo-text">OmniKit<span class="highlight">Hub</span></span>
+            </a>
+            <div class="nav-actions">
+                <button id="theme-toggle" class="icon-btn" aria-label="Toggle Theme">
+                    <i class="fa-solid fa-moon"></i>
+                </button>
+            </div>
         </div>
-        <div class="control-group">
-            <label>Sharpening & Clarity Filter: <span id="sharpVal" style="color: var(--primary-color);">20%</span></label>
-            <input type="range" id="sharpRange" min="0" max="100" value="20" style="width: 100%; cursor: pointer; margin-top: 6px;">
+    </header>
+
+<div class="main-wrapper">
+
+    <!-- Top Advertisement Slot -->
+    <div class="ad-placeholder">
+        <span>Responsive Advertisement Space (Google AdSense)</span>
+    </div>
+
+    <div class="app-container">
+        <div class="header">
+            <h1>🔍 Pro AI Image Upscaler & Enlarger</h1>
+        </div>
+        <p class="description">Enlarge image resolution by 2x or 4x with smart sharpening and clarity enhancement filters online for free.</p>
+
+        <!-- Dropzone -->
+        <div class="dropzone" onclick="document.getElementById('imageInput').click()">
+            <div style="font-size: 32px;">🖼️</div>
+            <p><b>Click or Drag Image Here to Upscale</b><br>Supports JPG, PNG, WebP</p>
+            <input type="file" id="imageInput" accept="image/*" style="display: none;">
+        </div>
+
+        <!-- Controls -->
+        <div class="controls-bar">
+            <div class="control-group">
+                <label>Upscale Multiplier:</label>
+                <select id="scaleMultiplier">
+                    <option value="2">2x HD Upscale (Double Resolution)</option>
+                    <option value="4">4x Ultra HD Upscale (Quad Resolution)</option>
+                </select>
+            </div>
+            <div class="control-group">
+                <label>Sharpening & Clarity Filter: <span id="sharpVal" style="color: var(--primary-color);">20%</span></label>
+                <input type="range" id="sharpRange" min="0" max="100" value="20" style="width: 100%; cursor: pointer; margin-top: 6px;">
+            </div>
+        </div>
+
+        <!-- Preview Box -->
+        <div class="preview-box">
+            <div id="placeholderText" style="color: #94a3b8; font-size: 14px;">No image uploaded yet.<br>Please select an image on the top to preview HD upscale.</div>
+            <img id="outputImg" alt="Upscaled Preview">
+            <div id="imageInfo" class="info-text"></div>
+        </div>
+
+        <!-- Action Bar -->
+        <div class="action-bar">
+            <button id="downloadBtn" class="btn btn-primary" style="flex: 1; display: none;">📥 Download Upscaled HD Image</button>
+            <button id="shareBtn" class="btn btn-share">🔗 Share Tool</button>
+            <button id="clearBtn" class="btn">🗑️ Reset</button>
         </div>
     </div>
 
-    <!-- Preview Box -->
-    <div class="preview-box">
-        <div id="placeholderText" style="color: #94a3b8; font-size: 14px;">No image uploaded yet.<br>Please select an image on the top to preview HD upscale.</div>
-        <img id="outputImg" alt="Upscaled Preview">
-        <div id="imageInfo" class="info-text"></div>
+    <!-- Bottom Advertisement Slot -->
+    <div class="ad-placeholder">
+        <span>Responsive Advertisement Space (Google AdSense)</span>
     </div>
 
-    <!-- Action Bar -->
-    <div class="action-bar">
-        <button id="downloadBtn" class="btn btn-primary" style="flex: 1; display: none;">📥 Download Upscaled HD Image</button>
-        <button id="shareBtn" class="btn btn-share">🔗 Share Tool</button>
-        <button id="clearBtn" class="btn">🗑️ Reset</button>
+    <!-- AdSense Friendly SEO Content Section -->
+    <div class="seo-content-card">
+        <h2>About Pro AI Image Upscaler & HD Enlarger</h2>
+        <p>OmniKitHub's AI Image Upscaler is an advanced web-based photo enhancer designed to boost low-resolution pictures into crisp 2x or 4x HD quality instantly using high-performance browser rendering algorithms.</p>
+        
+        <h3>Key Features & Benefits</h3>
+        <ul>
+            <li><strong>2x & 4x Resolution Scaling:</strong> Double or quadruple photo pixel dimensions effortlessly.</li>
+            <li><strong>Smart Sharpening Filters:</strong> Adjust clarity and detail sliders to refine edges and reduce pixel blur.</li>
+            <li><strong>Fast Client-Side Processing:</strong> No server wait times or data uploads; your images upscale safely on your device.</li>
+            <li><strong>Instant HD Download:</strong> Save your enhanced photos with a single click.</li>
+        </ul>
+
+        <h3>How to Upscale Photos Online</h3>
+        <ol>
+            <li>Click or drag your low-resolution image into the upload dropzone.</li>
+            <li>Choose your desired upscale multiplier (2x HD or 4x Ultra HD).</li>
+            <li>Adjust the sharpening filter and click <strong>Download Upscaled HD Image</strong>.</li>
+        </ol>
     </div>
+
 </div>
 
+<!-- Footer Section -->
+<footer class="footer">
+    <div class="container footer-container" style="max-width: 100% !important;">
+        <div class="footer-brand">
+            <a href="../index.html" class="logo">
+                <i class="fa-solid fa-toolbox logo-icon"></i>
+                <span class="logo-text">OmniKit<span class="highlight">Hub</span></span>
+            </a>
+            <p>Your ultimate free online toolkit for daily developer, text, media, PDF, and web tasks.</p>
+        </div>
+        
+        <div class="footer-links">
+            <h4>Legal & Pages</h4>
+            <ul>
+                <li><a href="../pages/about.html">About Us</a></li>
+                <li><a href="../pages/contact.html">Contact Us</a></li>
+                <li><a href="../pages/privacy-policy.html">Privacy Policy</a></li>
+                <li><a href="../pages/terms.html">Terms of Service</a></li>
+            </ul>
+        </div>
+    </div>
+    <div class="footer-bottom">
+        <div class="container">
+            <p>&copy; 2026 OmniKitHub.com. All rights reserved.</p>
+        </div>
+    </div>
+</footer>
+
+<script src="../script.js"></script>
 <script>
     const imageInput = document.getElementById('imageInput');
     const scaleMultiplier = document.getElementById('scaleMultiplier');
@@ -229,7 +334,7 @@
     const outputImg = document.getElementById('outputImg');
     const imageInfo = document.getElementById('imageInfo');
     const downloadBtn = document.getElementById('downloadBtn');
-    const themeToggle = document.getElementById('themeToggle');
+    const themeToggle = document.getElementById('theme-toggle');
 
     let loadedImage = null;
 
@@ -288,12 +393,6 @@
         link.download = `Upscaled_HD_OmniKitHub.jpg`;
         link.href = outputImg.src;
         link.click();
-    });
-
-    // Dark Mode
-    themeToggle.addEventListener('click', () => {
-        document.body.classList.toggle('dark-mode');
-        themeToggle.innerText = document.body.classList.contains('dark-mode') ? '☀️ Light Mode' : '🌙 Dark Mode';
     });
 
     document.getElementById('clearBtn').addEventListener('click', () => {
