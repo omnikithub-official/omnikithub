@@ -47,6 +47,9 @@
     </script>
 
     <link rel="stylesheet" href="../style.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Noto+Sans+Bengali&family=Noto+Serif+Bengali&family=Hind+Siliguri&display=swap">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/2.16.105/pdf.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf-lib/1.17.1/pdf-lib.min.js"></script>
@@ -61,7 +64,7 @@
         .upload-area { border: 2px dashed var(--accent-color); border-radius: 12px; padding: 35px 20px; text-align: center; background: var(--bg-primary); cursor: pointer; transition: background var(--transition-speed) ease; margin-bottom: 12px; }
         .upload-area:hover, .upload-area.drag { background: var(--badge-bg); }
         #status { min-height: 22px; font-size: .9rem; color: var(--text-secondary); margin-bottom: 8px; }
-        textarea { width: 100%; height: 280px; padding: 15px; border-radius: 12px; border: 1px solid var(--card-border); background: var(--bg-primary); color: var(--text-primary); font-size: .95rem; outline: none; resize: vertical; }
+        textarea { width: 100%; height: 280px; padding: 15px; border-radius: 12px; border: 1px solid var(--card-border); background: var(--bg-primary); color: var(--text-primary); font-size: .95rem; outline: none; resize: vertical; font-family: "Noto Sans Bengali","Hind Siliguri","Nirmala UI",system-ui,sans-serif; }
         .meta-row { display: flex; justify-content: space-between; flex-wrap: wrap; gap: 8px; margin: 8px 0 18px; font-size: .85rem; color: var(--text-secondary); }
         .btn-row { display: flex; flex-wrap: wrap; gap: 10px; justify-content: flex-end; }
         .action-btn { padding: 11px 20px; border-radius: 8px; border: 1px solid var(--accent-color); background: var(--accent-color); color: #fff; font-weight: 700; font-size: .95rem; cursor: pointer; display: inline-flex; align-items: center; gap: 8px; transition: background var(--transition-speed) ease; }
@@ -120,6 +123,7 @@
             </div>
             <div id="opts-w2p" class="opts" style="display:none">
                 <label>Page size <select id="pg-size"><option value="595,842">A4</option><option value="612,792">Letter</option></select></label>
+                <label>Bangla font <select id="pg-bfont"><option value="Noto Sans Bengali">Noto Sans Bengali</option><option value="Hind Siliguri">Hind Siliguri</option><option value="Noto Serif Bengali">Noto Serif Bengali</option></select></label>
                 <label>Font size <select id="pg-font"><option>10</option><option>11</option><option selected>12</option><option>14</option><option>16</option><option>18</option></select></label>
                 <label>Margin <select id="pg-margin"><option value="30">Narrow</option><option value="50" selected>Normal</option><option value="70">Wide</option></select></label>
             </div>
@@ -347,7 +351,8 @@
                 const S = 2, fs = FS + 2, lh = Math.round(FS * 1.7);
                 const c = document.createElement('canvas'); c.width = W * S; c.height = H * S;
                 const x = c.getContext('2d');
-                const font = fs + 'px "Noto Sans Bengali","Nirmala UI","Vrinda","Segoe UI",Arial,sans-serif';
+                const font = fs + 'px "' + $('pg-bfont').value + '","Noto Sans Bengali","Nirmala UI","Vrinda","Segoe UI",Arial,sans-serif';
+                try { if (document.fonts) await document.fonts.load(font, text.slice(0, 3000)); } catch (e) {}
                 x.font = font;
                 const lines = wrapText(text, s => x.measureText(s).width, W - 2 * M);
                 const per = Math.floor((H - 2 * M) / lh);
