@@ -3,11 +3,39 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Stopwatch & Countdown Timer - OmniKitHub</title>
+    <title>Stopwatch & Countdown Timer | OmniKitHub</title>
     <meta name="description" content="Free online stopwatch with lap times and customizable countdown timer with alarm for study, sports, and work.">
     <meta name="keywords" content="stopwatch online, countdown timer free, online timer with alarm, lap timer web app, stopwatch tool">
+    <meta name="robots" content="index, follow">
+    <link rel="canonical" href="https://omnikithub.com/tools/stopwatch.html">
+
+    <!-- Open Graph Tags -->
+    <meta property="og:title" content="Stopwatch & Countdown Timer - OmniKitHub">
+    <meta property="og:description" content="Free online stopwatch with lap times and customizable countdown timer for study, sports, and work.">
+    <meta property="og:url" content="https://omnikithub.com/tools/stopwatch.html">
+    <meta property="og:type" content="website">
+
+    <!-- External CSS & Icons -->
     <link rel="stylesheet" href="../style.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+    <!-- Schema.org Markup -->
+    <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@type": "WebApplication",
+      "name": "Stopwatch & Countdown Timer",
+      "url": "https://omnikithub.com/tools/stopwatch.html",
+      "applicationCategory": "UtilitiesApplication",
+      "operatingSystem": "All",
+      "offers": {
+        "@type": "Offer",
+        "price": "0",
+        "priceCurrency": "USD"
+      }
+    }
+    </script>
+
     <style>
         .tool-container {
             max-width: 850px;
@@ -122,12 +150,44 @@
             font-weight: 700;
             outline: none;
         }
+
+        /* Ad Slots & SEO Card Styling */
+        .ad-placeholder {
+            border: 1px dashed var(--card-border);
+            background: rgba(0,0,0,0.01);
+            padding: 15px;
+            border-radius: 10px;
+            text-align: center;
+            color: var(--text-secondary);
+            font-size: 13px;
+            margin: 20px 0;
+            max-width: 850px;
+            margin-left: auto;
+            margin-right: auto;
+        }
+
+        .seo-content-card {
+            background: var(--bg-surface);
+            border-radius: 12px;
+            box-shadow: var(--card-shadow);
+            padding: 30px;
+            margin: 30px auto;
+            max-width: 850px;
+            border: 1px solid var(--card-border);
+            line-height: 1.7;
+        }
+
+        .seo-content-card h2 { font-size: 1.4rem; color: var(--accent-color); margin-bottom: 12px; }
+        .seo-content-card h3 { font-size: 1.1rem; color: var(--text-primary); margin: 15px 0 8px 0; }
+        .seo-content-card p, .seo-content-card li { font-size: 0.95rem; margin-bottom: 8px; color: var(--text-secondary); }
+        .seo-content-card ul { padding-left: 20px; margin-bottom: 10px; }
     </style>
 </head>
 <body class="light-theme">
 
+    <!-- Navigation Header -->
     <header class="navbar">
-        <div class="container nav-container">
+        <div class="container nav-container" style="max-width: 100% !important; padding: 0 !important;">
             <a href="../index.html" class="logo">
                 <i class="fa-solid fa-toolbox logo-icon"></i>
                 <span class="logo-text">OmniKit<span class="highlight">Hub</span></span>
@@ -140,163 +200,218 @@
         </div>
     </header>
 
-    <main class="container">
-        <div class="tool-container">
-            <h1 style="font-size: 1.8rem; margin-bottom: 8px;">Stopwatch & Countdown Timer</h1>
-            <p style="color: var(--text-secondary); margin-bottom: 24px;">Precise online stopwatch with lap timing and customizable countdown alarm.</p>
+<div class="container" style="padding: 0 15px;">
 
-            <div class="mode-selector">
-                <button id="mode-stopwatch" class="mode-btn active" onclick="switchMode('stopwatch')">Stopwatch</button>
-                <button id="mode-countdown" class="mode-btn" onclick="switchMode('countdown')">Countdown Timer</button>
-            </div>
+    <!-- Top Advertisement Slot -->
+    <div class="ad-placeholder">
+        <span>Responsive Advertisement Space (Google AdSense)</span>
+    </div>
 
-            <div class="display-box">
-                <!-- Countdown Setup Inputs -->
-                <div id="countdown-setup" class="countdown-inputs" style="display: none;">
-                    <div>
-                        <label style="font-size: 0.8rem; display: block; margin-bottom: 4px; color: var(--text-secondary);">Minutes</label>
-                        <input type="number" id="inp-mins" class="form-control" value="5" min="0" max="999">
-                    </div>
-                    <div>
-                        <label style="font-size: 0.8rem; display: block; margin-bottom: 4px; color: var(--text-secondary);">Seconds</label>
-                        <input type="number" id="inp-secs" class="form-control" value="0" min="0" max="59">
-                    </div>
-                </div>
+    <div class="tool-container">
+        <h1 style="font-size: 1.8rem; margin-bottom: 8px; color: var(--text-primary);">Stopwatch & Countdown Timer</h1>
+        <p style="color: var(--text-secondary); margin-bottom: 24px;">Precise online stopwatch with lap timing and customizable countdown alarm.</p>
 
-                <div id="time-display" class="time-display">00:00:00</div>
-
-                <div class="btn-group">
-                    <button id="btn-start" class="action-btn btn-start" onclick="startTimer()">Start</button>
-                    <button id="btn-lap" class="action-btn btn-lap" onclick="recordLap()" style="display: none;">Lap</button>
-                    <button id="btn-pause" class="action-btn btn-pause" onclick="pauseTimer()" disabled>Pause</button>
-                    <button id="btn-reset" class="action-btn btn-reset" onclick="resetTimer()">Reset</button>
-                </div>
-
-                <div id="lap-container" class="lap-list" style="display: none;"></div>
-            </div>
+        <div class="mode-selector">
+            <button id="mode-stopwatch" class="mode-btn active" onclick="switchMode('stopwatch')">Stopwatch</button>
+            <button id="mode-countdown" class="mode-btn" onclick="switchMode('countdown')">Countdown Timer</button>
         </div>
-    </main>
 
-    <footer class="footer">
-        <div class="footer-bottom">
-            <div class="container">
-                <p>&copy; 2026 OmniKitHub.com. All rights reserved.</p>
+        <div class="display-box">
+            <!-- Countdown Setup Inputs -->
+            <div id="countdown-setup" class="countdown-inputs" style="display: none;">
+                <div>
+                    <label style="font-size: 0.8rem; display: block; margin-bottom: 4px; color: var(--text-secondary);">Minutes</label>
+                    <input type="number" id="inp-mins" class="form-control" value="5" min="0" max="999">
+                </div>
+                <div>
+                    <label style="font-size: 0.8rem; display: block; margin-bottom: 4px; color: var(--text-secondary);">Seconds</label>
+                    <input type="number" id="inp-secs" class="form-control" value="0" min="0" max="59">
+                </div>
             </div>
+
+            <div id="time-display" class="time-display">00:00:00</div>
+
+            <div class="btn-group">
+                <button id="btn-start" class="action-btn btn-start" onclick="startTimer()">Start</button>
+                <button id="btn-lap" class="action-btn btn-lap" onclick="recordLap()" style="display: none;">Lap</button>
+                <button id="btn-pause" class="action-btn btn-pause" onclick="pauseTimer()" disabled>Pause</button>
+                <button id="btn-reset" class="action-btn btn-reset" onclick="resetTimer()">Reset</button>
+            </div>
+
+            <div id="lap-container" class="lap-list" style="display: none;"></div>
         </div>
-    </footer>
+    </div>
 
-    <script src="../script.js"></script>
-    <script>
-        let currentMode = 'stopwatch';
-        let timerInterval = null;
-        let totalSeconds = 0;
-        let isRunning = false;
-        let lapCount = 1;
+    <!-- Bottom Advertisement Slot -->
+    <div class="ad-placeholder">
+        <span>Responsive Advertisement Space (Google AdSense)</span>
+    </div>
 
-        const timeDisplay = document.getElementById('time-display');
-        const countdownSetup = document.getElementById('countdown-setup');
-        const btnLap = document.getElementById('btn-lap');
-        const lapContainer = document.getElementById('lap-container');
-        const inpMins = document.getElementById('inp-mins');
-        const inpSecs = document.getElementById('inp-secs');
+    <!-- Helpful Tutorial Video Carousel -->
+    <div style="margin: 30px auto; max-width: 850px;">
+        <h3 style="font-size: 1.2rem; color: var(--text-primary); margin-bottom: 12px;"><i class="fa-solid fa-video" style="color: var(--accent-color);"></i> Recommended Stopwatch & Timer Tutorials</h3>
+        <Carousel>
+          <Video source="youtube" query="how to build stopwatch and countdown timer in javascript" count="3"/>
+        </Carousel>
+    </div>
 
-        function switchMode(mode) {
-            currentMode = mode;
-            resetTimer();
+    <!-- AdSense Friendly SEO Content Section -->
+    <div class="seo-content-card">
+        <h2>About Stopwatch & Countdown Timer</h2>
+        <p>OmniKitHub's free online Stopwatch and Countdown Timer is a reliable utility tool designed for productivity, sports training, cooking, exams, and time management tasks.</p>
+        
+        <h3>Key Features & Modes</h3>
+        <ul>
+            <li><strong>Precision Stopwatch Mode:</strong> Track elapsed time accurately with split lap timing capabilities to record multiple intervals.</li>
+            <li><strong>Customizable Countdown Timer:</strong> Set custom minutes and seconds with automatic alarm notification upon completion.</li>
+            <li><strong>Clean & Responsive UI:</strong> Fully optimized for desktop, tablet, and mobile browsers with dark mode support.</li>
+            <li><strong>100% Free & Fast:</strong> No installation or registration required; works instantly inside your browser.</li>
+        </ul>
+    </div>
 
-            if (mode === 'stopwatch') {
-                document.getElementById('mode-stopwatch').classList.add('active');
-                document.getElementById('mode-countdown').classList.remove('active');
-                countdownSetup.style.display = 'none';
-                btnLap.style.display = 'inline-block';
-                lapContainer.style.display = 'block';
-                timeDisplay.innerText = '00:00:00';
+</div>
+
+<!-- Footer Section -->
+<footer class="footer">
+    <div class="container footer-container" style="max-width: 100% !important;">
+        <div class="footer-brand">
+            <a href="../index.html" class="logo">
+                <i class="fa-solid fa-toolbox logo-icon"></i>
+                <span class="logo-text">OmniKit<span class="highlight">Hub</span></span>
+            </a>
+            <p>Your ultimate free online toolkit for daily developer, text, media, PDF, and web tasks.</p>
+        </div>
+        
+        <div class="footer-links">
+            <h4>Legal & Pages</h4>
+            <ul>
+                <li><a href="../pages/about.html">About Us</a></li>
+                <li><a href="../pages/contact.html">Contact Us</a></li>
+                <li><a href="../pages/privacy-policy.html">Privacy Policy</a></li>
+                <li><a href="../pages/terms.html">Terms of Service</a></li>
+            </ul>
+        </div>
+    </div>
+    <div class="footer-bottom">
+        <div class="container">
+            <p>&copy; 2026 OmniKitHub.com. All rights reserved.</p>
+        </div>
+    </div>
+</footer>
+
+<script src="../script.js"></script>
+<script>
+    let currentMode = 'stopwatch';
+    let timerInterval = null;
+    let totalSeconds = 0;
+    let isRunning = false;
+    let lapCount = 1;
+
+    const timeDisplay = document.getElementById('time-display');
+    const countdownSetup = document.getElementById('countdown-setup');
+    const btnLap = document.getElementById('btn-lap');
+    const lapContainer = document.getElementById('lap-container');
+    const inpMins = document.getElementById('inp-mins');
+    const inpSecs = document.getElementById('inp-secs');
+
+    function switchMode(mode) {
+        currentMode = mode;
+        resetTimer();
+
+        if (mode === 'stopwatch') {
+            document.getElementById('mode-stopwatch').classList.add('active');
+            document.getElementById('mode-countdown').classList.remove('active');
+            countdownSetup.style.display = 'none';
+            btnLap.style.display = 'inline-block';
+            lapContainer.style.display = 'block';
+            timeDisplay.innerText = '00:00:00';
+        } else {
+            document.getElementById('mode-countdown').classList.add('active');
+            document.getElementById('mode-stopwatch').classList.remove('active');
+            countdownSetup.style.display = 'flex';
+            btnLap.style.display = 'none';
+            lapContainer.style.display = 'none';
+            updateCountdownDisplay();
+        }
+    }
+
+    function updateCountdownDisplay() {
+        const m = parseInt(inpMins.value) || 0;
+        const s = parseInt(inpSecs.value) || 0;
+        totalSeconds = (m * 60) + s;
+        timeDisplay.innerText = formatTime(totalSeconds);
+    }
+
+    inpMins.addEventListener('input', () => { if (!isRunning) updateCountdownDisplay(); });
+    inpSecs.addEventListener('input', () => { if (!isRunning) updateCountdownDisplay(); });
+
+    function formatTime(secs) {
+        const hrs = Math.floor(secs / 3600);
+        const mins = Math.floor((secs % 3600) / 60);
+        const remainderSecs = secs % 60;
+        return `${String(hrs).padStart(2, '0')}:${String(mins).padStart(2, '0')}:${String(remainderSecs).padStart(2, '0')}`;
+    }
+
+    function startTimer() {
+        if (isRunning) return;
+        isRunning = true;
+
+        if (currentMode === 'countdown' && totalSeconds <= 0) {
+            updateCountdownDisplay();
+        }
+
+        timerInterval = setInterval(() => {
+            if (currentMode === 'stopwatch') {
+                totalSeconds++;
+                timeDisplay.innerText = formatTime(totalSeconds);
             } else {
-                document.getElementById('mode-countdown').classList.add('active');
-                document.getElementById('mode-stopwatch').classList.remove('active');
-                countdownSetup.style.display = 'flex';
-                btnLap.style.display = 'none';
-                lapContainer.style.display = 'none';
-                updateCountdownDisplay();
-            }
-        }
-
-        function updateCountdownDisplay() {
-            const m = parseInt(inpMins.value) || 0;
-            const s = parseInt(inpSecs.value) || 0;
-            totalSeconds = (m * 60) + s;
-            timeDisplay.innerText = formatTime(totalSeconds);
-        }
-
-        inpMins.addEventListener('input', () => { if (!isRunning) updateCountdownDisplay(); });
-        inpSecs.addEventListener('input', () => { if (!isRunning) updateCountdownDisplay(); });
-
-        function formatTime(secs) {
-            const hrs = Math.floor(secs / 3600);
-            const mins = Math.floor((secs % 3600) / 60);
-            const remainderSecs = secs % 60;
-            return `${String(hrs).padStart(2, '0')}:${String(mins).padStart(2, '0')}:${String(remainderSecs).padStart(2, '0')}`;
-        }
-
-        function startTimer() {
-            if (isRunning) return;
-            isRunning = true;
-
-            if (currentMode === 'countdown' && totalSeconds <= 0) {
-                updateCountdownDisplay();
-            }
-
-            timerInterval = setInterval(() => {
-                if (currentMode === 'stopwatch') {
-                    totalSeconds++;
+                if (totalSeconds > 0) {
+                    totalSeconds--;
                     timeDisplay.innerText = formatTime(totalSeconds);
                 } else {
-                    if (totalSeconds > 0) {
-                        totalSeconds--;
-                        timeDisplay.innerText = formatTime(totalSeconds);
-                    } else {
-                        pauseTimer();
-                        alert('Countdown Timer Completed!');
-                    }
+                    pauseTimer();
+                    alert('Countdown Timer Completed!');
                 }
-            }, 1000);
-
-            document.getElementById('btn-start').disabled = true;
-            document.getElementById('btn-pause').disabled = false;
-            if (currentMode === 'countdown') {
-                inpMins.disabled = true;
-                inpSecs.disabled = true;
             }
-        }
+        }, 1000);
 
-        function pauseTimer() {
-            isRunning = false;
-            clearInterval(timerInterval);
-            document.getElementById('btn-start').disabled = false;
-            document.getElementById('btn-pause').disabled = true;
+        document.getElementById('btn-start').disabled = true;
+        document.getElementById('btn-pause').disabled = false;
+        if (currentMode === 'countdown') {
+            inpMins.disabled = true;
+            inpSecs.disabled = true;
         }
+    }
 
-        function resetTimer() {
-            pauseTimer();
-            totalSeconds = 0;
-            if (currentMode === 'stopwatch') {
-                timeDisplay.innerText = '00:00:00';
-                lapContainer.innerHTML = '';
-                lapCount = 1;
-            } else {
-                inpMins.disabled = false;
-                inpSecs.disabled = false;
-                updateCountdownDisplay();
-            }
-        }
+    function pauseTimer() {
+        isRunning = false;
+        clearInterval(timerInterval);
+        document.getElementById('btn-start').disabled = false;
+        document.getElementById('btn-pause').disabled = true;
+    }
 
-        function recordLap() {
-            if (!isRunning || currentMode !== 'stopwatch') return;
-            const lapItem = document.createElement('div');
-            lapItem.className = 'lap-item';
-            lapItem.innerHTML = `<span>Lap ${lapCount++}</span> <strong>${timeDisplay.innerText}</strong>`;
-            lapContainer.prepend(lapItem);
+    function resetTimer() {
+        pauseTimer();
+        totalSeconds = 0;
+        if (currentMode === 'stopwatch') {
+            timeDisplay.innerText = '00:00:00';
+            lapContainer.innerHTML = '';
+            lapCount = 1;
+        } else {
+            inpMins.disabled = false;
+            inpSecs.disabled = false;
+            updateCountdownDisplay();
         }
-    </script>
+    }
+
+    function recordLap() {
+        if (!isRunning || currentMode !== 'stopwatch') return;
+        const lapItem = document.createElement('div');
+        lapItem.className = 'lap-item';
+        lapItem.innerHTML = `<span>Lap ${lapCount++}</span> <strong>${timeDisplay.innerText}</strong>`;
+        lapContainer.prepend(lapItem);
+    }
+</script>
+
 </body>
 </html>
