@@ -23,21 +23,55 @@
     <!-- Font Awesome Icons -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 
-    <!-- Extra UI Enhancements for Vibrant Look -->
+    <!-- High-End Animations & Dynamic UI Enhancements -->
     <style>
         .hero-section {
-            background: radial-gradient(circle at 50% 20%, rgba(37, 99, 235, 0.08) 0%, transparent 70%);
-            padding: 50px 20px 30px;
+            position: relative;
+            background: radial-gradient(circle at 50% 20%, rgba(37, 99, 235, 0.12) 0%, transparent 75%);
+            padding: 65px 20px 40px;
+            overflow: hidden;
         }
+
+        #particle-canvas {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: 0;
+        }
+
+        .hero-container {
+            position: relative;
+            z-index: 1;
+        }
+
+        .typing-cursor {
+            display: inline-block;
+            width: 3px;
+            background-color: #2563eb;
+            margin-left: 4px;
+            animation: blink 0.75s infinite;
+        }
+
+        @keyframes blink {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0; }
+        }
+
         .tool-card {
-            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1) !important;
+            transition: all 0.35s cubic-bezier(0.4, 0, 0.2, 1) !important;
             border: 1px solid var(--border-color, #e2e8f0);
+            background: var(--card-bg, #ffffff);
         }
+
         .tool-card:hover {
-            transform: translateY(-5px);
+            transform: translateY(-6px) scale(1.02);
             border-color: #2563eb !important;
-            box-shadow: 0 12px 30px -10px rgba(37, 99, 235, 0.15);
+            box-shadow: 0 15px 35px -10px rgba(37, 99, 235, 0.22);
         }
+
         .ad-placeholder {
             border: 1px dashed #cbd5e1;
             background: rgba(0,0,0,0.01);
@@ -67,11 +101,12 @@
         </div>
     </header>
 
-    <!-- Hero Section -->
+    <!-- Hero Section with Canvas Particles & Dynamic Text -->
     <section class="hero-section">
+        <canvas id="particle-canvas"></canvas>
         <div class="container hero-container">
             <h1 class="hero-title">Free Online Professional Tools for Everyone</h1>
-            <p class="hero-subtitle">Fast, secure, and privacy-first client-side web tools & AI helpers. Built for creators, developers, and professionals.</p>
+            <p class="hero-subtitle"><span id="typed-text"></span><span class="typing-cursor">&nbsp;</span></p>
 
             <!-- Live Search Bar -->
             <div class="search-box">
@@ -391,5 +426,96 @@
 
     <!-- JavaScript File -->
     <script src="script.js"></script>
+
+    <!-- Interactive Canvas Floating Particles & Dynamic Typewriter Script -->
+    <script>
+        // 1. Floating Particles Animation
+        const canvas = document.getElementById('particle-canvas');
+        const ctx = canvas.getContext('2d');
+        let particles = [];
+
+        function resizeCanvas() {
+            canvas.width = canvas.parentElement.clientWidth;
+            canvas.height = canvas.parentElement.clientHeight;
+        }
+        window.addEventListener('resize', resizeCanvas);
+        resizeCanvas();
+
+        class Particle {
+            constructor() {
+                this.reset();
+            }
+            reset() {
+                this.x = Math.random() * canvas.width;
+                this.y = Math.random() * canvas.height;
+                this.size = Math.random() * 3 + 1;
+                this.speedY = -(Math.random() * 0.6 + 0.2);
+                this.speedX = (Math.random() - 0.5) * 0.4;
+                this.opacity = Math.random() * 0.5 + 0.2;
+            }
+            update() {
+                this.y += this.speedY;
+                this.x += this.speedX;
+                if (this.y < 0) this.y = canvas.height;
+                if (this.x < 0 || this.x > canvas.width) this.x = Math.random() * canvas.width;
+            }
+            draw() {
+                ctx.fillStyle = `rgba(56, 189, 248, ${this.opacity})`;
+                ctx.beginPath();
+                ctx.arc(this.x, this.y, this.size, 0, Math.PI * 2);
+                ctx.fill();
+            }
+        }
+
+        for (let i = 0; i < 35; i++) {
+            particles.push(new Particle());
+        }
+
+        function animateParticles() {
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+            particles.forEach(p => {
+                p.update();
+                p.draw();
+            });
+            requestAnimationFrame(animateParticles);
+        }
+        animateParticles();
+
+        // 2. Dynamic Typewriter & Fade Effect
+        const phrases = [
+            "Fast, secure, and privacy-first client-side web tools & AI helpers.",
+            "Built for creators, developers, students, and digital professionals.",
+            "100% Free online utilities with zero software installation required."
+        ];
+        let pIndex = 0;
+        let cIndex = 0;
+        let isDeleting = false;
+        const targetElement = document.getElementById('typed-text');
+
+        function typeEffect() {
+            const currentPhrase = phrases[pIndex];
+            if (isDeleting) {
+                targetElement.textContent = currentPhrase.substring(0, cIndex - 1);
+                cIndex--;
+            } else {
+                targetElement.textContent = currentPhrase.substring(0, cIndex + 1);
+                cIndex++;
+            }
+
+            let typeSpeed = isDeleting ? 30 : 60;
+
+            if (!isDeleting && cIndex === currentPhrase.length) {
+                typeSpeed = 2200; // Pause at top
+                isDeleting = true;
+            } else if (isDeleting && cIndex === 0) {
+                isDeleting = false;
+                pIndex = (pIndex + 1) % phrases.length;
+                typeSpeed = 400;
+            }
+
+            setTimeout(typeEffect, typeSpeed);
+        }
+        document.addEventListener('DOMContentLoaded', typeEffect);
+    </script>
 </body>
 </html>
