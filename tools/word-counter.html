@@ -15,6 +15,10 @@
     <meta property="og:url" content="https://omnikithub.com/tools/word-counter.html">
     <meta property="og:type" content="website">
 
+    <!-- External CSS & Icons -->
+    <link rel="stylesheet" href="../style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
     <!-- html2pdf Library for PDF Export -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
 
@@ -55,29 +59,26 @@
         }
 
         * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; }
-        body { background-color: var(--bg-color); color: var(--text-color); padding: 20px; display: flex; justify-content: center; transition: all 0.3s ease; }
+        body { background-color: var(--bg-color); color: var(--text-color); display: flex; flex-direction: column; min-height: 100vh; transition: all 0.3s ease; }
 
-        .container {
+        .main-wrapper {
+            flex: 1;
             max-width: 1100px;
             width: 100%;
+            margin: 20px auto;
+            padding: 0 20px;
+        }
+
+        .container {
             background: var(--card-bg);
             border-radius: 12px;
             box-shadow: 0 4px 20px rgba(0,0,0,0.08);
             padding: 30px;
+            border: 1px solid var(--border-color);
         }
 
         .header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px; }
         .header h1 { color: var(--primary-color); font-size: 26px; }
-
-        .theme-btn {
-            background: transparent;
-            border: 1px solid var(--border-color);
-            color: var(--text-color);
-            padding: 6px 12px;
-            border-radius: 20px;
-            cursor: pointer;
-            font-size: 13px;
-        }
 
         .description { color: #64748b; font-size: 14px; margin-bottom: 25px; }
 
@@ -166,111 +167,217 @@
         .section-box h3 { font-size: 16px; margin-bottom: 15px; color: var(--primary-color); }
 
         .limit-item { margin-bottom: 12px; }
-        .limit-label { display: flex; justify-content: space-between; font-size: 13px; margin-bottom: 4px; }
+        .limit-label { display: flex; justify-content: space-between; font-size: 13px; margin-bottom: 4px; color: var(--text-color); }
         .progress-bar { height: 6px; background: var(--border-color); border-radius: 3px; overflow: hidden; }
         .progress-fill { height: 100%; background: var(--primary-color); width: 0%; transition: width 0.3s; }
 
         /* Density Table */
         table { width: 100%; border-collapse: collapse; font-size: 13px; }
-        th, td { padding: 8px; text-align: left; border-bottom: 1px solid var(--border-color); }
+        th, td { padding: 8px; text-align: left; border-bottom: 1px solid var(--border-color); color: var(--text-color); }
         th { color: #64748b; font-weight: 600; }
+
+        /* Ad Slots & SEO Card Styling */
+        .ad-placeholder {
+            border: 1px dashed var(--border-color);
+            background: rgba(0,0,0,0.01);
+            padding: 15px;
+            border-radius: 10px;
+            text-align: center;
+            color: #64748b;
+            font-size: 13px;
+            margin: 20px 0;
+        }
+
+        .seo-content-card {
+            background: var(--card-bg);
+            border-radius: 12px;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.08);
+            padding: 30px;
+            margin-top: 30px;
+            border: 1px solid var(--border-color);
+            line-height: 1.7;
+        }
+
+        .seo-content-card h2 { font-size: 1.4rem; color: var(--primary-color); margin-bottom: 12px; }
+        .seo-content-card h3 { font-size: 1.1rem; color: var(--text-color); margin: 15px 0 8px 0; }
+        .seo-content-card p, .seo-content-card li { font-size: 0.95rem; margin-bottom: 8px; color: #64748b; }
+        .seo-content-card ul { padding-left: 20px; margin-bottom: 10px; }
 
         @media print {
             body * { visibility: hidden; }
-            .container, .container * { visibility: visible; }
-            .container { position: absolute; left: 0; top: 0; width: 100%; shadow: none; }
-            .toolbar, .theme-btn { display: none; }
+            #reportArea, #reportArea * { visibility: visible; }
+            #reportArea { position: absolute; left: 0; top: 0; width: 100%; box-shadow: none; }
+            .toolbar, .theme-btn, .ad-placeholder, .footer { display: none !important; }
         }
     </style>
 </head>
-<body>
+<body class="light-theme">
 
-<div class="container" id="reportArea">
-    <div class="header">
-        <h1>📊 Word Counter & Text Analyzer</h1>
-        <button id="themeToggle" class="theme-btn">🌙 Dark Mode</button>
-    </div>
-    <p class="description">Analyze your content length, word count, character limits, reading duration, and SEO keyword density in real-time.</p>
+    <!-- Navigation Header -->
+    <header class="navbar">
+        <div class="container nav-container" style="max-width: 100% !important; padding: 0 !important;">
+            <a href="../index.html" class="logo">
+                <i class="fa-solid fa-toolbox logo-icon"></i>
+                <span class="logo-text">OmniKit<span class="highlight">Hub</span></span>
+            </a>
+            <div class="nav-actions">
+                <button id="theme-toggle" class="icon-btn" aria-label="Toggle Theme">
+                    <i class="fa-solid fa-moon"></i>
+                </button>
+            </div>
+        </div>
+    </header>
 
-    <!-- Stats Cards Grid -->
-    <div class="stats-grid">
-        <div class="stat-card"><h3 id="wordCount">0</h3><p>WORDS</p></div>
-        <div class="stat-card"><h3 id="charCount">0</h3><p>CHARACTERS</p></div>
-        <div class="stat-card"><h3 id="charNoSpace">0</h3><p>CHARS (NO SPACE)</p></div>
-        <div class="stat-card"><h3 id="sentenceCount">0</h3><p>SENTENCES</p></div>
-        <div class="stat-card"><h3 id="paragraphCount">0</h3><p>PARAGRAPHS</p></div>
-        <div class="stat-card"><h3 id="readingTime">0s</h3><p>READING TIME</p></div>
-        <div class="stat-card"><h3 id="speakingTime">0s</h3><p>SPEAKING TIME</p></div>
-    </div>
+<div class="main-wrapper">
 
-    <!-- Main Text Area -->
-    <textarea id="inputText" placeholder="Type or paste your text here to count words, check SEO keywords, and analyze stats..."></textarea>
-
-    <!-- Case Converter & Cleaner Toolbar -->
-    <div class="toolbar">
-        <button class="btn" onclick="convertCase('upper')">UPPERCASE</button>
-        <button class="btn" onclick="convertCase('lower')">lowercase</button>
-        <button class="btn" onclick="convertCase('title')">Title Case</button>
-        <button class="btn" onclick="cleanExtraSpaces()">🧹 Clean Spaces</button>
-        <button class="btn" onclick="clearText()">🗑️ Clear</button>
+    <!-- Top Advertisement Slot -->
+    <div class="ad-placeholder">
+        <span>Responsive Advertisement Space (Google AdSense)</span>
     </div>
 
-    <!-- Social Media Tracker & SEO Keyword Density Grid -->
-    <div class="details-grid">
-        <!-- Social Media Limits -->
-        <div class="section-box">
-            <h3>📱 Social Media Character Limits</h3>
-            
-            <div class="limit-item">
-                <div class="limit-label"><span>Twitter / X (280 Chars)</span><span id="twLimit">0/280</span></div>
-                <div class="progress-bar"><div id="twBar" class="progress-fill"></div></div>
+    <div class="container" id="reportArea">
+        <div class="header">
+            <h1>📊 Word Counter & Text Analyzer</h1>
+        </div>
+        <p class="description">Analyze your content length, word count, character limits, reading duration, and SEO keyword density in real-time.</p>
+
+        <!-- Stats Cards Grid -->
+        <div class="stats-grid">
+            <div class="stat-card"><h3 id="wordCount">0</h3><p>WORDS</p></div>
+            <div class="stat-card"><h3 id="charCount">0</h3><p>CHARACTERS</p></div>
+            <div class="stat-card"><h3 id="charNoSpace">0</h3><p>CHARS (NO SPACE)</p></div>
+            <div class="stat-card"><h3 id="sentenceCount">0</h3><p>SENTENCES</p></div>
+            <div class="stat-card"><h3 id="paragraphCount">0</h3><p>PARAGRAPHS</p></div>
+            <div class="stat-card"><h3 id="readingTime">0s</h3><p>READING TIME</p></div>
+            <div class="stat-card"><h3 id="speakingTime">0s</h3><p>SPEAKING TIME</p></div>
+        </div>
+
+        <!-- Main Text Area -->
+        <textarea id="inputText" placeholder="Type or paste your text here to count words, check SEO keywords, and analyze stats..."></textarea>
+
+        <!-- Case Converter & Cleaner Toolbar -->
+        <div class="toolbar">
+            <button class="btn" onclick="convertCase('upper')">UPPERCASE</button>
+            <button class="btn" onclick="convertCase('lower')">lowercase</button>
+            <button class="btn" onclick="convertCase('title')">Title Case</button>
+            <button class="btn" onclick="cleanExtraSpaces()">🧹 Clean Spaces</button>
+            <button class="btn" onclick="clearText()">🗑️ Clear</button>
+        </div>
+
+        <!-- Social Media Tracker & SEO Keyword Density Grid -->
+        <div class="details-grid">
+            <!-- Social Media Limits -->
+            <div class="section-box">
+                <h3>📱 Social Media Character Limits</h3>
+                
+                <div class="limit-item">
+                    <div class="limit-label"><span>Twitter / X (280 Chars)</span><span id="twLimit">0/280</span></div>
+                    <div class="progress-bar"><div id="twBar" class="progress-fill"></div></div>
+                </div>
+
+                <div class="limit-item">
+                    <div class="limit-label"><span>Facebook Post (63,206 Chars)</span><span id="fbLimit">0%</span></div>
+                    <div class="progress-bar"><div id="fbBar" class="progress-fill"></div></div>
+                </div>
+
+                <div class="limit-item">
+                    <div class="limit-label"><span>Instagram Bio (150 Chars)</span><span id="igLimit">0/150</span></div>
+                    <div class="progress-bar"><div id="igBar" class="progress-fill"></div></div>
+                </div>
+
+                <div class="limit-item">
+                    <div class="limit-label"><span>Google Meta Title (60 Chars)</span><span id="metaTitleLimit">0/60</span></div>
+                    <div class="progress-bar"><div id="metaTitleBar" class="progress-fill"></div></div>
+                </div>
+
+                <div class="limit-item">
+                    <div class="limit-label"><span>Google Meta Description (160 Chars)</span><span id="metaDescLimit">0/160</span></div>
+                    <div class="progress-bar"><div id="metaDescBar" class="progress-fill"></div></div>
+                </div>
             </div>
 
-            <div class="limit-item">
-                <div class="limit-label"><span>Facebook Post (63,206 Chars)</span><span id="fbLimit">0%</span></div>
-                <div class="progress-bar"><div id="fbBar" class="progress-fill"></div></div>
-            </div>
-
-            <div class="limit-item">
-                <div class="limit-label"><span>Instagram Bio (150 Chars)</span><span id="igLimit">0/150</span></div>
-                <div class="progress-bar"><div id="igBar" class="progress-fill"></div></div>
-            </div>
-
-            <div class="limit-item">
-                <div class="limit-label"><span>Google Meta Title (60 Chars)</span><span id="metaTitleLimit">0/60</span></div>
-                <div class="progress-bar"><div id="metaTitleBar" class="progress-fill"></div></div>
-            </div>
-
-            <div class="limit-item">
-                <div class="limit-label"><span>Google Meta Description (160 Chars)</span><span id="metaDescLimit">0/160</span></div>
-                <div class="progress-bar"><div id="metaDescBar" class="progress-fill"></div></div>
+            <!-- Keyword Density Analysis -->
+            <div class="section-box">
+                <h3>🔍 Top SEO Keyword Density</h3>
+                <table>
+                    <thead>
+                        <tr><th>KEYWORD</th><th>COUNT</th><th>DENSITY</th></tr>
+                    </thead>
+                    <tbody id="densityTable">
+                        <tr><td colspan="3" style="text-align:center; color:#94a3b8;">Type text to display keyword frequency...</td></tr>
+                    </tbody>
+                </table>
             </div>
         </div>
 
-        <!-- Keyword Density Analysis -->
-        <div class="section-box">
-            <h3>🔍 Top SEO Keyword Density</h3>
-            <table>
-                <thead>
-                    <tr><th>KEYWORD</th><th>COUNT</th><th>DENSITY</th></tr>
-                </thead>
-                <tbody id="densityTable">
-                    <tr><td colspan="3" style="text-align:center; color:#94a3b8;">Type text to display keyword frequency...</td></tr>
-                </tbody>
-            </table>
+        <!-- Export & Share Action Toolbar -->
+        <div class="toolbar" style="margin-top: 25px; padding-top: 15px; border-top: 1px solid var(--border-color);">
+            <button id="copyBtn" class="btn btn-primary">📋 Copy Text</button>
+            <button id="downloadTxtBtn" class="btn">📥 Download .TXT</button>
+            <button id="downloadPdfBtn" class="btn">📄 Save PDF Report</button>
+            <button id="printBtn" class="btn">🖨️ Print Report</button>
+            <button id="shareBtn" class="btn btn-share">🔗 Share Anywhere</button>
         </div>
     </div>
 
-    <!-- Export & Share Action Toolbar -->
-    <div class="toolbar" style="margin-top: 25px; padding-top: 15px; border-top: 1px solid var(--border-color);">
-        <button id="copyBtn" class="btn btn-primary">📋 Copy Text</button>
-        <button id="downloadTxtBtn" class="btn">📥 Download .TXT</button>
-        <button id="downloadPdfBtn" class="btn">📄 Save PDF Report</button>
-        <button id="printBtn" class="btn">🖨️ Print Report</button>
-        <button id="shareBtn" class="btn btn-share">🔗 Share Anywhere</button>
+    <!-- Bottom Advertisement Slot -->
+    <div class="ad-placeholder">
+        <span>Responsive Advertisement Space (Google AdSense)</span>
     </div>
+
+    <!-- Helpful Tutorial Video Carousel -->
+    <div style="margin: 30px 0;">
+        <h3 style="font-size: 1.2rem; color: var(--text-color); margin-bottom: 12px;"><i class="fa-solid fa-video" style="color: var(--primary-color);"></i> Recommended Word Counter & SEO Tutorials</h3>
+        <Carousel>
+          <Video source="youtube" query="how to build word counter and keyword density checker in javascript" count="3"/>
+        </Carousel>
+    </div>
+
+    <!-- AdSense Friendly SEO Content Section -->
+    <div class="seo-content-card">
+        <h2>About Word Counter & SEO Keyword Density Checker</h2>
+        <p>OmniKitHub's free online Word Counter and SEO Text Analyzer gives students, bloggers, copywriters, and webmasters instant insights into their content length, readability, and search engine optimization metrics.</p>
+        
+        <h3>Key Features & Capabilities</h3>
+        <ul>
+            <li><strong>Comprehensive Text Statistics:</strong> Instantly track total word count, character count (with and without spaces), sentence count, and paragraph count.</li>
+            <li><strong>Reading & Speaking Duration:</strong> Automatically estimate reading time (200 WPM) and speaking time (130 WPM) for speeches, scripts, and essays.</li>
+            <li><strong>Social Media & Meta Trackers:</strong> Monitor post limits for Twitter/X, Facebook, Instagram bios, Google Meta Titles, and Meta Descriptions.</li>
+            <li><strong>SEO Keyword Density Analysis:</strong> Find your most frequently used keywords and avoid keyword stuffing instantly.</li>
+        </ul>
+    </div>
+
 </div>
 
+<!-- Footer Section -->
+<footer class="footer">
+    <div class="container footer-container" style="max-width: 100% !important;">
+        <div class="footer-brand">
+            <a href="../index.html" class="logo">
+                <i class="fa-solid fa-toolbox logo-icon"></i>
+                <span class="logo-text">OmniKit<span class="highlight">Hub</span></span>
+            </a>
+            <p>Your ultimate free online toolkit for daily developer, text, media, PDF, and web tasks.</p>
+        </div>
+        
+        <div class="footer-links">
+            <h4>Legal & Pages</h4>
+            <ul>
+                <li><a href="../pages/about.html">About Us</a></li>
+                <li><a href="../pages/contact.html">Contact Us</a></li>
+                <li><a href="../pages/privacy-policy.html">Privacy Policy</a></li>
+                <li><a href="../pages/terms.html">Terms of Service</a></li>
+            </ul>
+        </div>
+    </div>
+    <div class="footer-bottom">
+        <div class="container">
+            <p>&copy; 2026 OmniKitHub.com. All rights reserved.</p>
+        </div>
+    </div>
+</footer>
+
+<script src="../script.js"></script>
 <script>
     const inputText = document.getElementById('inputText');
     const wordCount = document.getElementById('wordCount');
@@ -281,7 +388,7 @@
     const readingTime = document.getElementById('readingTime');
     const speakingTime = document.getElementById('speakingTime');
     const densityTable = document.getElementById('densityTable');
-    const themeToggle = document.getElementById('themeToggle');
+    const themeToggle = document.getElementById('theme-toggle');
 
     // Real-time Text Analysis Engine
     function analyzeText() {
