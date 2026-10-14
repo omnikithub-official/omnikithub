@@ -15,6 +15,10 @@
     <meta property="og:url" content="https://omnikithub.com/tools/ai-assistant.html">
     <meta property="og:type" content="website">
 
+    <!-- External CSS & Icons -->
+    <link rel="stylesheet" href="../style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
     <!-- html2pdf and html2canvas for exports -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
@@ -56,29 +60,26 @@
         }
 
         * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; }
-        body { background-color: var(--bg-color); color: var(--text-color); padding: 20px; display: flex; justify-content: center; }
+        body { background-color: var(--bg-color); color: var(--text-color); display: flex; flex-direction: column; min-height: 100vh; }
 
-        .container {
+        .main-wrapper {
+            flex: 1;
             max-width: 1100px;
             width: 100%;
+            margin: 20px auto;
+            padding: 0 20px;
+        }
+
+        .container-box {
             background: var(--card-bg);
             border-radius: 12px;
             box-shadow: 0 4px 20px rgba(0,0,0,0.08);
             padding: 30px;
-        }
-
-        .header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px; }
-        .header h1 { color: var(--primary-color); font-size: 26px; }
-
-        .theme-btn {
-            background: transparent;
             border: 1px solid var(--border-color);
-            color: var(--text-color);
-            padding: 6px 12px;
-            border-radius: 20px;
-            cursor: pointer;
-            font-size: 13px;
         }
+
+        .tool-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px; }
+        .tool-header h1 { color: var(--primary-color); font-size: 24px; }
 
         .description { color: #64748b; font-size: 14px; margin-bottom: 20px; }
 
@@ -181,6 +182,33 @@
 
         .status-info { font-size: 13px; color: #64748b; margin-top: 8px; }
 
+        /* Ad Slots & SEO Card Styling */
+        .ad-placeholder {
+            border: 1px dashed #cbd5e1;
+            background: rgba(0,0,0,0.01);
+            padding: 15px;
+            border-radius: 10px;
+            text-align: center;
+            color: #64748b;
+            font-size: 13px;
+            margin: 20px 0;
+        }
+
+        .seo-content-card {
+            background: var(--card-bg);
+            border-radius: 12px;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.08);
+            padding: 30px;
+            margin-top: 30px;
+            border: 1px solid var(--border-color);
+            line-height: 1.7;
+        }
+
+        .seo-content-card h2 { font-size: 1.4rem; color: var(--primary-color); margin-bottom: 12px; }
+        .seo-content-card h3 { font-size: 1.1rem; color: var(--text-color); margin: 15px 0 8px 0; }
+        .seo-content-card p, .seo-content-card li { font-size: 0.95rem; margin-bottom: 8px; color: #64748b; }
+        .seo-content-card ul { padding-left: 20px; margin-bottom: 10px; }
+
         @media print {
             body * { visibility: hidden; }
             #outputBox, #outputBox * { visibility: visible; }
@@ -188,69 +216,147 @@
         }
     </style>
 </head>
-<body>
+<body class="light-theme">
 
-<div class="container">
-    <div class="header">
-        <h1>🧠 Smart AI Assistant & Content Humanizer</h1>
-        <button id="themeToggle" class="theme-btn">🌙 Dark Mode</button>
-    </div>
-    <p class="description">Transform AI text into natural human writing, solve student questions, summarize documents, fix grammar, and export results in PDF or Image.</p>
+    <!-- Navigation Header -->
+    <header class="navbar">
+        <div class="container nav-container">
+            <a href="../index.html" class="logo">
+                <i class="fa-solid fa-toolbox logo-icon"></i>
+                <span class="logo-text">OmniKit<span class="highlight">Hub</span></span>
+            </a>
+            <div class="nav-actions">
+                <button id="theme-toggle" class="icon-btn" aria-label="Toggle Theme">
+                    <i class="fa-solid fa-moon"></i>
+                </button>
+            </div>
+        </div>
+    </header>
 
-    <!-- Dashboard Quick Action Presets -->
-    <div class="dashboard-presets">
-        <button class="preset-btn active" onclick="setMode('humanize')">👤 Humanize AI Text</button>
-        <button class="preset-btn" onclick="setMode('ask')">❓ Ask Question / Solve Task</button>
-        <button class="preset-btn" onclick="setMode('summarize')">📑 Summarize Content</button>
-        <button class="preset-btn" onclick="setMode('grammar')">✏️ Fix Grammar & Tone</button>
-    </div>
+<div class="main-wrapper">
 
-    <div class="mode-bar">
-        <label>Writing Style Tone:</label>
-        <select id="toneSelect">
-            <option value="natural">Natural Human (Casual)</option>
-            <option value="academic" selected>Academic Student Style</option>
-            <option value="professional">Professional Business</option>
-        </select>
-
-        <label>Upload Document/Image:</label>
-        <input type="file" id="fileInput" accept=".txt,.pdf,image/*">
+    <!-- Top Advertisement Slot -->
+    <div class="ad-placeholder">
+        <span>Responsive Advertisement Space (Google AdSense)</span>
     </div>
 
-    <!-- Dual Panel Editor -->
-    <div class="editor-grid">
-        <div class="panel">
-            <label>Input Text / Prompt / Uploaded File Content:</label>
-            <textarea id="inputText" placeholder="Paste AI content here or ask any question for teachers and students..."></textarea>
-            <div class="status-info">Input Words: <span id="inWords">0</span></div>
+    <div class="container-box">
+        <div class="tool-header">
+            <h1>🧠 Smart AI Assistant & Content Humanizer</h1>
+        </div>
+        <p class="description">Transform AI text into natural human writing, solve student questions, summarize documents, fix grammar, and export results in PDF or Image.</p>
+
+        <!-- Dashboard Quick Action Presets -->
+        <div class="dashboard-presets">
+            <button class="preset-btn active" onclick="setMode('humanize')">👤 Humanize AI Text</button>
+            <button class="preset-btn" onclick="setMode('ask')">❓ Ask Question / Solve Task</button>
+            <button class="preset-btn" onclick="setMode('summarize')">📑 Summarize Content</button>
+            <button class="preset-btn" onclick="setMode('grammar')">✏️ Fix Grammar & Tone</button>
         </div>
 
-        <div class="panel">
-            <label>Output Result / Humanized Text:</label>
-            <div id="outputBox" class="output-box">Your processed humanized text or AI response will appear here...</div>
-            <div class="status-info">Output Words: <span id="outWords">0</span></div>
+        <div class="mode-bar">
+            <label>Writing Style Tone:</label>
+            <select id="toneSelect">
+                <option value="natural">Natural Human (Casual)</option>
+                <option value="academic" selected>Academic Student Style</option>
+                <option value="professional">Professional Business</option>
+            </select>
+
+            <label>Upload Document/Image:</label>
+            <input type="file" id="fileInput" accept=".txt,.pdf,image/*">
+        </div>
+
+        <!-- Dual Panel Editor -->
+        <div class="editor-grid">
+            <div class="panel">
+                <label>Input Text / Prompt / Uploaded File Content:</label>
+                <textarea id="inputText" placeholder="Paste AI content here or ask any question for teachers and students..."></textarea>
+                <div class="status-info">Input Words: <span id="inWords">0</span></div>
+            </div>
+
+            <div class="panel">
+                <label>Output Result / Humanized Text:</label>
+                <div id="outputBox" class="output-box">Your processed humanized text or AI response will appear here...</div>
+                <div class="status-info">Output Words: <span id="outWords">0</span></div>
+            </div>
+        </div>
+
+        <!-- Action Toolbar -->
+        <div class="actions">
+            <button id="processBtn" class="btn btn-primary">⚡ Process & Humanize</button>
+            <button id="copyBtn" class="btn btn-secondary">📋 Copy Output</button>
+            <button id="downloadPdfBtn" class="btn btn-secondary">📄 Download PDF</button>
+            <button id="downloadImgBtn" class="btn btn-secondary">🖼️ Save Image (PNG)</button>
+            <button id="printBtn" class="btn btn-secondary">🖨️ Print</button>
+            <button id="shareBtn" class="btn btn-success">🔗 Share Anywhere</button>
+            <button id="clearBtn" class="btn btn-secondary">🗑️ Clear</button>
         </div>
     </div>
 
-    <!-- Action Toolbar -->
-    <div class="actions">
-        <button id="processBtn" class="btn btn-primary">⚡ Process & Humanize</button>
-        <button id="copyBtn" class="btn btn-secondary">📋 Copy Output</button>
-        <button id="downloadPdfBtn" class="btn btn-secondary">📄 Download PDF</button>
-        <button id="downloadImgBtn" class="btn btn-secondary">🖼️ Save Image (PNG)</button>
-        <button id="printBtn" class="btn btn-secondary">🖨️ Print</button>
-        <button id="shareBtn" class="btn btn-success">🔗 Share Anywhere</button>
-        <button id="clearBtn" class="btn btn-secondary">🗑️ Clear</button>
+    <!-- Bottom Advertisement Slot -->
+    <div class="ad-placeholder">
+        <span>Responsive Advertisement Space (Google AdSense)</span>
     </div>
+
+    <!-- AdSense Friendly SEO Content Section -->
+    <div class="seo-content-card">
+        <h2>About Smart AI Assistant & Content Humanizer</h2>
+        <p>OmniKitHub’s Smart AI Assistant and Content Humanizer is an all-in-one web utility tailored for students, researchers, content writers, and professionals. It allows users to convert synthetic, AI-generated content into natural human-like prose, solve complex study questions, generate document summaries, and correct grammatical flaws instantaneously.</p>
+
+        <h3>Core Functions & Educational Features</h3>
+        <ul>
+            <li><strong>AI Text Humanizer:</strong> Transforms robotic sentence structures into natural academic writing that reads fluently.</li>
+            <li><strong>Assignment & Task Solver:</strong> Assists students and educators in analyzing complex questions, producing structured explanations.</li>
+            <li><strong>Grammar & Tone Adjuster:</strong> Refines tone according to academic, casual, or formal business standards.</li>
+            <li><strong>Multi-Format Export:</strong> Offers clean printing options and direct PDF downloading for classroom or report submission.</li>
+        </ul>
+
+        <h3>Step-by-Step Usage Guide</h3>
+        <ol>
+            <li>Select your preferred action mode (Humanize, Question Solver, Summarize, or Grammar Fixer).</li>
+            <li>Choose the desired writing tone and paste your text into the left input box.</li>
+            <li>Click <strong>Process & Humanize</strong> to generate your refined output.</li>
+            <li>Copy the output or export it directly as a formatted PDF document.</li>
+        </ol>
+    </div>
+
 </div>
 
+<!-- Footer Section -->
+<footer class="footer">
+    <div class="container footer-container">
+        <div class="footer-brand">
+            <a href="../index.html" class="logo">
+                <i class="fa-solid fa-toolbox logo-icon"></i>
+                <span class="logo-text">OmniKit<span class="highlight">Hub</span></span>
+            </a>
+            <p>Your ultimate free online toolkit for daily developer, text, media, PDF, and web tasks.</p>
+        </div>
+        
+        <div class="footer-links">
+            <h4>Legal & Pages</h4>
+            <ul>
+                <li><a href="../pages/about.html">About Us</a></li>
+                <li><a href="../pages/contact.html">Contact Us</a></li>
+                <li><a href="../pages/privacy-policy.html">Privacy Policy</a></li>
+                <li><a href="../pages/terms.html">Terms of Service</a></li>
+            </ul>
+        </div>
+    </div>
+    <div class="footer-bottom">
+        <div class="container">
+            <p>&copy; 2026 OmniKitHub.com. All rights reserved.</p>
+        </div>
+    </div>
+</footer>
+
+<script src="../script.js"></script>
 <script>
     const inputText = document.getElementById('inputText');
     const outputBox = document.getElementById('outputBox');
     const processBtn = document.getElementById('processBtn');
     const copyBtn = document.getElementById('copyBtn');
     const clearBtn = document.getElementById('clearBtn');
-    const themeToggle = document.getElementById('themeToggle');
     const toneSelect = document.getElementById('toneSelect');
     const fileInput = document.getElementById('fileInput');
     const inWords = document.getElementById('inWords');
@@ -297,7 +403,6 @@
     });
 
     function humanizeText(text, tone) {
-        // Natural human phrasing transformation logic
         let words = text.split(' ');
         let humanized = words.map(w => {
             if(w.toLowerCase() === 'furthermore,') return 'Also,';
@@ -328,12 +433,6 @@
             inputText.value = `[Uploaded File: ${file.name}] - Content loaded successfully for processing.`;
             updateCounts();
         }
-    });
-
-    // Dark Mode
-    themeToggle.addEventListener('click', () => {
-        document.body.classList.toggle('dark-mode');
-        themeToggle.innerText = document.body.classList.contains('dark-mode') ? '☀️ Light Mode' : '🌙 Dark Mode';
     });
 
     // Copy, Download, Print & Share
