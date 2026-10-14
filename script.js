@@ -90,8 +90,16 @@ function filterCategory(categoryName, element = null) {
 
     // Active button class toggle
     filterButtons.forEach(btn => btn.classList.remove("active"));
+    
     if (element) {
         element.classList.add("active");
+    } else {
+        // Find matching button if called via onclick attribute
+        filterButtons.forEach(btn => {
+            if (btn.getAttribute("onclick") && btn.getAttribute("onclick").includes(categoryName)) {
+                btn.classList.add("active");
+            }
+        });
     }
 
     // Show/Hide relevant tool cards
@@ -117,7 +125,13 @@ function initSearchAndCategory() {
     const filterButtons = document.querySelectorAll(".filter-btn");
     filterButtons.forEach(btn => {
         btn.addEventListener("click", function(e) {
-            const category = this.getAttribute("data-category") || "all";
+            // Support both direct click binding and onclick attribute parsing
+            let category = this.getAttribute("data-category");
+            if (!category && this.getAttribute("onclick")) {
+                const match = this.getAttribute("onclick").exec(/['"]([^'"]+)['"]/);
+                if (match) category = match[1];
+            }
+            if (!category) category = "all";
             filterCategory(category, this);
         });
     });
@@ -140,11 +154,9 @@ function exportToolContent(contentElementId, actionType = 'print', title = 'Omni
         return;
     }
 
-    // A4 পেজ ও প্যারাগ্রাফ অনুযায়ী স্মার্ট টেক্সট ফরম্যাটিং
     let paragraphs = rawContent.split(/\r?\n\r?\n/);
     let formattedHTML = paragraphs.map(p => `<p>${p.replace(/\n/g, '<br>')}</p>`).join('');
 
-    // শেয়ার অপশন
     if (actionType === 'share') {
         if (navigator.share) {
             navigator.share({
@@ -159,7 +171,6 @@ function exportToolContent(contentElementId, actionType = 'print', title = 'Omni
         return;
     }
 
-    // নতুন প্রিন্ট ও এক্সপোর্ট উইন্ডো তৈরি
     const exportWindow = window.open('', '', 'height=800,width=1000');
     if (!exportWindow) {
         alert("পপআপ ব্লক করা আছে, অনুগ্রহ করে পপআপ অনুমোদন করুন।");
@@ -196,7 +207,7 @@ function exportToolContent(contentElementId, actionType = 'print', title = 'Omni
                 }
                 .header {
                     border-bottom: 2px solid #222222;
-                    padding-bottom: 8px;
+                    padding-bottom: 8mm;
                     margin-bottom: 20px;
                     display: flex;
                     justify-content: space-between;
@@ -216,8 +227,6 @@ function exportToolContent(contentElementId, actionType = 'print', title = 'Omni
                     margin-bottom: 14px;
                     page-break-inside: avoid;
                     break-inside: avoid;
-                    orphans: 3;
-                    widows: 3;
                 }
                 .action-bar {
                     margin-top: 20px;
@@ -308,7 +317,6 @@ function initAutoExportButtons() {
         }
     }
 
-    // Event Delegation for auto buttons
     document.body.addEventListener("click", (e) => {
         const activeTarget = document.getElementById("user-input") || document.querySelector("textarea") || document.querySelector(".tool-output");
         const title = document.title || "OmniKitHub Document";
