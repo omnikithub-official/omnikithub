@@ -11,7 +11,7 @@
     <style>
         .tool-container {
             max-width: 950px;
-            margin: 40px auto;
+            margin: 30px auto;
             background: var(--bg-surface);
             border: 1px solid var(--card-border);
             border-radius: 16px;
@@ -87,10 +87,40 @@
             outline: none;
             border-radius: 30px;
         }
+
+        /* Ad Slots & SEO Card Styling */
+        .ad-placeholder {
+            border: 1px dashed #cbd5e1;
+            background: rgba(0,0,0,0.01);
+            padding: 15px;
+            border-radius: 10px;
+            text-align: center;
+            color: #64748b;
+            font-size: 13px;
+            margin: 20px 0;
+        }
+
+        .seo-content-card {
+            max-width: 950px;
+            margin: 30px auto;
+            background: var(--bg-surface);
+            border: 1px solid var(--card-border);
+            border-radius: 16px;
+            padding: 30px;
+            box-shadow: var(--card-shadow);
+            line-height: 1.7;
+            text-align: left;
+        }
+
+        .seo-content-card h2 { font-size: 1.4rem; color: var(--accent-color); margin-bottom: 12px; }
+        .seo-content-card h3 { font-size: 1.1rem; color: var(--text-primary); margin: 15px 0 8px 0; }
+        .seo-content-card p, .seo-content-card li { font-size: 0.95rem; margin-bottom: 8px; color: var(--text-secondary); }
+        .seo-content-card ul { padding-left: 20px; margin-bottom: 10px; }
     </style>
 </head>
 <body class="light-theme">
 
+    <!-- Navigation Header -->
     <header class="navbar">
         <div class="container nav-container">
             <a href="../index.html" class="logo">
@@ -105,6 +135,14 @@
         </div>
     </header>
 
+    <!-- Top Advertisement Slot -->
+    <div class="container ad-wrapper" style="margin: 20px auto; max-width: 950px;">
+        <div class="ad-placeholder">
+            <span>Responsive Advertisement Space (Google AdSense)</span>
+        </div>
+    </div>
+
+    <!-- Main Tool Container -->
     <main class="container">
         <div class="tool-container">
             <h1 style="font-size: 1.8rem; margin-bottom: 8px;">Audio Spectrum & Frequency Visualizer</h1>
@@ -144,7 +182,57 @@
         </div>
     </main>
 
+    <!-- Bottom Advertisement Slot -->
+    <div class="container ad-wrapper" style="margin: 20px auto; max-width: 950px;">
+        <div class="ad-placeholder">
+            <span>Responsive Advertisement Space (Google AdSense)</span>
+        </div>
+    </div>
+
+    <!-- AdSense Friendly SEO Content Section -->
+    <section class="container">
+        <div class="seo-content-card">
+            <h2>About Audio Spectrum & Frequency Visualizer</h2>
+            <p>Welcome to OmniKitHub's free online Audio Spectrum and Frequency Visualizer. This browser-based utility transforms standard audio files into stunning, real-time graphical waveforms and frequency spectrum animations using advanced Web Audio API technology.</p>
+            
+            <h3>Key Features & Capabilities</h3>
+            <ul>
+                <li><strong>Real-Time Frequency Analysis:</strong> Renders music beats and audio frequencies instantly with low latency.</li>
+                <li><strong>Multiple Visualizer Styles:</strong> Choose between dynamic frequency bars or immersive circular waveform animations.</li>
+                <li><strong>Custom Color Themes:</strong> Personalize your visualizer experience with Cyber Neon, Sunset Gold, or Ocean Wave palettes.</li>
+                <li><strong>100% Client-Side Processing:</strong> Your tracks play securely in your browser without requiring external server uploads.</li>
+            </ul>
+
+            <h3>How to Use the Audio Visualizer</h3>
+            <ol>
+                <li>Click the upload box or drag your favorite MP3/WAV audio track into the designated area.</li>
+                <li>Select your preferred visualizer display style and color theme from the configuration menu.</li>
+                <li>Enjoy the live music playback accompanied by breathtaking real-time frequency animations.</li>
+            </ol>
+        </div>
+    </section>
+
+    <!-- Footer Section -->
     <footer class="footer">
+        <div class="container footer-container">
+            <div class="footer-brand">
+                <a href="../index.html" class="logo">
+                    <i class="fa-solid fa-toolbox logo-icon"></i>
+                    <span class="logo-text">OmniKit<span class="highlight">Hub</span></span>
+                </a>
+                <p>Your ultimate free online toolkit for daily developer, text, media, PDF, and web tasks.</p>
+            </div>
+            
+            <div class="footer-links">
+                <h4>Legal & Pages</h4>
+                <ul>
+                    <li><a href="../pages/about.html">About Us</a></li>
+                    <li><a href="../pages/contact.html">Contact Us</a></li>
+                    <li><a href="../pages/privacy-policy.html">Privacy Policy</a></li>
+                    <li><a href="../pages/terms.html">Terms of Service</a></li>
+                </ul>
+            </div>
+        </div>
         <div class="footer-bottom">
             <div class="container">
                 <p>&copy; 2026 OmniKitHub.com. All rights reserved.</p>
