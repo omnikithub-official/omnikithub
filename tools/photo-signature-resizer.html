@@ -3,291 +3,386 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Photo Resizer & Signature Crop - OmniKitHub</title>
-    <meta name="description" content="Resize and crop photos or signatures to exact pixels (300x300, 300x80) and KB size for job applications and official forms online for free.">
-    <meta name="keywords" content="photo resizer online, signature crop tool, 300x300 photo converter, 300x80 signature resizer, image kb reducer">
-    <link rel="stylesheet" href="../style.css">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <title>Ultimate Photo Resizer & Signature Crop for Job Forms | OmniKitHub</title>
+    <meta name="description" content="Free online image resizer and signature cropper for government jobs, university admissions, and online forms. Resize photos to exact pixels and compress file size in KB instantly.">
+    <meta name="keywords" content="photo resizer, signature crop online, job application photo resize, 300x300 image resizer, compress image to kb, passport photo maker online, bcs photo resizer">
+    <meta name="robots" content="index, follow">
+    <link rel="canonical" href="https://omnikithub.com/tools/photo-signature-resizer.html">
+
+    <!-- Open Graph Tags -->
+    <meta property="og:title" content="Ultimate Photo Resizer & Signature Crop - OmniKitHub">
+    <meta property="og:description" content="Resize photos and signatures to exact pixel dimensions and compress file size in KB for job applications instantly.">
+    <meta property="og:url" content="https://omnikithub.com/tools/photo-signature-resizer.html">
+    <meta property="og:type" content="website">
+
+    <!-- Schema.org Markup -->
+    <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@type": "WebApplication",
+      "name": "Ultimate Photo Resizer & Signature Crop",
+      "url": "https://omnikithub.com/tools/photo-signature-resizer.html",
+      "applicationCategory": "UtilityApplication",
+      "operatingSystem": "All",
+      "offers": {
+        "@type": "Offer",
+        "price": "0",
+        "priceCurrency": "USD"
+      }
+    }
+    </script>
+
     <style>
-        .tool-container {
-            max-width: 1100px;
-            margin: 40px auto;
+        :root {
+            --bg-color: #f4f6f9;
+            --card-bg: #ffffff;
+            --text-color: #1e293b;
+            --border-color: #cbd5e1;
+            --primary-color: #2563eb;
+            --primary-hover: #1d4ed8;
+        }
+
+        body.dark-mode {
+            --bg-color: #0f172a;
+            --card-bg: #1e293b;
+            --text-color: #f8fafc;
+            --border-color: #334155;
+            --primary-color: #3b82f6;
+            --primary-hover: #60a5fa;
+        }
+
+        * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; }
+        body { background-color: var(--bg-color); color: var(--text-color); padding: 20px; transition: all 0.3s ease; }
+
+        .app-container {
+            max-width: 1250px;
+            margin: 0 auto;
             display: grid;
             grid-template-columns: 1fr 1fr;
             gap: 25px;
         }
 
-        .panel-box {
-            background: var(--bg-surface);
-            border: 1px solid var(--card-border);
-            border-radius: 16px;
-            padding: 24px;
-            box-shadow: var(--card-shadow);
+        @media (max-width: 900px) {
+            .app-container { grid-template-columns: 1fr; }
         }
 
-        .upload-area {
-            border: 2px dashed var(--accent-color);
+        .editor-card, .preview-card {
+            background: var(--card-bg);
             border-radius: 12px;
-            padding: 30px 20px;
-            text-align: center;
-            background: var(--bg-primary);
-            cursor: pointer;
-            transition: background var(--transition-speed) ease;
-            margin-bottom: 20px;
+            padding: 25px;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.08);
+            border: 1px solid var(--border-color);
         }
 
-        .upload-area:hover { background: var(--badge-bg); }
+        .header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 15px; }
+        .header h1 { font-size: 22px; color: var(--primary-color); }
 
-        .preset-btns {
-            display: flex;
-            gap: 8px;
-            flex-wrap: wrap;
-            margin-bottom: 20px;
-        }
-
-        .preset-btn {
-            padding: 6px 14px;
+        .theme-btn {
+            background: transparent;
+            border: 1px solid var(--border-color);
+            color: var(--text-color);
+            padding: 6px 12px;
             border-radius: 20px;
-            border: 1px solid var(--card-border);
-            background: var(--bg-primary);
-            color: var(--text-primary);
-            font-size: 0.85rem;
-            font-weight: 600;
             cursor: pointer;
-            transition: all var(--transition-speed) ease;
+            font-size: 13px;
         }
 
-        .preset-btn:hover, .preset-btn.active {
-            background: var(--accent-color);
-            color: #ffffff;
-            border-color: var(--accent-color);
+        .section-title {
+            font-size: 13px;
+            font-weight: 700;
+            margin: 16px 0 8px 0;
+            color: var(--primary-color);
+            border-bottom: 1px solid var(--border-color);
+            padding-bottom: 4px;
+            text-transform: uppercase;
         }
 
-        .input-row {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 12px;
-            margin-bottom: 15px;
-        }
+        .form-group { margin-bottom: 12px; }
+        .form-group label { display: block; font-size: 12px; font-weight: 600; margin-bottom: 5px; }
 
-        .form-group label {
-            display: block;
-            font-weight: 600;
-            font-size: 0.85rem;
-            margin-bottom: 4px;
-            color: var(--text-primary);
-        }
-
-        .form-control {
+        input[type="number"], select {
             width: 100%;
-            padding: 8px 12px;
-            border-radius: 8px;
-            border: 1px solid var(--card-border);
-            background: var(--bg-primary);
-            color: var(--text-primary);
+            padding: 10px 12px;
+            border: 1px solid var(--border-color);
+            border-radius: 6px;
+            font-size: 13px;
+            background: var(--card-bg);
+            color: var(--text-color);
             outline: none;
         }
 
+        /* Dropzone Upload */
+        .dropzone {
+            border: 2px dashed var(--primary-color);
+            padding: 25px;
+            text-align: center;
+            border-radius: 8px;
+            background: rgba(37, 99, 235, 0.02);
+            cursor: pointer;
+            margin-bottom: 15px;
+        }
+        .dropzone:hover { background: rgba(37, 99, 235, 0.05); }
+        .dropzone p { font-size: 13px; color: #64748b; margin-top: 5px; }
+
+        .preset-grid {
+            display: flex;
+            gap: 8px;
+            flex-wrap: wrap;
+            margin-bottom: 15px;
+        }
+
+        .preset-chip {
+            background: rgba(37, 99, 235, 0.1);
+            color: var(--primary-color);
+            border: 1px solid var(--border-color);
+            padding: 6px 12px;
+            border-radius: 6px;
+            font-size: 12px;
+            font-weight: 600;
+            cursor: pointer;
+        }
+        .preset-chip:hover { background: var(--primary-color); color: white; }
+
+        .settings-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 12px;
+        }
+
+        /* Image Preview Box */
         .preview-box {
+            background: rgba(0,0,0,0.02);
+            border: 1px solid var(--border-color);
+            border-radius: 8px;
+            padding: 20px;
+            text-align: center;
+            min-height: 280px;
             display: flex;
             flex-direction: column;
             align-items: center;
             justify-content: center;
-            min-height: 300px;
-            background: var(--bg-primary);
-            border: 1px solid var(--card-border);
-            border-radius: 12px;
-            padding: 20px;
-            margin-bottom: 20px;
+            margin-bottom: 15px;
         }
 
-        canvas {
+        .preview-box img {
             max-width: 100%;
-            max-height: 320px;
-            border-radius: 6px;
-            box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+            max-height: 240px;
+            border-radius: 4px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+            display: none;
         }
 
-        .info-badge {
+        .info-text {
+            font-size: 13px;
+            color: #64748b;
             margin-top: 10px;
-            font-size: 0.85rem;
-            color: var(--text-secondary);
             font-weight: 600;
         }
 
-        .action-btn {
-            width: 100%;
-            padding: 12px;
-            border-radius: 8px;
-            border: none;
-            background: var(--accent-color);
-            color: #fff;
-            font-weight: 700;
-            cursor: pointer;
+        /* Action Buttons */
+        .action-bar {
             display: flex;
-            align-items: center;
-            justify-content: center;
-            gap: 8px;
-            transition: background var(--transition-speed) ease;
+            gap: 10px;
+            margin-top: 20px;
+            flex-wrap: wrap;
         }
 
-        .action-btn:hover { background: var(--accent-hover); }
-
-        @media (max-width: 900px) {
-            .tool-container { grid-template-columns: 1fr; }
+        .btn {
+            padding: 10px 16px;
+            border-radius: 6px;
+            border: 1px solid var(--border-color);
+            background: var(--card-bg);
+            color: var(--text-color);
+            font-weight: 600;
+            cursor: pointer;
+            font-size: 13px;
         }
+
+        .btn-primary { background: var(--primary-color); color: white; border: none; }
+        .btn-primary:hover { background: var(--primary-hover); }
+        .btn-share { background: #10b981; color: white; border: none; }
     </style>
 </head>
-<body class="light-theme">
+<body>
 
-    <header class="navbar">
-        <div class="container nav-container">
-            <a href="../index.html" class="logo">
-                <i class="fa-solid fa-toolbox logo-icon"></i>
-                <span class="logo-text">OmniKit<span class="highlight">Hub</span></span>
-            </a>
-            <div class="nav-actions">
-                <button id="theme-toggle" class="icon-btn" aria-label="Toggle Theme">
-                    <i class="fa-solid fa-moon"></i>
-                </button>
+<div class="app-container">
+    <!-- Left Editor -->
+    <div class="editor-card">
+        <div class="header">
+            <h1>🖼️ Pro Photo & Signature Resizer</h1>
+            <button id="themeToggle" class="theme-btn">🌙 Dark Mode</button>
+        </div>
+
+        <div class="section-title">1. Upload Image</div>
+        <div class="dropzone" onclick="document.getElementById('imageInput').click()">
+            <div style="font-size: 24px;">📁</div>
+            <p><b>Click or Drag Image Here</b><br>Supports JPG, PNG, WebP for Job Applications</p>
+            <input type="file" id="imageInput" accept="image/*" style="display: none;">
+        </div>
+
+        <div class="section-title">2. Quick Job Form Presets</div>
+        <div class="preset-grid">
+            <span class="preset-chip" onclick="setPreset(300, 300)">Govt Photo (300x300px)</span>
+            <span class="preset-chip" onclick="setPreset(300, 80)">Signature (300x80px)</span>
+            <span class="preset-chip" onclick="setPreset(600, 600)">Passport (600x600px)</span>
+            <span class="preset-chip" onclick="setPreset(150, 150)">Thumbnail (150x150px)</span>
+        </div>
+
+        <div class="section-title">3. Custom Dimensions & Quality</div>
+        <div class="settings-grid">
+            <div class="form-group">
+                <label>Width (Pixels):</label>
+                <input type="number" id="widthInput" value="300">
+            </div>
+            <div class="form-group">
+                <label>Height (Pixels):</label>
+                <input type="number" id="heightInput" value="300">
             </div>
         </div>
-    </header>
 
-    <main class="container">
-        <div class="tool-container">
-            <!-- Left Controls -->
-            <div class="panel-box">
-                <h1 style="font-size: 1.5rem; margin-bottom: 6px;">Photo Resizer & Signature Crop</h1>
-                <p style="color: var(--text-secondary); font-size: 0.9rem; margin-bottom: 18px;">Resize images to exact dimensions (Pixels/mm) and compress file size in KB for job forms.</p>
-
-                <div class="upload-area" onclick="document.getElementById('file-input').click()">
-                    <i class="fa-solid fa-cloud-arrow-up" style="font-size: 2rem; color: var(--accent-color); margin-bottom: 8px;"></i>
-                    <div style="font-weight: 600; color: var(--text-primary);">Click or Drag Image Here</div>
-                    <div style="font-size: 0.8rem; color: var(--text-secondary);">Supports JPG, PNG, WebP</div>
-                    <input type="file" id="file-input" accept="image/*" style="display: none;">
-                </div>
-
-                <div style="font-weight: 600; font-size: 0.85rem; margin-bottom: 8px;">Quick Presets:</div>
-                <div class="preset-btns">
-                    <button class="preset-btn" onclick="applyPreset(300, 300)">Photo (300x300)</button>
-                    <button class="preset-btn" onclick="applyPreset(300, 80)">Signature (300x80)</button>
-                    <button class="preset-btn" onclick="applyPreset(600, 600)">Passport (600x600)</button>
-                </div>
-
-                <div class="input-row">
-                    <div class="form-group">
-                        <label>Width (Pixels):</label>
-                        <input type="number" id="img-width" class="form-control" value="300">
-                    </div>
-                    <div class="form-group">
-                        <label>Height (Pixels):</label>
-                        <input type="number" id="img-height" class="form-control" value="300">
-                    </div>
-                </div>
-
-                <div class="form-group" style="margin-bottom: 20px;">
-                    <label>Quality & Compression Quality: <span id="quality-val">90%</span></label>
-                    <input type="range" id="img-quality" min="10" max="100" value="90" style="width: 100%;">
-                </div>
-            </div>
-
-            <!-- Right Preview & Download -->
-            <div class="panel-box" style="display: flex; flex-direction: column;">
-                <h3 style="font-size: 1.1rem; margin-bottom: 15px;">Live Resized Preview</h3>
-                
-                <div class="preview-box">
-                    <canvas id="canvas-preview"></canvas>
-                    <div id="file-info" class="info-badge">Upload an image to preview</div>
-                </div>
-
-                <button id="download-btn" class="action-btn"><i class="fa-solid fa-download"></i> Download Resized Image</button>
+        <div class="form-group">
+            <label>Compression Quality (KB Optimizer):</label>
+            <input type="range" id="qualityRange" min="10" max="100" value="90" style="width: 100%; cursor: pointer;">
+            <div style="display: flex; justify-content: space-between; font-size: 11px; color: #64748b; margin-top: 4px;">
+                <span>Low Size (Small KB)</span>
+                <span id="qualityVal">90%</span>
+                <span>High Quality</span>
             </div>
         </div>
-    </main>
 
-    <footer class="footer">
-        <div class="footer-bottom">
-            <div class="container">
-                <p>&copy; 2026 OmniKitHub.com. All rights reserved.</p>
-            </div>
+        <div class="action-bar">
+            <button id="resizeBtn" class="btn btn-primary" style="flex: 1;">⚡ Process & Resize Image</button>
+            <button id="clearBtn" class="btn">🗑️ Reset</button>
         </div>
-    </footer>
+    </div>
 
-    <script src="../script.js"></script>
-    <script>
-        const fileInput = document.getElementById('file-input');
-        const imgWidth = document.getElementById('img-width');
-        const imgHeight = document.getElementById('img-height');
-        const imgQuality = document.getElementById('img-quality');
-        const qualityVal = document.getElementById('quality-val');
-        const canvas = document.getElementById('canvas-preview');
-        const ctx = canvas.getContext('2d');
-        const fileInfo = document.getElementById('file-info');
-        const downloadBtn = document.getElementById('download-btn');
+    <!-- Right Live Preview -->
+    <div class="preview-card">
+        <h3 style="margin-bottom: 15px; color: var(--primary-color);">Live Resized Result & Download</h3>
+        
+        <div class="preview-box">
+            <div id="placeholderText" style="color: #94a3b8; font-size: 14px;">No image uploaded yet.<br>Please select an image on the left.</div>
+            <img id="outputImg" alt="Resized Preview">
+            <div id="imageInfo" class="info-text"></div>
+        </div>
 
-        let loadedImage = null;
+        <div class="action-bar">
+            <button id="downloadBtn" class="btn btn-primary" style="flex: 1; display: none;">📥 Download Resized Image</button>
+            <button id="shareBtn" class="btn btn-share">🔗 Share Tool</button>
+        </div>
+    </div>
+</div>
 
-        fileInput.addEventListener('change', (e) => {
-            const file = e.target.files[0];
-            if (!file) return;
+<script>
+    const imageInput = document.getElementById('imageInput');
+    const widthInput = document.getElementById('widthInput');
+    const heightInput = document.getElementById('heightInput');
+    const qualityRange = document.getElementById('qualityRange');
+    const qualityVal = document.getElementById('qualityVal');
+    const resizeBtn = document.getElementById('resizeBtn');
+    const downloadBtn = document.getElementById('downloadBtn');
+    const outputImg = document.getElementById('outputImg');
+    const placeholderText = document.getElementById('placeholderText');
+    const imageInfo = document.getElementById('imageInfo');
+    const themeToggle = document.getElementById('themeToggle');
 
+    let uploadedImage = null;
+
+    function setPreset(w, h) {
+        widthInput.value = w;
+        heightInput.value = h;
+        if(uploadedImage) processImage();
+    }
+
+    qualityRange.addEventListener('input', (e) => {
+        qualityVal.innerText = e.target.value + '%';
+        if(uploadedImage) processImage();
+    });
+
+    imageInput.addEventListener('change', (e) => {
+        const file = e.target.files[0];
+        if (file) {
             const reader = new FileReader();
             reader.onload = (event) => {
-                loadedImage = new Image();
-                loadedImage.onload = () => {
-                    renderCanvas();
+                const img = new Image();
+                img.onload = () => {
+                    uploadedImage = img;
+                    processImage();
                 };
-                loadedImage.src = event.target.result;
+                img.src = event.target.result;
             };
             reader.readAsDataURL(file);
-        });
-
-        function applyPreset(w, h) {
-            imgWidth.value = w;
-            imgHeight.value = h;
-            renderCanvas();
         }
+    });
 
-        imgWidth.addEventListener('input', renderCanvas);
-        imgHeight.addEventListener('input', renderCanvas);
-        imgQuality.addEventListener('input', () => {
-            qualityVal.innerText = `${imgQuality.value}%`;
-            renderCanvas();
-        });
+    function processImage() {
+        if (!uploadedImage) return;
 
-        function renderCanvas() {
-            if (!loadedImage) return;
+        const w = parseInt(widthInput.value) || 300;
+        const h = parseInt(heightInput.value) || 300;
+        const quality = parseInt(qualityRange.value) / 100;
 
-            const w = parseInt(imgWidth.value) || 300;
-            const h = parseInt(imgHeight.value) || 300;
+        const canvas = document.createElement('canvas');
+        canvas.width = w;
+        canvas.height = h;
+        const ctx = canvas.getContext('2d');
+        ctx.drawImage(uploadedImage, 0, 0, w, h);
 
-            canvas.width = w;
-            canvas.height = h;
+        const dataUrl = canvas.toDataURL('image/jpeg', quality);
+        outputImg.src = dataUrl;
+        outputImg.style.display = 'block';
+        placeholderText.style.display = 'none';
+        downloadBtn.style.display = 'block';
 
-            ctx.clearRect(0, 0, w, h);
-            ctx.drawImage(loadedImage, 0, 0, w, h);
+        // Approximate size in KB calculation
+        const head = 'data:image/jpeg;base64,';
+        const fileSizeBytes = Math.round((dataUrl.length - head.length) * 3 / 4);
+        const fileSizeKB = (fileSizeBytes / 1024).toFixed(1);
 
-            const quality = parseFloat(imgQuality.value) / 100;
-            const dataUrl = canvas.toDataURL('image/jpeg', quality);
-            const head = 'data:image/jpeg;base64,';
-            const sizeInBytes = Math.round((dataUrl.length - head.length) * 3 / 4);
-            const sizeInKB = (sizeInBytes / 1024).toFixed(2);
+        imageInfo.innerText = `Dimensions: ${w} x ${h} px | Est. File Size: ${fileSizeKB} KB`;
+    }
 
-            fileInfo.innerText = `Dimensions: ${w} x ${h} px | Est. Size: ${sizeInKB} KB`;
+    resizeBtn.addEventListener('click', processImage);
+    widthInput.addEventListener('input', () => { if(uploadedImage) processImage(); });
+    heightInput.addEventListener('input', () => { if(uploadedImage) processImage(); });
+
+    downloadBtn.addEventListener('click', () => {
+        const link = document.createElement('a');
+        link.download = `Resized_${widthInput.value}x${heightInput.value}_OmniKitHub.jpg`;
+        link.href = outputImg.src;
+        link.click();
+    });
+
+    // Dark Mode
+    themeToggle.addEventListener('click', () => {
+        document.body.classList.toggle('dark-mode');
+        themeToggle.innerText = document.body.classList.contains('dark-mode') ? '☀️ Light Mode' : '🌙 Dark Mode';
+    });
+
+    document.getElementById('clearBtn').addEventListener('click', () => {
+        uploadedImage = null;
+        outputImg.style.display = 'none';
+        placeholderText.style.display = 'block';
+        downloadBtn.style.display = 'none';
+        imageInfo.innerText = '';
+        imageInput.value = '';
+    });
+
+    document.getElementById('shareBtn').addEventListener('click', async () => {
+        if (navigator.share) {
+            try {
+                await navigator.share({
+                    title: 'Pro Photo & Signature Resizer',
+                    text: 'Resize and compress photos for government jobs and online applications instantly!',
+                    url: window.location.href
+                });
+            } catch (err) { console.log(err); }
+        } else {
+            navigator.clipboard.writeText(window.location.href);
+            alert('Tool link copied to clipboard!');
         }
+    });
+</script>
 
-        downloadBtn.addEventListener('click', () => {
-            if (!loadedImage) {
-                alert('Please upload an image first!');
-                return;
-            }
-            const quality = parseFloat(imgQuality.value) / 100;
-            const link = document.createElement('a');
-            link.download = 'OmniKitHub-Resized.jpg';
-            link.href = canvas.toDataURL('image/jpeg', quality);
-            link.click();
-        });
-    </script>
 </body>
 </html>
