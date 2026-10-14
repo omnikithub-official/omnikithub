@@ -15,6 +15,10 @@
     <meta property="og:url" content="https://omnikithub.com/tools/speech-to-text.html">
     <meta property="og:type" content="website">
 
+    <!-- External CSS & Icons -->
+    <link rel="stylesheet" href="../style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
     <!-- html2pdf Library for PDF Export -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
 
@@ -294,19 +298,6 @@
             100% { opacity: 1; }
         }
 
-        /* Global Footer */
-        .site-footer {
-            background: var(--card-bg);
-            border-top: 1px solid var(--border-color);
-            padding: 25px 20px;
-            text-align: center;
-            font-size: 13px;
-            color: #64748b;
-            margin-top: auto;
-        }
-
-        .site-footer a { color: var(--primary-color); text-decoration: none; margin: 0 5px; }
-
         @media print {
             body * { visibility: hidden; }
             #editor, #editor * { visibility: visible; }
@@ -315,14 +306,16 @@
         }
     </style>
 </head>
-<body>
+<body class="light-theme">
 
 <!-- Header Navigation -->
 <header class="site-header">
-    <a href="/" class="site-logo">🎙️ OmniKitHub</a>
+    <a href="../index.html" class="site-logo">
+        <i class="fa-solid fa-toolbox logo-icon"></i>
+        <span class="logo-text">OmniKit<span class="highlight">Hub</span></span>
+    </a>
     <nav class="nav-links">
-        <a href="/">Home</a>
-        <a href="/#tools">All Tools</a>
+        <a href="../index.html">Home</a>
         <button id="themeToggle" class="theme-toggle-btn">🌙 Dark Mode</button>
     </nav>
 </header>
@@ -331,7 +324,7 @@
 
     <!-- Top Advertisement Area -->
     <div class="ad-slot-box">
-        <span>-- Google AdSense Advertisement Slot --</span>
+        <span>Responsive Advertisement Space (Google AdSense)</span>
     </div>
 
     <div class="container">
@@ -402,7 +395,15 @@
 
     <!-- Bottom Advertisement Area -->
     <div class="ad-slot-box">
-        <span>-- Google AdSense Advertisement Slot --</span>
+        <span>Responsive Advertisement Space (Google AdSense)</span>
+    </div>
+
+    <!-- Helpful Tutorial Video Carousel -->
+    <div style="margin: 30px 0; width: 100%; max-width: 950px;">
+        <h3 style="font-size: 1.2rem; color: var(--text-color); margin-bottom: 12px;"><i class="fa-solid fa-video" style="color: var(--primary-color);"></i> Recommended Speech to Text Tutorials</h3>
+        <Carousel>
+          <Video source="youtube" query="how to use speech to text web speech api javascript" count="3"/>
+        </Carousel>
     </div>
 
     <!-- AdSense Friendly SEO Content Section -->
@@ -430,16 +431,34 @@
 </div>
 
 <!-- Footer Navigation -->
-<footer class="site-footer">
-    <p>© 2026 <strong>OmniKitHub.com</strong>. All rights reserved.</p>
-    <div style="margin-top: 8px;">
-        <a href="/">Home</a> | 
-        <a href="/privacy-policy.html">Privacy Policy</a> | 
-        <a href="/terms.html">Terms of Service</a> | 
-        <a href="/contact.html">Contact Us</a>
+<footer class="footer">
+    <div class="container footer-container" style="max-width: 100% !important;">
+        <div class="footer-brand">
+            <a href="../index.html" class="logo">
+                <i class="fa-solid fa-toolbox logo-icon"></i>
+                <span class="logo-text">OmniKit<span class="highlight">Hub</span></span>
+            </a>
+            <p>Your ultimate free online toolkit for daily developer, text, media, PDF, and web tasks.</p>
+        </div>
+        
+        <div class="footer-links">
+            <h4>Legal & Pages</h4>
+            <ul>
+                <li><a href="../pages/about.html">About Us</a></li>
+                <li><a href="../pages/contact.html">Contact Us</a></li>
+                <li><a href="../pages/privacy-policy.html">Privacy Policy</a></li>
+                <li><a href="../pages/terms.html">Terms of Service</a></li>
+            </ul>
+        </div>
+    </div>
+    <div class="footer-bottom">
+        <div class="container">
+            <p>&copy; 2026 OmniKitHub.com. All rights reserved.</p>
+        </div>
     </div>
 </footer>
 
+<script src="../script.js"></script>
 <script>
     const startBtn = document.getElementById('startBtn');
     const stopBtn = document.getElementById('stopBtn');
