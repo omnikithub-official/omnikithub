@@ -15,6 +15,10 @@
     <meta property="og:url" content="https://omnikithub.com/tools/policy-generator.html">
     <meta property="og:type" content="website">
 
+    <!-- External CSS & Icons -->
+    <link rel="stylesheet" href="../style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
     <!-- html2pdf Library -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
 
@@ -55,11 +59,17 @@
         }
 
         * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; }
-        body { background-color: var(--bg-color); color: var(--text-color); padding: 20px; transition: all 0.3s ease; }
+        body { background-color: var(--bg-color); color: var(--text-color); display: flex; flex-direction: column; min-height: 100vh; transition: all 0.3s ease; }
+
+        .main-wrapper {
+            flex: 1;
+            max-width: 1200px;
+            width: 100%;
+            margin: 20px auto;
+            padding: 0 20px;
+        }
 
         .app-container {
-            max-width: 1200px;
-            margin: 0 auto;
             display: grid;
             grid-template-columns: 1fr 1.1fr;
             gap: 25px;
@@ -80,16 +90,6 @@
         .header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 15px; }
         .header h1 { font-size: 22px; color: var(--primary-color); }
 
-        .theme-btn {
-            background: transparent;
-            border: 1px solid var(--border-color);
-            color: var(--text-color);
-            padding: 6px 12px;
-            border-radius: 20px;
-            cursor: pointer;
-            font-size: 13px;
-        }
-
         .section-title {
             font-size: 14px;
             font-weight: 700;
@@ -101,7 +101,7 @@
         }
 
         .form-group { margin-bottom: 12px; }
-        .form-group label { display: block; font-size: 12px; font-weight: 600; margin-bottom: 5px; }
+        .form-group label { display: block; font-size: 12px; font-weight: 600; margin-bottom: 5px; color: var(--text-color); }
 
         input[type="text"], input[type="email"], select {
             width: 100%;
@@ -175,72 +175,178 @@
         .btn-primary:hover { background: var(--primary-hover); }
         .btn-share { background: #10b981; color: white; border: none; }
 
+        /* Ad Slots & SEO Card Styling */
+        .ad-placeholder {
+            border: 1px dashed #cbd5e1;
+            background: rgba(0,0,0,0.01);
+            padding: 15px;
+            border-radius: 10px;
+            text-align: center;
+            color: #64748b;
+            font-size: 13px;
+            margin: 20px 0;
+        }
+
+        .seo-content-card {
+            background: var(--card-bg);
+            border-radius: 12px;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.08);
+            padding: 30px;
+            margin-top: 30px;
+            border: 1px solid var(--border-color);
+            line-height: 1.7;
+        }
+
+        .seo-content-card h2 { font-size: 1.4rem; color: var(--primary-color); margin-bottom: 12px; }
+        .seo-content-card h3 { font-size: 1.1rem; color: var(--text-color); margin: 15px 0 8px 0; }
+        .seo-content-card p, .seo-content-card li { font-size: 0.95rem; margin-bottom: 8px; color: #64748b; }
+        .seo-content-card ul { padding-left: 20px; margin-bottom: 10px; }
+
         @media print {
             body * { visibility: hidden; }
             #legalPaper, #legalPaper * { visibility: visible; }
             #legalPaper { position: absolute; left: 0; top: 0; width: 100%; box-shadow: none; max-height: none; }
-            .editor-card, .header, .action-bar { display: none; }
+            .editor-card, .header, .action-bar, .ad-placeholder, .footer { display: none !important; }
         }
     </style>
 </head>
-<body>
+<body class="light-theme">
 
-<div class="app-container">
-    <!-- Left Editor -->
-    <div class="editor-card">
-        <div class="header">
-            <h1>⚖️ Legal Page Generator</h1>
-            <button id="themeToggle" class="theme-btn">🌙 Dark Mode</button>
+    <!-- Navigation Header -->
+    <header class="navbar">
+        <div class="container nav-container" style="max-width: 100% !important; padding: 0 !important;">
+            <a href="../index.html" class="logo">
+                <i class="fa-solid fa-toolbox logo-icon"></i>
+                <span class="logo-text">OmniKit<span class="highlight">Hub</span></span>
+            </a>
+            <div class="nav-actions">
+                <button id="theme-toggle" class="icon-btn" aria-label="Toggle Theme">
+                    <i class="fa-solid fa-moon"></i>
+                </button>
+            </div>
+        </div>
+    </header>
+
+<div class="main-wrapper">
+
+    <!-- Top Advertisement Slot -->
+    <div class="ad-placeholder">
+        <span>Responsive Advertisement Space (Google AdSense)</span>
+    </div>
+
+    <div class="app-container">
+        <!-- Left Editor -->
+        <div class="editor-card">
+            <div class="header">
+                <h1>⚖️ Legal Page Generator</h1>
+            </div>
+
+            <div class="section-title">1. Select Legal Document Type</div>
+            <div class="tab-bar">
+                <button class="tab-btn active" onclick="switchDoc('privacy', event)">Privacy Policy</button>
+                <button class="tab-btn" onclick="switchDoc('terms', event)">Terms & Conditions</button>
+                <button class="tab-btn" onclick="switchDoc('disclaimer', event)">Disclaimer</button>
+                <button class="tab-btn" onclick="switchDoc('refund', event)">Refund Policy</button>
+            </div>
+
+            <div class="section-title">2. Website & Company Information</div>
+            <div class="form-group">
+                <label>Company / Website Name:</label>
+                <input type="text" id="siteName" value="OmniKitHub">
+            </div>
+            <div class="form-group">
+                <label>Website URL:</label>
+                <input type="text" id="siteUrl" value="https://omnikithub.com">
+            </div>
+            <div class="form-group">
+                <label>Contact Email:</label>
+                <input type="email" id="siteEmail" value="contact@omnikithub.com">
+            </div>
+            <div class="form-group">
+                <label>Country / Jurisdiction:</label>
+                <select id="siteCountry">
+                    <option value="Bangladesh">Bangladesh</option>
+                    <option value="United States">United States</option>
+                    <option value="United Kingdom">United Kingdom</option>
+                    <option value="Global / International" selected>Global / International</option>
+                </select>
+            </div>
+
+            <div class="action-bar">
+                <button id="downloadPdfBtn" class="btn btn-primary">📥 Save PDF Report</button>
+                <button id="copyBtn" class="btn">📋 Copy Text</button>
+                <button id="printBtn" class="btn">🖨️ Print</button>
+                <button id="shareBtn" class="btn btn-share">🔗 Share Tool</button>
+            </div>
         </div>
 
-        <div class="section-title">1. Select Legal Document Type</div>
-        <div class="tab-bar">
-            <button class="tab-btn active" onclick="switchDoc('privacy')">Privacy Policy</button>
-            <button class="tab-btn" onclick="switchDoc('terms')">Terms & Conditions</button>
-            <button class="tab-btn" onclick="switchDoc('disclaimer')">Disclaimer</button>
-            <button class="tab-btn" onclick="switchDoc('refund')">Refund Policy</button>
-        </div>
-
-        <div class="section-title">2. Website & Company Information</div>
-        <div class="form-group">
-            <label>Company / Website Name:</label>
-            <input type="text" id="siteName" value="OmniKitHub">
-        </div>
-        <div class="form-group">
-            <label>Website URL:</label>
-            <input type="text" id="siteUrl" value="https://omnikithub.com">
-        </div>
-        <div class="form-group">
-            <label>Contact Email:</label>
-            <input type="email" id="siteEmail" value="contact@omnikithub.com">
-        </div>
-        <div class="form-group">
-            <label>Country / Jurisdiction:</label>
-            <select id="siteCountry">
-                <option value="Bangladesh">Bangladesh</option>
-                <option value="United States">United States</option>
-                <option value="United Kingdom">United Kingdom</option>
-                <option value="Global / International" selected>Global / International</option>
-            </select>
-        </div>
-
-        <div class="action-bar">
-            <button id="downloadPdfBtn" class="btn btn-primary">📥 Save PDF Report</button>
-            <button id="copyBtn" class="btn">📋 Copy Text</button>
-            <button id="printBtn" class="btn">🖨️ Print</button>
-            <button id="shareBtn" class="btn btn-share">🔗 Share Tool</button>
+        <!-- Right Live Preview -->
+        <div class="preview-card">
+            <h3 id="previewTitle" style="margin-bottom: 12px; color: var(--primary-color);">Live Generated Privacy Policy</h3>
+            <div class="legal-paper" id="legalPaper">
+                Loading legal content...
+            </div>
         </div>
     </div>
 
-    <!-- Right Live Preview -->
-    <div class="preview-card">
-        <h3 id="previewTitle" style="margin-bottom: 12px; color: var(--primary-color);">Live Generated Privacy Policy</h3>
-        <div class="legal-paper" id="legalPaper">
-            Loading legal content...
-        </div>
+    <!-- Bottom Advertisement Slot -->
+    <div class="ad-placeholder">
+        <span>Responsive Advertisement Space (Google AdSense)</span>
     </div>
+
+    <!-- Helpful Tutorial Video Carousel -->
+    <div style="margin: 30px 0;">
+        <h3 style="font-size: 1.2rem; color: var(--text-color); margin-bottom: 12px;"><i class="fa-solid fa-video" style="color: var(--primary-color);"></i> Recommended Website Legal Policy Guides</h3>
+        <Carousel>
+          <Video source="youtube" query="how to write privacy policy and terms and conditions for website" count="3"/>
+        </Carousel>
+    </div>
+
+    <!-- AdSense Friendly SEO Content Section -->
+    <div class="seo-content-card">
+        <h2>About Pro Privacy Policy & Terms Generator</h2>
+        <p>OmniKitHub's free Legal Page Generator allows website owners, bloggers, and developers to instantly create professional, Google AdSense compliant, and GDPR-ready legal documents. Generate Privacy Policies, Terms & Conditions, Disclaimers, and Refund Policies in seconds.</p>
+        
+        <h3>Why You Need These Legal Pages</h3>
+        <ul>
+            <li><strong>Google AdSense Compliance:</strong> Ad networks strictly require clear Privacy Policy pages disclosing ad cookies and data usage.</li>
+            <li><strong>GDPR & International Regulations:</strong> Protect your platform by establishing transparent user data rights and jurisdiction rules.</li>
+            <li><strong>Liability Protection:</strong> Safeguard your business from content liabilities, disputes, and copyright misunderstanding.</li>
+            <li><strong>Instant PDF Export:</strong> Download or print your formatted policies ready to publish on your website.</li>
+        </ul>
+    </div>
+
 </div>
 
+<!-- Footer Section -->
+<footer class="footer">
+    <div class="container footer-container" style="max-width: 100% !important;">
+        <div class="footer-brand">
+            <a href="../index.html" class="logo">
+                <i class="fa-solid fa-toolbox logo-icon"></i>
+                <span class="logo-text">OmniKit<span class="highlight">Hub</span></span>
+            </a>
+            <p>Your ultimate free online toolkit for daily developer, text, media, PDF, and web tasks.</p>
+        </div>
+        
+        <div class="footer-links">
+            <h4>Legal & Pages</h4>
+            <ul>
+                <li><a href="../pages/about.html">About Us</a></li>
+                <li><a href="../pages/contact.html">Contact Us</a></li>
+                <li><a href="../pages/privacy-policy.html">Privacy Policy</a></li>
+                <li><a href="../pages/terms.html">Terms of Service</a></li>
+            </ul>
+        </div>
+    </div>
+    <div class="footer-bottom">
+        <div class="container">
+            <p>&copy; 2026 OmniKitHub.com. All rights reserved.</p>
+        </div>
+    </div>
+</footer>
+
+<script src="../script.js"></script>
 <script>
     const siteName = document.getElementById('siteName');
     const siteUrl = document.getElementById('siteUrl');
@@ -248,11 +354,11 @@
     const siteCountry = document.getElementById('siteCountry');
     const legalPaper = document.getElementById('legalPaper');
     const previewTitle = document.getElementById('previewTitle');
-    const themeToggle = document.getElementById('themeToggle');
+    const themeToggle = document.getElementById('theme-toggle');
 
     let currentDoc = 'privacy';
 
-    function switchDoc(type) {
+    function switchDoc(type, event) {
         currentDoc = type;
         document.querySelectorAll('.tab-btn').forEach(btn => btn.classList.remove('active'));
         event.target.classList.add('active');
@@ -346,7 +452,7 @@ If you have any questions on how to return your item to us, contact us at ${emai
         inp.addEventListener('change', updateGenerator);
     });
 
-    // Dark Mode
+    // Dark Mode Toggle
     themeToggle.addEventListener('click', () => {
         document.body.classList.toggle('dark-mode');
         themeToggle.innerText = document.body.classList.contains('dark-mode') ? '☀️ Light Mode' : '🌙 Dark Mode';
