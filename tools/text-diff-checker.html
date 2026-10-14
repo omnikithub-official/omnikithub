@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="bn">
+<html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -14,6 +14,10 @@
     <meta property="og:description" content="Compare two text files or code side-by-side with live stats, word highlighting, and instant PDF report export.">
     <meta property="og:url" content="https://omnikithub.com/tools/text-diff-checker.html">
     <meta property="og:type" content="website">
+
+    <!-- External CSS & Icons -->
+    <link rel="stylesheet" href="../style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 
     <!-- html2pdf for Exporting PDF Reports -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
@@ -63,29 +67,26 @@
         }
 
         * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; }
-        body { background-color: var(--bg-color); color: var(--text-color); padding: 20px; display: flex; justify-content: center; transition: all 0.3s ease; }
+        body { background-color: var(--bg-color); color: var(--text-color); display: flex; flex-direction: column; min-height: 100vh; transition: all 0.3s ease; }
 
-        .container {
+        .main-wrapper {
+            flex: 1;
             max-width: 1100px;
             width: 100%;
+            margin: 20px auto;
+            padding: 0 20px;
+        }
+
+        .container {
             background: var(--card-bg);
             border-radius: 12px;
             box-shadow: 0 4px 20px rgba(0,0,0,0.08);
             padding: 30px;
+            border: 1px solid var(--border-color);
         }
 
         .header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px; }
         .header h1 { color: var(--primary-color); font-size: 26px; }
-
-        .theme-btn {
-            background: transparent;
-            border: 1px solid var(--border-color);
-            color: var(--text-color);
-            padding: 6px 12px;
-            border-radius: 20px;
-            cursor: pointer;
-            font-size: 13px;
-        }
 
         .description { color: #64748b; font-size: 14px; margin-bottom: 20px; }
 
@@ -126,6 +127,7 @@
             font-weight: 600;
             font-size: 13px;
             margin-bottom: 8px;
+            color: var(--text-color);
         }
 
         .file-input { font-size: 12px; color: #64748b; }
@@ -188,6 +190,7 @@
             margin-bottom: 15px;
             padding-bottom: 8px;
             border-bottom: 1px solid var(--border-color);
+            color: var(--text-color);
         }
 
         .diff-output {
@@ -223,77 +226,183 @@
 
         .btn-share { background: #10b981; color: white; border: none; }
 
+        /* Ad Slots & SEO Card Styling */
+        .ad-placeholder {
+            border: 1px dashed var(--border-color);
+            background: rgba(0,0,0,0.01);
+            padding: 15px;
+            border-radius: 10px;
+            text-align: center;
+            color: #64748b;
+            font-size: 13px;
+            margin: 20px 0;
+        }
+
+        .seo-content-card {
+            background: var(--card-bg);
+            border-radius: 12px;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.08);
+            padding: 30px;
+            margin-top: 30px;
+            border: 1px solid var(--border-color);
+            line-height: 1.7;
+        }
+
+        .seo-content-card h2 { font-size: 1.4rem; color: var(--primary-color); margin-bottom: 12px; }
+        .seo-content-card h3 { font-size: 1.1rem; color: var(--text-color); margin: 15px 0 8px 0; }
+        .seo-content-card p, .seo-content-card li { font-size: 0.95rem; margin-bottom: 8px; color: #64748b; }
+        .seo-content-card ul { padding-left: 20px; margin-bottom: 10px; }
+
         @media print {
             body * { visibility: hidden; }
             #printableReport, #printableReport * { visibility: visible; }
-            #printableReport { position: absolute; left: 0; top: 0; width: 100%; shadow: none; }
-            .diff-grid, .btn-bar, .action-bar, .header button { display: none; }
+            #printableReport { position: absolute; left: 0; top: 0; width: 100%; box-shadow: none; }
+            .diff-grid, .btn-bar, .action-bar, .header button, .ad-placeholder, .footer { display: none !important; }
         }
     </style>
 </head>
-<body>
+<body class="light-theme">
 
-<div class="container" id="printableReport">
-    <div class="header">
-        <h1>🔍 Advanced Text Diff & Code Compare Tool</h1>
-        <button id="themeToggle" class="theme-btn">🌙 Dark Mode</button>
-    </div>
-    <p class="description">Compare text files, essays, or code side-by-side. Upload documents or paste content to highlight line differences and export PDF reports.</p>
-
-    <!-- Stats Bar -->
-    <div class="stats-grid">
-        <div class="stat-card">
-            <h4 id="statAdded" style="color: #16a34a;">0</h4>
-            <p>Lines Added (+)</p>
+    <!-- Navigation Header -->
+    <header class="navbar">
+        <div class="container nav-container" style="max-width: 100% !important; padding: 0 !important;">
+            <a href="../index.html" class="logo">
+                <i class="fa-solid fa-toolbox logo-icon"></i>
+                <span class="logo-text">OmniKit<span class="highlight">Hub</span></span>
+            </a>
+            <div class="nav-actions">
+                <button id="theme-toggle" class="icon-btn" aria-label="Toggle Theme">
+                    <i class="fa-solid fa-moon"></i>
+                </button>
+            </div>
         </div>
-        <div class="stat-card">
-            <h4 id="statRemoved" style="color: #dc2626;">0</h4>
-            <p>Lines Removed (-)</p>
+    </header>
+
+<div class="main-wrapper">
+
+    <!-- Top Advertisement Slot -->
+    <div class="ad-placeholder">
+        <span>Responsive Advertisement Space (Google AdSense)</span>
+    </div>
+
+    <div class="container" id="printableReport">
+        <div class="header">
+            <h1>🔍 Advanced Text Diff & Code Compare Tool</h1>
         </div>
-        <div class="stat-card">
-            <h4 id="statSame" style="color: #2563eb;">0</h4>
-            <p>Unchanged Lines</p>
+        <p class="description">Compare text files, essays, or code side-by-side. Upload documents or paste content to highlight line differences and export PDF reports.</p>
+
+        <!-- Stats Bar -->
+        <div class="stats-grid">
+            <div class="stat-card">
+                <h4 id="statAdded" style="color: #16a34a;">0</h4>
+                <p>Lines Added (+)</p>
+            </div>
+            <div class="stat-card">
+                <h4 id="statRemoved" style="color: #dc2626;">0</h4>
+                <p>Lines Removed (-)</p>
+            </div>
+            <div class="stat-card">
+                <h4 id="statSame" style="color: #2563eb;">0</h4>
+                <p>Unchanged Lines</p>
+            </div>
+        </div>
+
+        <!-- Input Grid -->
+        <div class="diff-grid">
+            <div class="text-box-wrapper">
+                <label>
+                    <span>Original Text / Code 1:</span>
+                    <input type="file" id="file1" class="file-input" accept=".txt,.js,.py,.html,.css,.md">
+                </label>
+                <textarea id="text1" placeholder="Paste original text or upload file..."></textarea>
+            </div>
+            <div class="text-box-wrapper">
+                <label>
+                    <span>Modified Text / Code 2:</span>
+                    <input type="file" id="file2" class="file-input" accept=".txt,.js,.py,.html,.css,.md">
+                </label>
+                <textarea id="text2" placeholder="Paste modified text or upload file..."></textarea>
+            </div>
+        </div>
+
+        <div class="btn-bar">
+            <button id="compareBtn" class="btn-main">⚡ Compare Differences</button>
+            <button id="demoBtn" class="btn-demo">🧪 Load Demo Sample</button>
+        </div>
+
+        <!-- Comparison Result -->
+        <div id="resultPanel" class="result-panel">
+            <div class="result-title">📋 Difference Comparison Output:</div>
+            <div id="diffOutput" class="diff-output"></div>
+        </div>
+
+        <!-- Action Bar -->
+        <div class="action-bar">
+            <button id="downloadPdfBtn" class="btn-action">📄 Save PDF Report</button>
+            <button id="printBtn" class="btn-action">🖨️ Print Comparison</button>
+            <button id="shareBtn" class="btn-action btn-share">🔗 Share Tool</button>
+            <button id="clearBtn" class="btn-action">🗑️ Clear All</button>
         </div>
     </div>
 
-    <!-- Input Grid -->
-    <div class="diff-grid">
-        <div class="text-box-wrapper">
-            <label>
-                <span>Original Text / Code 1:</span>
-                <input type="file" id="file1" class="file-input" accept=".txt,.js,.py,.html,.css,.md">
-            </label>
-            <textarea id="text1" placeholder="Paste original text or upload file..."></textarea>
-        </div>
-        <div class="text-box-wrapper">
-            <label>
-                <span>Modified Text / Code 2:</span>
-                <input type="file" id="file2" class="file-input" accept=".txt,.js,.py,.html,.css,.md">
-            </label>
-            <textarea id="text2" placeholder="Paste modified text or upload file..."></textarea>
-        </div>
+    <!-- Bottom Advertisement Slot -->
+    <div class="ad-placeholder">
+        <span>Responsive Advertisement Space (Google AdSense)</span>
     </div>
 
-    <div class="btn-bar">
-        <button id="compareBtn" class="btn-main">⚡ Compare Differences</button>
-        <button id="demoBtn" class="btn-demo">🧪 Load Demo Sample</button>
+    <!-- Helpful Tutorial Video Carousel -->
+    <div style="margin: 30px 0;">
+        <h3 style="font-size: 1.2rem; color: var(--text-color); margin-bottom: 12px;"><i class="fa-solid fa-video" style="color: var(--primary-color);"></i> Recommended Code Compare & Text Diff Tutorials</h3>
+        <Carousel>
+          <Video source="youtube" query="how to compare text difference in javascript code diff" count="3"/>
+        </Carousel>
     </div>
 
-    <!-- Comparison Result -->
-    <div id="resultPanel" class="result-panel">
-        <div class="result-title">📋 Difference Comparison Output:</div>
-        <div id="diffOutput" class="diff-output"></div>
+    <!-- AdSense Friendly SEO Content Section -->
+    <div class="seo-content-card">
+        <h2>About Advanced Text Diff & Code Compare Tool</h2>
+        <p>OmniKitHub's free online Text Difference and Code Compare utility allows developers, students, writers, and editors to find modifications between two text documents or source code snippets instantly.</p>
+        
+        <h3>Key Features & Capabilities</h3>
+        <ul>
+            <li><strong>Side-by-Side Comparison:</strong> Paste text or upload source code files (.txt, .js, .py, .html, .css, etc.) for direct diffing.</li>
+            <li><strong>Live Difference Highlighting:</strong> Automatically tracks and color-codes added lines (+), removed lines (-), and identical lines.</li>
+            <li><strong>Instant Statistical Summary:</strong> Real-time counter of total added, deleted, and unchanged lines.</li>
+            <li><strong>Report Generation:</strong> Save comparison results instantly to a clean PDF report or print directly from your browser.</li>
+        </ul>
     </div>
 
-    <!-- Action Bar -->
-    <div class="action-bar">
-        <button id="downloadPdfBtn" class="btn-action">📄 Save PDF Report</button>
-        <button id="printBtn" class="btn-action">🖨️ Print Comparison</button>
-        <button id="shareBtn" class="btn-action btn-share">🔗 Share Tool</button>
-        <button id="clearBtn" class="btn-action">🗑️ Clear All</button>
-    </div>
 </div>
 
+<!-- Footer Section -->
+<footer class="footer">
+    <div class="container footer-container" style="max-width: 100% !important;">
+        <div class="footer-brand">
+            <a href="../index.html" class="logo">
+                <i class="fa-solid fa-toolbox logo-icon"></i>
+                <span class="logo-text">OmniKit<span class="highlight">Hub</span></span>
+            </a>
+            <p>Your ultimate free online toolkit for daily developer, text, media, PDF, and web tasks.</p>
+        </div>
+        
+        <div class="footer-links">
+            <h4>Legal & Pages</h4>
+            <ul>
+                <li><a href="../pages/about.html">About Us</a></li>
+                <li><a href="../pages/contact.html">Contact Us</a></li>
+                <li><a href="../pages/privacy-policy.html">Privacy Policy</a></li>
+                <li><a href="../pages/terms.html">Terms of Service</a></li>
+            </ul>
+        </div>
+    </div>
+    <div class="footer-bottom">
+        <div class="container">
+            <p>&copy; 2026 OmniKitHub.com. All rights reserved.</p>
+        </div>
+    </div>
+</footer>
+
+<script src="../script.js"></script>
 <script>
     const text1 = document.getElementById('text1');
     const text2 = document.getElementById('text2');
@@ -301,7 +410,7 @@
     const demoBtn = document.getElementById('demoBtn');
     const resultPanel = document.getElementById('resultPanel');
     const diffOutput = document.getElementById('diffOutput');
-    const themeToggle = document.getElementById('themeToggle');
+    const themeToggle = document.getElementById('theme-toggle');
 
     const statAdded = document.getElementById('statAdded');
     const statRemoved = document.getElementById('statRemoved');
