@@ -1,99 +1,79 @@
 <!DOCTYPE html>
-<html lang="bn">
+<html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>PDF to Word & Word to PDF Converter - OmniKitHub</title>
-    <meta name="description" content="Convert PDF documents to editable Word format and convert text/documents back to PDF online for free.">
+    <title>PDF to Word & Word to PDF Converter Online Free | OmniKitHub</title>
+    <meta name="description" content="Convert PDF to Word and Word or text to PDF online for free. No sign-up, no upload: files stay private in your browser. Works with English and Bangla text.">
+    <meta name="keywords" content="pdf to word converter, word to pdf converter, convert pdf to word online free, pdf to doc, docx to pdf, text to pdf, pdf text extractor, bangla pdf converter">
+    <meta name="robots" content="index, follow, max-image-preview:large">
+    <link rel="canonical" href="https://omnikithub.com/tools/pdf-word-converter.html">
+
+    <meta property="og:type" content="website">
+    <meta property="og:site_name" content="OmniKitHub">
+    <meta property="og:title" content="PDF to Word & Word to PDF Converter - Free Online | OmniKitHub">
+    <meta property="og:description" content="Convert PDF to Word and Word or text to PDF free. Private, fast, no sign-up.">
+    <meta property="og:url" content="https://omnikithub.com/tools/pdf-word-converter.html">
+    <meta name="twitter:card" content="summary">
+    <meta name="twitter:title" content="PDF to Word & Word to PDF Converter | OmniKitHub">
+    <meta name="twitter:description" content="Free online PDF to Word and Word to PDF converter. Files never leave your device.">
+
+    <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@graph": [
+        {
+          "@type": "WebApplication",
+          "name": "PDF to Word & Word to PDF Converter",
+          "url": "https://omnikithub.com/tools/pdf-word-converter.html",
+          "applicationCategory": "UtilitiesApplication",
+          "operatingSystem": "Any",
+          "description": "Free online tool to extract text from PDF into a Word document and to create PDF files from Word or text files.",
+          "offers": { "@type": "Offer", "price": "0", "priceCurrency": "USD" },
+          "publisher": { "@type": "Organization", "name": "OmniKitHub", "url": "https://omnikithub.com" }
+        },
+        {
+          "@type": "FAQPage",
+          "mainEntity": [
+            { "@type": "Question", "name": "Is this PDF to Word converter free?", "acceptedAnswer": { "@type": "Answer", "text": "Yes. It is completely free and needs no account or sign-up." } },
+            { "@type": "Question", "name": "Are my files uploaded to a server?", "acceptedAnswer": { "@type": "Answer", "text": "No. Conversion runs inside your browser, so your documents never leave your device." } },
+            { "@type": "Question", "name": "Does it keep the original layout and images?", "acceptedAnswer": { "@type": "Answer", "text": "No. PDF to Word extracts the text only. Images, tables and exact layout are not preserved. Scanned PDFs that contain only images have no text to extract." } },
+            { "@type": "Question", "name": "Can I convert Bangla text to PDF?", "acceptedAnswer": { "@type": "Answer", "text": "Yes. Bangla and other non-English text is supported when creating a PDF." } }
+          ]
+        }
+      ]
+    }
+    </script>
+
     <link rel="stylesheet" href="../style.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    
-    <!-- pdf.js and pdf-lib for PDF handling -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/2.16.105/pdf.min.js"></script>
-    <script src="https://unpkg.com/pdf-lib@1.17.1/dist/pdf-lib.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf-lib/1.17.1/pdf-lib.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/mammoth/1.4.2/mammoth.browser.min.js"></script>
 
     <style>
-        .tool-container {
-            max-width: 950px;
-            margin: 40px auto;
-            background: var(--bg-surface);
-            border: 1px solid var(--card-border);
-            border-radius: 16px;
-            padding: 30px;
-            box-shadow: var(--card-shadow);
-        }
-
-        .mode-selector {
-            display: flex;
-            gap: 12px;
-            margin-bottom: 25px;
-        }
-
-        .mode-btn {
-            flex: 1;
-            padding: 12px;
-            border-radius: 30px;
-            border: 1px solid var(--card-border);
-            background: var(--bg-primary);
-            color: var(--text-secondary);
-            font-weight: 700;
-            cursor: pointer;
-            transition: all var(--transition-speed) ease;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            gap: 8px;
-        }
-
-        .mode-btn.active {
-            background: var(--accent-color);
-            color: #ffffff;
-            border-color: var(--accent-color);
-        }
-
-        .upload-area {
-            border: 2px dashed var(--accent-color);
-            border-radius: 12px;
-            padding: 35px 20px;
-            text-align: center;
-            background: var(--bg-primary);
-            cursor: pointer;
-            transition: background var(--transition-speed) ease;
-            margin-bottom: 25px;
-        }
-
-        .upload-area:hover { background: var(--badge-bg); }
-
-        textarea {
-            width: 100%;
-            height: 280px;
-            padding: 15px;
-            border-radius: 12px;
-            border: 1px solid var(--card-border);
-            background: var(--bg-primary);
-            color: var(--text-primary);
-            font-size: 0.95rem;
-            outline: none;
-            resize: vertical;
-            margin-bottom: 20px;
-        }
-
-        .action-btn {
-            padding: 12px 24px;
-            border-radius: 8px;
-            border: none;
-            background: var(--accent-color);
-            color: #fff;
-            font-weight: 700;
-            font-size: 1rem;
-            cursor: pointer;
-            display: inline-flex;
-            align-items: center;
-            gap: 8px;
-            transition: background var(--transition-speed) ease;
-        }
-
+        .tool-container { max-width: 950px; margin: 40px auto; background: var(--bg-surface); border: 1px solid var(--card-border); border-radius: 16px; padding: 30px; box-shadow: var(--card-shadow); }
+        .mode-selector { display: flex; gap: 12px; margin-bottom: 25px; }
+        .mode-btn { flex: 1; padding: 12px; border-radius: 30px; border: 1px solid var(--card-border); background: var(--bg-primary); color: var(--text-secondary); font-weight: 700; cursor: pointer; transition: all var(--transition-speed) ease; display: flex; align-items: center; justify-content: center; gap: 8px; }
+        .mode-btn.active { background: var(--accent-color); color: #fff; border-color: var(--accent-color); }
+        .upload-area { border: 2px dashed var(--accent-color); border-radius: 12px; padding: 35px 20px; text-align: center; background: var(--bg-primary); cursor: pointer; transition: background var(--transition-speed) ease; margin-bottom: 12px; }
+        .upload-area:hover, .upload-area.drag { background: var(--badge-bg); }
+        #status { min-height: 22px; font-size: .9rem; color: var(--text-secondary); margin-bottom: 8px; }
+        textarea { width: 100%; height: 280px; padding: 15px; border-radius: 12px; border: 1px solid var(--card-border); background: var(--bg-primary); color: var(--text-primary); font-size: .95rem; outline: none; resize: vertical; }
+        .meta-row { display: flex; justify-content: space-between; flex-wrap: wrap; gap: 8px; margin: 8px 0 18px; font-size: .85rem; color: var(--text-secondary); }
+        .btn-row { display: flex; flex-wrap: wrap; gap: 10px; justify-content: flex-end; }
+        .action-btn { padding: 11px 20px; border-radius: 8px; border: 1px solid var(--accent-color); background: var(--accent-color); color: #fff; font-weight: 700; font-size: .95rem; cursor: pointer; display: inline-flex; align-items: center; gap: 8px; transition: background var(--transition-speed) ease; }
         .action-btn:hover { background: var(--accent-hover); }
+        .action-btn.ghost { background: var(--bg-primary); color: var(--text-primary); border-color: var(--card-border); }
+        .action-btn.ghost:hover { border-color: var(--accent-color); }
+        .action-btn:focus-visible, .mode-btn:focus-visible { outline: 2px solid var(--accent-color); outline-offset: 2px; }
+        .info { max-width: 950px; margin: 0 auto 50px; color: var(--text-secondary); line-height: 1.7; }
+        .info h2 { color: var(--text-primary); font-size: 1.3rem; margin: 26px 0 8px; }
+        .info h3 { color: var(--text-primary); font-size: 1rem; margin: 16px 0 4px; }
+        #toast { position: fixed; left: 50%; bottom: 28px; transform: translateX(-50%); background: var(--text-primary); color: var(--bg-primary); padding: 10px 18px; border-radius: 999px; font-weight: 600; font-size: .9rem; opacity: 0; pointer-events: none; transition: opacity .2s; z-index: 9999; }
+        #toast.show { opacity: 1; }
+        @media (max-width: 600px) { .tool-container { margin: 20px 12px; padding: 18px; } .btn-row { justify-content: stretch; } .btn-row .action-btn { flex: 1 1 45%; justify-content: center; } }
+        @media print { header, footer, .info, .btn-row, .mode-selector, .upload-area { display: none !important; } }
     </style>
 </head>
 <body class="light-theme">
@@ -115,120 +95,241 @@
     <main class="container">
         <div class="tool-container">
             <h1 style="font-size: 1.8rem; margin-bottom: 8px;">PDF to Word / Word to PDF Converter</h1>
-            <p style="color: var(--text-secondary); margin-bottom: 24px;">Convert PDF documents into editable text/Word format or generate PDF files seamlessly.</p>
+            <p style="color: var(--text-secondary); margin-bottom: 24px;">Extract text from a PDF into a Word file, or turn a Word or text file into a PDF. Everything runs in your browser, so your files stay private.</p>
 
             <div class="mode-selector">
-                <button id="mode-p2w" class="mode-btn active" onclick="switchMode('p2w')">
-                    <i class="fa-solid fa-file-pdf"></i> PDF to Word
-                </button>
-                <button id="mode-w2p" class="mode-btn" onclick="switchMode('w2p')">
-                    <i class="fa-solid fa-file-word"></i> Word / Text to PDF
-                </button>
+                <button id="mode-p2w" class="mode-btn active" onclick="switchMode('p2w')"><i class="fa-solid fa-file-pdf"></i> PDF to Word</button>
+                <button id="mode-w2p" class="mode-btn" onclick="switchMode('w2p')"><i class="fa-solid fa-file-word"></i> Word / Text to PDF</button>
             </div>
 
             <div id="upload-box" class="upload-area" onclick="document.getElementById('file-input').click()">
                 <i class="fa-solid fa-file-export" style="font-size: 2.5rem; color: var(--accent-color); margin-bottom: 10px;"></i>
                 <div id="upload-title" style="font-weight: 700; font-size: 1.1rem; color: var(--text-primary);">Upload PDF File</div>
-                <div style="font-size: 0.85rem; color: var(--text-secondary); margin-top: 4px;">Select a file from your device</div>
+                <div style="font-size: .85rem; color: var(--text-secondary); margin-top: 4px;">Click to choose a file, or drag and drop it here</div>
                 <input type="file" id="file-input" accept=".pdf" style="display: none;">
             </div>
+            <div id="status" role="status" aria-live="polite"></div>
 
             <textarea id="text-editor" placeholder="Extracted or typed text will appear here..."></textarea>
+            <div class="meta-row">
+                <span id="counter">0 words · 0 characters</span>
+                <label id="marker-wrap"><input type="checkbox" id="markers" checked> Add page markers</label>
+            </div>
 
-            <div style="text-align: right;">
-                <button id="download-btn" class="action-btn" onclick="downloadResult()"><i class="fa-solid fa-download"></i> Download File</button>
+            <div class="btn-row">
+                <button class="action-btn ghost" onclick="copyText()"><i class="fa-solid fa-copy"></i> Copy</button>
+                <button class="action-btn ghost" onclick="printText()"><i class="fa-solid fa-print"></i> Print</button>
+                <button class="action-btn ghost" onclick="shareTool()"><i class="fa-solid fa-share-nodes"></i> Share</button>
+                <button class="action-btn ghost" onclick="clearAll()"><i class="fa-solid fa-trash"></i> Clear</button>
+                <button id="txt-btn" class="action-btn ghost" onclick="downloadTxt()"><i class="fa-solid fa-file-lines"></i> Download TXT</button>
+                <button id="download-btn" class="action-btn" onclick="downloadResult()"><i class="fa-solid fa-download"></i> Download</button>
             </div>
         </div>
+
+        <section class="info">
+            <h2>How to convert PDF to Word</h2>
+            <p>Choose <strong>PDF to Word</strong>, upload your PDF, check the extracted text, then download it as a Word file or plain text. You can also copy or print it.</p>
+            <h2>How to convert Word or text to PDF</h2>
+            <p>Choose <strong>Word / Text to PDF</strong>, upload a .docx or .txt file (or type directly in the box), then download the PDF. Long documents are split across pages automatically.</p>
+            <h2>Frequently asked questions</h2>
+            <h3>Is it free?</h3>
+            <p>Yes, with no sign-up.</p>
+            <h3>Are my files uploaded?</h3>
+            <p>No. The conversion happens in your browser and your documents never leave your device.</p>
+            <h3>Does it keep the layout and images?</h3>
+            <p>No. PDF to Word extracts text only. Images, tables and exact layout are not kept, and scanned (image-only) PDFs have no text to extract.</p>
+            <h3>Does it support Bangla?</h3>
+            <p>Yes, Bangla text can be turned into a PDF. Older .doc files are not supported, so save them as .docx first.</p>
+        </section>
     </main>
 
     <footer class="footer">
         <div class="footer-bottom">
-            <div class="container">
-                <p>&copy; 2026 OmniKitHub.com. All rights reserved.</p>
-            </div>
+            <div class="container"><p>&copy; 2026 OmniKitHub.com. All rights reserved.</p></div>
         </div>
     </footer>
+
+    <div id="toast"></div>
 
     <script src="../script.js"></script>
     <script>
         pdfjsLib.GlobalWorkerOptions.workerSrc = 'https://cdnjs.cloudflare.com/ajax/libs/pdf.js/2.16.105/pdf.worker.min.js';
 
-        let currentMode = 'p2w';
-        const fileInput = document.getElementById('file-input');
-        const textEditor = document.getElementById('text-editor');
-        const uploadTitle = document.getElementById('upload-title');
-        const downloadBtn = document.getElementById('download-btn');
+        let mode = 'p2w', baseName = 'OmniKitHub-Converted';
+        const $ = id => document.getElementById(id);
+        const fileInput = $('file-input'), ed = $('text-editor'), statusEl = $('status');
 
-        function switchMode(mode) {
-            currentMode = mode;
-            textEditor.value = '';
+        function toast(msg) {
+            const t = $('toast'); t.textContent = msg; t.classList.add('show');
+            clearTimeout(toast.t); toast.t = setTimeout(() => t.classList.remove('show'), 2000);
+        }
+        function esc(s) { return s.replace(/[&<>"']/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c])); }
+        function save(blob, name) {
+            const a = document.createElement('a');
+            a.href = URL.createObjectURL(blob); a.download = name;
+            document.body.appendChild(a); a.click(); a.remove();
+            setTimeout(() => URL.revokeObjectURL(a.href), 1500);
+        }
+        function updateCount() {
+            const v = ed.value.trim();
+            $('counter').textContent = (v ? v.split(/\s+/).length : 0) + ' words · ' + ed.value.length + ' characters';
+        }
+        ed.addEventListener('input', updateCount);
 
-            if (mode === 'p2w') {
-                document.getElementById('mode-p2w').classList.add('active');
-                document.getElementById('mode-w2p').classList.remove('active');
-                uploadTitle.innerText = 'Upload PDF File';
-                fileInput.accept = '.pdf';
-                downloadBtn.innerHTML = '<i class="fa-solid fa-file-word"></i> Download Word (.doc)';
-            } else {
-                document.getElementById('mode-w2p').classList.add('active');
-                document.getElementById('mode-p2w').classList.remove('active');
-                uploadTitle.innerText = 'Upload Text / Word Document File';
-                fileInput.accept = '.txt,.doc,.docx';
-                downloadBtn.innerHTML = '<i class="fa-solid fa-file-pdf"></i> Download PDF';
-            }
+        function switchMode(m) {
+            mode = m; ed.value = ''; statusEl.textContent = ''; updateCount();
+            $('mode-p2w').classList.toggle('active', m === 'p2w');
+            $('mode-w2p').classList.toggle('active', m === 'w2p');
+            $('marker-wrap').style.display = m === 'p2w' ? '' : 'none';
+            $('txt-btn').style.display = m === 'p2w' ? '' : 'none';
+            $('upload-title').textContent = m === 'p2w' ? 'Upload PDF File' : 'Upload Word (.docx) or Text (.txt) File';
+            fileInput.accept = m === 'p2w' ? '.pdf' : '.txt,.docx';
+            ed.placeholder = m === 'p2w' ? 'Extracted text will appear here...' : 'Type or paste text here, or upload a file...';
+            $('download-btn').innerHTML = m === 'p2w' ? '<i class="fa-solid fa-file-word"></i> Download Word (.doc)' : '<i class="fa-solid fa-file-pdf"></i> Download PDF';
         }
 
-        fileInput.addEventListener('change', async (e) => {
-            const file = e.target.files[0];
+        async function handleFile(file) {
             if (!file) return;
-
-            if (currentMode === 'p2w') {
-                const arrayBuffer = await file.arrayBuffer();
-                const pdf = await pdfjsLib.getDocument({ data: arrayBuffer }).promise;
-                let fullText = '';
-
-                for (let i = 1; i <= pdf.numPages; i++) {
-                    const page = await pdf.getPage(i);
-                    const textContent = await page.getTextContent();
-                    const pageText = textContent.items.map(item => item.str).join(' ');
-                    fullText += `--- Page ${i} ---\n` + pageText + '\n\n';
+            baseName = file.name.replace(/\.[^.]+$/, '') || 'OmniKitHub-Converted';
+            try {
+                if (mode === 'p2w') {
+                    if (!/\.pdf$/i.test(file.name)) return toast('Please choose a PDF file');
+                    statusEl.textContent = 'Reading PDF...';
+                    const pdf = await pdfjsLib.getDocument({ data: await file.arrayBuffer() }).promise;
+                    let out = '';
+                    for (let i = 1; i <= pdf.numPages; i++) {
+                        statusEl.textContent = 'Reading page ' + i + ' of ' + pdf.numPages + '...';
+                        const tc = await (await pdf.getPage(i)).getTextContent();
+                        const t = tc.items.map(it => it.str + (it.hasEOL ? '\n' : ' ')).join('').replace(/ +\n/g, '\n').trim();
+                        out += ($('markers').checked ? '--- Page ' + i + ' ---\n' : '') + t + '\n\n';
+                    }
+                    ed.value = out.trim();
+                    statusEl.textContent = ed.value.replace(/--- Page \d+ ---/g, '').trim()
+                        ? 'Done. ' + pdf.numPages + ' page(s) read.'
+                        : 'No text found. This looks like a scanned PDF (images only), so there is no text to extract.';
+                } else if (/\.docx$/i.test(file.name)) {
+                    if (!window.mammoth) return toast('Word reader failed to load. Refresh and try again');
+                    statusEl.textContent = 'Reading document...';
+                    ed.value = (await mammoth.extractRawText({ arrayBuffer: await file.arrayBuffer() })).value;
+                    statusEl.textContent = 'Done.';
+                } else if (/\.txt$/i.test(file.name)) {
+                    ed.value = await file.text(); statusEl.textContent = 'Done.';
+                } else {
+                    statusEl.textContent = 'This file type is not supported. Save it as .docx or .txt and try again.';
                 }
-                textEditor.value = fullText;
-            } else {
-                const reader = new FileReader();
-                reader.onload = function(evt) {
-                    textEditor.value = evt.target.result;
-                };
-                reader.readAsText(file);
+            } catch (err) {
+                console.error(err);
+                statusEl.textContent = 'Could not read this file. It may be damaged or password-protected.';
             }
-        });
+            updateCount(); fileInput.value = '';
+        }
+        fileInput.addEventListener('change', e => handleFile(e.target.files[0]));
+        const box = $('upload-box');
+        ['dragenter', 'dragover'].forEach(ev => box.addEventListener(ev, e => { e.preventDefault(); box.classList.add('drag'); }));
+        ['dragleave', 'drop'].forEach(ev => box.addEventListener(ev, e => { e.preventDefault(); box.classList.remove('drag'); }));
+        box.addEventListener('drop', e => handleFile(e.dataTransfer.files[0]));
+
+        function copyText() {
+            if (!ed.value.trim()) return toast('Nothing to copy yet');
+            (navigator.clipboard ? navigator.clipboard.writeText(ed.value) : Promise.reject())
+                .then(() => toast('Copied'))
+                .catch(() => { ed.select(); document.execCommand('copy'); toast('Copied'); });
+        }
+        function printText() {
+            if (!ed.value.trim()) return toast('Nothing to print yet');
+            const f = document.createElement('iframe');
+            f.style.cssText = 'position:fixed;width:0;height:0;border:0';
+            document.body.appendChild(f);
+            f.contentDocument.write('<!doctype html><meta charset="utf-8"><title>' + esc(baseName) + '</title><pre style="white-space:pre-wrap;font:15px/1.6 system-ui,sans-serif;padding:20px">' + esc(ed.value) + '</pre>');
+            f.contentDocument.close();
+            setTimeout(() => { f.contentWindow.focus(); f.contentWindow.print(); setTimeout(() => f.remove(), 1500); }, 300);
+        }
+        function shareTool() {
+            const data = { title: document.title, url: location.href };
+            if (navigator.share) navigator.share(data).catch(() => {});
+            else if (navigator.clipboard) navigator.clipboard.writeText(location.href).then(() => toast('Link copied. Paste it anywhere to share'));
+        }
+        function clearAll() { ed.value = ''; statusEl.textContent = ''; updateCount(); }
+
+        function downloadTxt() {
+            if (!ed.value.trim()) return toast('Please upload a file or type text first');
+            save(new Blob(['\ufeff' + ed.value], { type: 'text/plain;charset=utf-8' }), baseName + '.txt');
+        }
+
+        function wrapText(text, measure, maxW) {
+            const lines = [];
+            text.replace(/\r\n?/g, '\n').replace(/\t/g, '    ').split('\n').forEach(p => {
+                if (!p.trim()) return lines.push('');
+                let line = '';
+                p.split(' ').forEach(word => {
+                    const test = line ? line + ' ' + word : word;
+                    if (measure(test) <= maxW) { line = test; return; }
+                    if (line) lines.push(line);
+                    line = '';
+                    while (measure(word) > maxW) {
+                        let n = word.length;
+                        while (n > 1 && measure(word.slice(0, n)) > maxW) n--;
+                        lines.push(word.slice(0, n)); word = word.slice(n);
+                    }
+                    line = word;
+                });
+                lines.push(line);
+            });
+            return lines;
+        }
+
+        async function makePdf(text) {
+            const W = 595, H = 842, M = 50;
+            const pdf = await PDFLib.PDFDocument.create();
+            pdf.setTitle(baseName); pdf.setCreator('OmniKitHub');
+            const latin = /^[\n\r\t\x20-\x7E\xA0-\xFF]*$/.test(text);
+
+            if (latin) {
+                const font = await pdf.embedFont(PDFLib.StandardFonts.Helvetica), size = 12, lh = 16;
+                const lines = wrapText(text, s => font.widthOfTextAtSize(s, size), W - 2 * M);
+                const per = Math.floor((H - 2 * M) / lh);
+                for (let i = 0; i < lines.length; i += per) {
+                    const page = pdf.addPage([W, H]);
+                    lines.slice(i, i + per).forEach((l, j) => l && page.drawText(l, { x: M, y: H - M - size - j * lh, size, font }));
+                }
+            } else {
+                // Non-English text (e.g. Bangla): draw with the browser's own fonts, then place pages as images
+                const S = 2, fs = 14, lh = 22;
+                const c = document.createElement('canvas'); c.width = W * S; c.height = H * S;
+                const x = c.getContext('2d');
+                const font = fs + 'px "Noto Sans Bengali","Nirmala UI","Vrinda","Segoe UI",Arial,sans-serif';
+                x.font = font;
+                const lines = wrapText(text, s => x.measureText(s).width, W - 2 * M);
+                const per = Math.floor((H - 2 * M) / lh);
+                for (let i = 0; i < lines.length; i += per) {
+                    x.setTransform(S, 0, 0, S, 0, 0);
+                    x.fillStyle = '#fff'; x.fillRect(0, 0, W, H);
+                    x.fillStyle = '#000'; x.font = font; x.textBaseline = 'top';
+                    lines.slice(i, i + per).forEach((l, j) => x.fillText(l, M, M + j * lh));
+                    const bin = atob(c.toDataURL('image/png').split(',')[1]);
+                    const bytes = Uint8Array.from(bin, ch => ch.charCodeAt(0));
+                    const img = await pdf.embedPng(bytes);
+                    pdf.addPage([W, H]).drawImage(img, { x: 0, y: 0, width: W, height: H });
+                }
+            }
+            return pdf.save();
+        }
 
         async function downloadResult() {
-            const content = textEditor.value.trim();
-            if (!content) {
-                alert('Please input or extract text first!');
-                return;
-            }
-
-            if (currentMode === 'p2w') {
-                const blob = new Blob(['\ufeff' + content], { type: 'application/msword' });
-                const url = URL.createObjectURL(blob);
-                const a = document.createElement('a');
-                a.href = url;
-                a.download = 'OmniKitHub-Converted.doc';
-                a.click();
+            const content = ed.value.trim();
+            if (!content) return toast('Please upload a file or type text first');
+            if (mode === 'p2w') {
+                const body = esc(content).split(/\n{2,}/).map(p => '<p>' + p.replace(/\n/g, '<br>') + '</p>').join('');
+                const html = '<html xmlns:o="urn:schemas-microsoft-com:office:office" xmlns:w="urn:schemas-microsoft-com:office:word" xmlns="http://www.w3.org/TR/REC-html40"><head><meta charset="utf-8"><title>' + esc(baseName) + '</title></head><body style="font-family:Calibri,Arial,sans-serif;font-size:12pt">' + body + '</body></html>';
+                save(new Blob(['\ufeff' + html], { type: 'application/msword;charset=utf-8' }), baseName + '.doc');
             } else {
-                const pdfDoc = await PDFLib.PDFDocument.create();
-                const page = pdfDoc.addPage([600, 800]);
-                page.drawText(content.substring(0, 2000), { x: 50, y: 750, size: 12 });
-                const pdfBytes = await pdfDoc.save();
-
-                const blob = new Blob([pdfBytes], { type: 'application/pdf' });
-                const url = URL.createObjectURL(blob);
-                const a = document.createElement('a');
-                a.href = url;
-                a.download = 'OmniKitHub-Converted.pdf';
-                a.click();
+                try {
+                    statusEl.textContent = 'Creating PDF...';
+                    save(new Blob([await makePdf(content)], { type: 'application/pdf' }), baseName + '.pdf');
+                    statusEl.textContent = 'PDF ready.';
+                } catch (err) {
+                    console.error(err); statusEl.textContent = 'Could not create the PDF. Please try again.';
+                }
             }
         }
 
