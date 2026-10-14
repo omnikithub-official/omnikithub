@@ -11,7 +11,7 @@
     <style>
         .tool-container {
             max-width: 900px;
-            margin: 40px auto;
+            margin: 30px auto;
             background: var(--bg-surface);
             border: 1px solid var(--card-border);
             border-radius: 16px;
@@ -101,6 +101,35 @@
             font-size: 0.88rem;
         }
 
+        /* Ad Slots & SEO Card Styling */
+        .ad-placeholder {
+            border: 1px dashed #cbd5e1;
+            background: rgba(0,0,0,0.01);
+            padding: 15px;
+            border-radius: 10px;
+            text-align: center;
+            color: #64748b;
+            font-size: 13px;
+            margin: 20px 0;
+        }
+
+        .seo-content-card {
+            max-width: 900px;
+            margin: 30px auto;
+            background: var(--bg-surface);
+            border: 1px solid var(--card-border);
+            border-radius: 16px;
+            padding: 30px;
+            box-shadow: var(--card-shadow);
+            line-height: 1.7;
+            text-align: left;
+        }
+
+        .seo-content-card h2 { font-size: 1.4rem; color: var(--accent-color); margin-bottom: 12px; }
+        .seo-content-card h3 { font-size: 1.1rem; color: var(--text-primary); margin: 15px 0 8px 0; }
+        .seo-content-card p, .seo-content-card li { font-size: 0.95rem; margin-bottom: 8px; color: var(--text-secondary); }
+        .seo-content-card ul { padding-left: 20px; margin-bottom: 10px; }
+
         @media (max-width: 768px) {
             .calc-grid { grid-template-columns: 1fr; }
         }
@@ -108,6 +137,7 @@
 </head>
 <body class="light-theme">
 
+    <!-- Navigation Header -->
     <header class="navbar">
         <div class="container nav-container">
             <a href="../index.html" class="logo">
@@ -122,6 +152,14 @@
         </div>
     </header>
 
+    <!-- Top Advertisement Slot -->
+    <div class="container ad-wrapper" style="margin: 20px auto; max-width: 900px;">
+        <div class="ad-placeholder">
+            <span>Responsive Advertisement Space (Google AdSense)</span>
+        </div>
+    </div>
+
+    <!-- Main Tool Container -->
     <main class="container">
         <div class="tool-container">
             <h1 style="font-size: 1.8rem; margin-bottom: 8px;">BMI & Calorie Calculator</h1>
@@ -175,7 +213,7 @@
                     <div style="font-size: 0.9rem; color: var(--text-secondary); font-weight: 600; margin-top: 15px;">DAILY CALORIE NEEDS (TDEE)</div>
                     
                     <div class="calorie-card">
-                        <div style="display:flex; justify-shadow:space-between; justify-content: space-between;">
+                        <div style="display:flex; justify-content: space-between;">
                             <span>Maintain Weight:</span>
                             <strong id="cal-maintain" style="color: var(--accent-color);">2,250 kcal/day</strong>
                         </div>
@@ -197,7 +235,57 @@
         </div>
     </main>
 
+    <!-- Bottom Advertisement Slot -->
+    <div class="container ad-wrapper" style="margin: 20px auto; max-width: 900px;">
+        <div class="ad-placeholder">
+            <span>Responsive Advertisement Space (Google AdSense)</span>
+        </div>
+    </div>
+
+    <!-- AdSense Friendly SEO Content Section -->
+    <section class="container">
+        <div class="seo-content-card">
+            <h2>About BMI & Daily Calorie Calculator</h2>
+            <p>Welcome to OmniKitHub's free online BMI and Calorie Calculator. This comprehensive health tool calculates your Body Mass Index to evaluate your weight status and estimates your Total Daily Energy Expenditure (TDEE) to guide your fitness goals.</p>
+            
+            <h3>Key Features & Health Metrics</h3>
+            <ul>
+                <li><strong>Accurate BMI Evaluation:</strong> Instantly categorizes your body mass index into underweight, normal, overweight, or obese ranges.</li>
+                <li><strong>TDEE & Calorie Targets:</strong> Calculates exact daily maintenance calories along with custom targets for safe weight loss or muscle gain.</li>
+                <li><strong>Activity Level Adjustment:</strong> Accounts for your weekly exercise routine ranging from sedentary to highly active lifestyles.</li>
+                <li><strong>100% Free & Private:</strong> Computes health data instantly in your browser with complete privacy.</li>
+            </ul>
+
+            <h3>How to Use the Calculator</h3>
+            <ol>
+                <li>Select your gender and enter your current age, height in centimeters, and weight in kilograms.</li>
+                <li>Choose your daily physical activity level from the dropdown options.</li>
+                <li>Click <strong>Calculate Results</strong> to view your precise BMI score and custom calorie targets.</li>
+            </ol>
+        </div>
+    </section>
+
+    <!-- Footer Section -->
     <footer class="footer">
+        <div class="container footer-container">
+            <div class="footer-brand">
+                <a href="../index.html" class="logo">
+                    <i class="fa-solid fa-toolbox logo-icon"></i>
+                    <span class="logo-text">OmniKit<span class="highlight">Hub</span></span>
+                </a>
+                <p>Your ultimate free online toolkit for daily developer, text, media, PDF, and web tasks.</p>
+            </div>
+            
+            <div class="footer-links">
+                <h4>Legal & Pages</h4>
+                <ul>
+                    <li><a href="../pages/about.html">About Us</a></li>
+                    <li><a href="../pages/contact.html">Contact Us</a></li>
+                    <li><a href="../pages/privacy-policy.html">Privacy Policy</a></li>
+                    <li><a href="../pages/terms.html">Terms of Service</a></li>
+                </ul>
+            </div>
+        </div>
         <div class="footer-bottom">
             <div class="container">
                 <p>&copy; 2026 OmniKitHub.com. All rights reserved.</p>
