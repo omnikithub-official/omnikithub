@@ -15,6 +15,10 @@
     <meta property="og:url" content="https://omnikithub.com/tools/background-remover.html">
     <meta property="og:type" content="website">
 
+    <!-- External CSS & Icons -->
+    <link rel="stylesheet" href="../style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
     <!-- Schema.org Markup -->
     <script type="application/ld+json">
     {
@@ -53,11 +57,17 @@
         }
 
         * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; }
-        body { background-color: var(--bg-color); color: var(--text-color); padding: 20px; transition: all 0.3s ease; }
+        body { background-color: var(--bg-color); color: var(--text-color); display: flex; flex-direction: column; min-height: 100vh; transition: all 0.3s ease; }
+
+        .main-wrapper {
+            flex: 1;
+            max-width: 1250px;
+            width: 100%;
+            margin: 20px auto;
+            padding: 0 20px;
+        }
 
         .app-container {
-            max-width: 1250px;
-            margin: 0 auto;
             background: var(--card-bg);
             border-radius: 12px;
             padding: 30px;
@@ -67,16 +77,6 @@
 
         .header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px; }
         .header h1 { font-size: 24px; color: var(--primary-color); }
-
-        .theme-btn {
-            background: transparent;
-            border: 1px solid var(--border-color);
-            color: var(--text-color);
-            padding: 6px 12px;
-            border-radius: 20px;
-            cursor: pointer;
-            font-size: 13px;
-        }
 
         .description { color: #64748b; font-size: 14px; margin-bottom: 25px; }
 
@@ -195,67 +195,172 @@
         .btn-primary { background: var(--primary-color); color: white; border: none; }
         .btn-primary:hover { background: var(--primary-hover); }
         .btn-share { background: #10b981; color: white; border: none; }
+
+        /* Ad Slots & SEO Card Styling */
+        .ad-placeholder {
+            border: 1px dashed #cbd5e1;
+            background: rgba(0,0,0,0.01);
+            padding: 15px;
+            border-radius: 10px;
+            text-align: center;
+            color: #64748b;
+            font-size: 13px;
+            margin: 20px 0;
+        }
+
+        .seo-content-card {
+            background: var(--card-bg);
+            border-radius: 12px;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.08);
+            padding: 30px;
+            margin-top: 30px;
+            border: 1px solid var(--border-color);
+            line-height: 1.7;
+        }
+
+        .seo-content-card h2 { font-size: 1.4rem; color: var(--primary-color); margin-bottom: 12px; }
+        .seo-content-card h3 { font-size: 1.1rem; color: var(--text-color); margin: 15px 0 8px 0; }
+        .seo-content-card p, .seo-content-card li { font-size: 0.95rem; margin-bottom: 8px; color: #64748b; }
+        .seo-content-card ul { padding-left: 20px; margin-bottom: 10px; }
     </style>
 </head>
-<body>
+<body class="light-theme">
 
-<div class="app-container">
-    <div class="header">
-        <h1>✨ Pro AI Background Remover</h1>
-        <button id="themeToggle" class="theme-btn">🌙 Dark Mode</button>
-    </div>
-    <p class="description">Remove image backgrounds automatically or replace them with custom backdrop colors and transparent PNGs instantly.</p>
-
-    <!-- Dropzone -->
-    <div class="dropzone" onclick="document.getElementById('imageInput').click()">
-        <div style="font-size: 32px;">🖼️</div>
-        <p><b>Click or Drag Photo Here to Remove Background</b><br>Supports JPG, PNG, WebP</p>
-        <input type="file" id="imageInput" accept="image/*" style="display: none;">
-    </div>
-
-    <!-- Controls -->
-    <div class="controls-bar">
-        <div class="control-group">
-            <label>Color Tolerance / Sensitivity: <span id="toleranceVal" style="color: var(--primary-color);">35</span></label>
-            <input type="range" id="toleranceRange" min="5" max="100" value="35" style="width: 100%; cursor: pointer;">
-        </div>
-        <div class="control-group">
-            <label>Replace Background Color / Backdrop:</label>
-            <select id="bgColorPicker">
-                <option value="transparent">Transparent (PNG)</option>
-                <option value="#ffffff">Solid White (#FFFFFF)</option>
-                <option value="#000000">Solid Black (#000000)</option>
-                <option value="#2563eb">Royal Blue (#2563EB)</option>
-                <option value="#dc2626">Crimson Red (#DC2626)</option>
-                <option value="#10b981">Emerald Green (#10B981)</option>
-            </select>
-        </div>
-    </div>
-
-    <!-- Workspace -->
-    <div class="workspace">
-        <div class="pane">
-            <h3>Original Photo</h3>
-            <div class="pane-canvas-box" id="origBox">
-                <span style="color: #94a3b8; font-size: 13px;">No image uploaded yet</span>
+    <!-- Navigation Header -->
+    <header class="navbar">
+        <div class="container nav-container">
+            <a href="../index.html" class="logo">
+                <i class="fa-solid fa-toolbox logo-icon"></i>
+                <span class="logo-text">OmniKit<span class="highlight">Hub</span></span>
+            </a>
+            <div class="nav-actions">
+                <button id="theme-toggle" class="icon-btn" aria-label="Toggle Theme">
+                    <i class="fa-solid fa-moon"></i>
+                </button>
             </div>
         </div>
-        <div class="pane">
-            <h3>Background Removed Output</h3>
-            <div class="pane-canvas-box checkerboard" id="outputBox">
-                <span style="color: #94a3b8; font-size: 13px;">Processed result will appear here</span>
+    </header>
+
+<div class="main-wrapper">
+
+    <!-- Top Advertisement Slot -->
+    <div class="ad-placeholder">
+        <span>Responsive Advertisement Space (Google AdSense)</span>
+    </div>
+
+    <div class="app-container">
+        <div class="header">
+            <h1>✨ Pro AI Background Remover</h1>
+        </div>
+        <p class="description">Remove image backgrounds automatically or replace them with custom backdrop colors and transparent PNGs instantly.</p>
+
+        <!-- Dropzone -->
+        <div class="dropzone" onclick="document.getElementById('imageInput').click()">
+            <div style="font-size: 32px;">🖼️</div>
+            <p><b>Click or Drag Photo Here to Remove Background</b><br>Supports JPG, PNG, WebP</p>
+            <input type="file" id="imageInput" accept="image/*" style="display: none;">
+        </div>
+
+        <!-- Controls -->
+        <div class="controls-bar">
+            <div class="control-group">
+                <label>Color Tolerance / Sensitivity: <span id="toleranceVal" style="color: var(--primary-color);">35</span></label>
+                <input type="range" id="toleranceRange" min="5" max="100" value="35" style="width: 100%; cursor: pointer;">
             </div>
+            <div class="control-group">
+                <label>Replace Background Color / Backdrop:</label>
+                <select id="bgColorPicker">
+                    <option value="transparent">Transparent (PNG)</option>
+                    <option value="#ffffff">Solid White (#FFFFFF)</option>
+                    <option value="#000000">Solid Black (#000000)</option>
+                    <option value="#2563eb">Royal Blue (#2563EB)</option>
+                    <option value="#dc2626">Crimson Red (#DC2626)</option>
+                    <option value="#10b981">Emerald Green (#10B981)</option>
+                </select>
+            </div>
+        </div>
+
+        <!-- Workspace -->
+        <div class="workspace">
+            <div class="pane">
+                <h3>Original Photo</h3>
+                <div class="pane-canvas-box" id="origBox">
+                    <span style="color: #94a3b8; font-size: 13px;">No image uploaded yet</span>
+                </div>
+            </div>
+            <div class="pane">
+                <h3>Background Removed Output</h3>
+                <div class="pane-canvas-box checkerboard" id="outputBox">
+                    <span style="color: #94a3b8; font-size: 13px;">Processed result will appear here</span>
+                </div>
+            </div>
+        </div>
+
+        <!-- Action Bar -->
+        <div class="action-bar">
+            <button id="downloadBtn" class="btn btn-primary" style="flex: 1; display: none;">📥 Download Processed PNG Image</button>
+            <button id="shareBtn" class="btn btn-share">🔗 Share Tool</button>
+            <button id="clearBtn" class="btn">🗑️ Reset</button>
         </div>
     </div>
 
-    <!-- Action Bar -->
-    <div class="action-bar">
-        <button id="downloadBtn" class="btn btn-primary" style="flex: 1; display: none;">📥 Download Processed PNG Image</button>
-        <button id="shareBtn" class="btn btn-share">🔗 Share Tool</button>
-        <button id="clearBtn" class="btn">🗑️ Reset</button>
+    <!-- Bottom Advertisement Slot -->
+    <div class="ad-placeholder">
+        <span>Responsive Advertisement Space (Google AdSense)</span>
     </div>
+
+    <!-- AdSense Friendly SEO Content Section -->
+    <div class="seo-content-card">
+        <h2>About Pro AI Background Remover</h2>
+        <p>OmniKitHub's Pro AI Background Remover is an advanced browser-based tool designed to extract subjects from image backgrounds instantly. Whether you need transparent PNG cutouts for graphic designs or solid color backdrops for ID and passport photos, this utility processes images securely in your browser.</p>
+
+        <h3>Key Features & Capabilities</h3>
+        <ul>
+            <li><strong>Instant Background Eraser:</strong> Automatically detects and removes surrounding background pixels with adjustable color tolerance.</li>
+            <li><strong>Custom Backdrop Replacement:</strong> Swap transparent backgrounds with solid white, black, blue, red, or green colors instantly.</li>
+            <li><strong>High-Quality PNG Export:</strong> Download your edited cutouts cleanly without sacrificing image resolution.</li>
+            <li><strong>100% Privacy & Security:</strong> All image processing takes place locally on your device without server uploads.</li>
+        </ul>
+
+        <h3>How to Remove Backgrounds Online</h3>
+        <ol>
+            <li>Click or drag your image into the upload dropzone area.</li>
+            <li>Adjust the color sensitivity slider to fine-tune background detection accuracy.</li>
+            <li>Select a transparent or solid color backdrop option, then click download to save your edited image.</li>
+        </ol>
+    </div>
+
 </div>
 
+<!-- Footer Section -->
+<footer class="footer">
+    <div class="container footer-container">
+        <div class="footer-brand">
+            <a href="../index.html" class="logo">
+                <i class="fa-solid fa-toolbox logo-icon"></i>
+                <span class="logo-text">OmniKit<span class="highlight">Hub</span></span>
+            </a>
+            <p>Your ultimate free online toolkit for daily developer, text, media, PDF, and web tasks.</p>
+        </div>
+        
+        <div class="footer-links">
+            <h4>Legal & Pages</h4>
+            <ul>
+                <li><a href="../pages/about.html">About Us</a></li>
+                <li><a href="../pages/contact.html">Contact Us</a></li>
+                <li><a href="../pages/privacy-policy.html">Privacy Policy</a></li>
+                <li><a href="../pages/terms.html">Terms of Service</a></li>
+            </ul>
+        </div>
+    </div>
+    <div class="footer-bottom">
+        <div class="container">
+            <p>&copy; 2026 OmniKitHub.com. All rights reserved.</p>
+        </div>
+    </div>
+</footer>
+
+<script src="../script.js"></script>
 <script>
     const imageInput = document.getElementById('imageInput');
     const toleranceRange = document.getElementById('toleranceRange');
@@ -264,7 +369,6 @@
     const origBox = document.getElementById('origBox');
     const outputBox = document.getElementById('outputBox');
     const downloadBtn = document.getElementById('downloadBtn');
-    const themeToggle = document.getElementById('themeToggle');
 
     let loadedImage = null;
     let processedCanvas = null;
@@ -361,12 +465,6 @@
         link.download = `Background_Removed_OmniKitHub.png`;
         link.href = processedCanvas.toDataURL('image/png');
         link.click();
-    });
-
-    // Dark Mode
-    themeToggle.addEventListener('click', () => {
-        document.body.classList.toggle('dark-mode');
-        themeToggle.innerText = document.body.classList.contains('dark-mode') ? '☀️ Light Mode' : '🌙 Dark Mode';
     });
 
     document.getElementById('clearBtn').addEventListener('click', () => {
