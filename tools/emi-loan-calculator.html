@@ -11,7 +11,7 @@
     <style>
         .tool-container {
             max-width: 1000px;
-            margin: 40px auto;
+            margin: 30px auto;
             background: var(--bg-surface);
             border: 1px solid var(--card-border);
             border-radius: 16px;
@@ -115,6 +115,35 @@
 
         .action-btn:hover { background: var(--accent-hover); }
 
+        /* Ad Slots & SEO Card Styling */
+        .ad-placeholder {
+            border: 1px dashed #cbd5e1;
+            background: rgba(0,0,0,0.01);
+            padding: 15px;
+            border-radius: 10px;
+            text-align: center;
+            color: #64748b;
+            font-size: 13px;
+            margin: 20px 0;
+        }
+
+        .seo-content-card {
+            max-width: 1000px;
+            margin: 30px auto;
+            background: var(--bg-surface);
+            border: 1px solid var(--card-border);
+            border-radius: 16px;
+            padding: 30px;
+            box-shadow: var(--card-shadow);
+            line-height: 1.7;
+            text-align: left;
+        }
+
+        .seo-content-card h2 { font-size: 1.4rem; color: var(--accent-color); margin-bottom: 12px; }
+        .seo-content-card h3 { font-size: 1.1rem; color: var(--text-primary); margin: 15px 0 8px 0; }
+        .seo-content-card p, .seo-content-card li { font-size: 0.95rem; margin-bottom: 8px; color: var(--text-secondary); }
+        .seo-content-card ul { padding-left: 20px; margin-bottom: 10px; }
+
         @media (max-width: 768px) {
             .calc-grid { grid-template-columns: 1fr; }
         }
@@ -122,6 +151,7 @@
 </head>
 <body class="light-theme">
 
+    <!-- Navigation Header -->
     <header class="navbar">
         <div class="container nav-container">
             <a href="../index.html" class="logo">
@@ -136,6 +166,14 @@
         </div>
     </header>
 
+    <!-- Top Advertisement Slot -->
+    <div class="container ad-wrapper" style="margin: 20px auto; max-width: 1000px;">
+        <div class="ad-placeholder">
+            <span>Responsive Advertisement Space (Google AdSense)</span>
+        </div>
+    </div>
+
+    <!-- Main Tool Container -->
     <main class="container">
         <div class="tool-container">
             <h1 style="font-size: 1.8rem; margin-bottom: 8px;">All-in-One Financial & Loan Calculator</h1>
@@ -186,7 +224,57 @@
         </div>
     </main>
 
+    <!-- Bottom Advertisement Slot -->
+    <div class="container ad-wrapper" style="margin: 20px auto; max-width: 1000px;">
+        <div class="ad-placeholder">
+            <span>Responsive Advertisement Space (Google AdSense)</span>
+        </div>
+    </div>
+
+    <!-- AdSense Friendly SEO Content Section -->
+    <section class="container">
+        <div class="seo-content-card">
+            <h2>About All-in-One Financial & Loan Calculator</h2>
+            <p>Welcome to OmniKitHub's comprehensive financial calculator suite. This all-in-one utility helps individuals, investors, and loan applicants estimate precise monthly EMIs, fixed deposit maturity yields, and systematic investment plan (SIP) compounding growth instantly.</p>
+            
+            <h3>Key Financial Calculators Included</h3>
+            <ul>
+                <li><strong>Loan EMI Calculator:</strong> Computes monthly loan installments, total interest payable, and total loan cost based on principal, interest rate, and tenure.</li>
+                <li><strong>Fixed Deposit (FD) Calculator:</strong> Estimates lump-sum investment returns with compounding interest over custom deposit periods.</li>
+                <li><strong>SIP Investment Growth Calculator:</strong> Projects future wealth accumulation for recurring monthly mutual fund contributions.</li>
+                <li><strong>Instant Client-Side Computation:</strong> Performs fast financial modeling securely inside your web browser.</li>
+            </ul>
+
+<h3>How to Use the Financial Calculator</h3>
+            <ol>
+                <li>Select your preferred calculation mode using the top tabs: <strong>Loan EMI</strong>, <strong>Fixed Deposit</strong>, or <strong>SIP Growth</strong>.</li>
+                <li>Enter the primary amount, annual interest rate percentage, and investment or loan duration in years.</li>
+                <li>Click <strong>Calculate Returns</strong> to review your complete financial breakdown instantly.</li>
+            </ol>
+        </div>
+    </section>
+
+    <!-- Footer Section -->
     <footer class="footer">
+        <div class="container footer-container">
+            <div class="footer-brand">
+                <a href="../index.html" class="logo">
+                    <i class="fa-solid fa-toolbox logo-icon"></i>
+                    <span class="logo-text">OmniKit<span class="highlight">Hub</span></span>
+                </a>
+                <p>Your ultimate free online toolkit for daily developer, text, media, PDF, and web tasks.</p>
+            </div>
+            
+            <div class="footer-links">
+                <h4>Legal & Pages</h4>
+                <ul>
+                    <li><a href="../pages/about.html">About Us</a></li>
+                    <li><a href="../pages/contact.html">Contact Us</a></li>
+                    <li><a href="../pages/privacy-policy.html">Privacy Policy</a></li>
+                    <li><a href="../pages/terms.html">Terms of Service</a></li>
+                </ul>
+            </div>
+        </div>
         <div class="footer-bottom">
             <div class="container">
                 <p>&copy; 2026 OmniKitHub.com. All rights reserved.</p>
