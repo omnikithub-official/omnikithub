@@ -15,6 +15,10 @@
     <meta property="og:url" content="https://omnikithub.com/tools/text-case-converter.html">
     <meta property="og:type" content="website">
 
+    <!-- External CSS & Icons -->
+    <link rel="stylesheet" href="../style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
     <!-- html2pdf Library for PDF Export -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
 
@@ -55,29 +59,26 @@
         }
 
         * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; }
-        body { background-color: var(--bg-color); color: var(--text-color); padding: 20px; display: flex; justify-content: center; transition: all 0.3s ease; }
+        body { background-color: var(--bg-color); color: var(--text-color); display: flex; flex-direction: column; min-height: 100vh; transition: all 0.3s ease; }
 
-        .container {
+        .main-wrapper {
+            flex: 1;
             max-width: 1000px;
             width: 100%;
+            margin: 20px auto;
+            padding: 0 20px;
+        }
+
+        .container {
             background: var(--card-bg);
             border-radius: 12px;
             box-shadow: 0 4px 20px rgba(0,0,0,0.08);
             padding: 30px;
+            border: 1px solid var(--border-color);
         }
 
         .header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px; }
         .header h1 { color: var(--primary-color); font-size: 26px; }
-
-        .theme-btn {
-            background: transparent;
-            border: 1px solid var(--border-color);
-            color: var(--text-color);
-            padding: 6px 12px;
-            border-radius: 20px;
-            cursor: pointer;
-            font-size: 13px;
-        }
 
         .description { color: #64748b; font-size: 14px; margin-bottom: 20px; }
 
@@ -157,77 +158,183 @@
             flex-wrap: wrap;
         }
 
+        /* Ad Slots & SEO Card Styling */
+        .ad-placeholder {
+            border: 1px dashed var(--border-color);
+            background: rgba(0,0,0,0.01);
+            padding: 15px;
+            border-radius: 10px;
+            text-align: center;
+            color: #64748b;
+            font-size: 13px;
+            margin: 20px 0;
+        }
+
+        .seo-content-card {
+            background: var(--card-bg);
+            border-radius: 12px;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.08);
+            padding: 30px;
+            margin-top: 30px;
+            border: 1px solid var(--border-color);
+            line-height: 1.7;
+        }
+
+        .seo-content-card h2 { font-size: 1.4rem; color: var(--primary-color); margin-bottom: 12px; }
+        .seo-content-card h3 { font-size: 1.1rem; color: var(--text-color); margin: 15px 0 8px 0; }
+        .seo-content-card p, .seo-content-card li { font-size: 0.95rem; margin-bottom: 8px; color: #64748b; }
+        .seo-content-card ul { padding-left: 20px; margin-bottom: 10px; }
+
         @media print {
             body * { visibility: hidden; }
             .container, .container * { visibility: visible; }
-            .container { position: absolute; left: 0; top: 0; width: 100%; shadow: none; }
-            .action-bar, .btn-group, .header button { display: none; }
+            .container { position: absolute; left: 0; top: 0; width: 100%; box-shadow: none; }
+            .action-bar, .btn-group, .header button, .ad-placeholder, .footer { display: none !important; }
         }
     </style>
 </head>
-<body>
+<body class="light-theme">
 
-<div class="container" id="reportArea">
-    <div class="header">
-        <h1>🔤 Text Case Converter & Cleaner</h1>
-        <button id="themeToggle" class="theme-btn">🌙 Dark Mode</button>
-    </div>
-    <p class="description">Type or paste text below to convert case formatting or clean duplicate lines and extra spaces in 1 click.</p>
+    <!-- Navigation Header -->
+    <header class="navbar">
+        <div class="container nav-container" style="max-width: 100% !important; padding: 0 !important;">
+            <a href="../index.html" class="logo">
+                <i class="fa-solid fa-toolbox logo-icon"></i>
+                <span class="logo-text">OmniKit<span class="highlight">Hub</span></span>
+            </a>
+            <div class="nav-actions">
+                <button id="theme-toggle" class="icon-btn" aria-label="Toggle Theme">
+                    <i class="fa-solid fa-moon"></i>
+                </button>
+            </div>
+        </div>
+    </header>
 
-    <!-- Real-time Stats -->
-    <div class="stats-bar">
-        <span>Words: <b id="wordCount">0</b></span>
-        <span>Characters: <b id="charCount">0</b></span>
-        <span>Sentences: <b id="sentenceCount">0</b></span>
-        <span>Lines: <b id="lineCount">0</b></span>
-    </div>
+<div class="main-wrapper">
 
-    <!-- Text Area -->
-    <textarea id="inputText" placeholder="Type or paste your text here to format or clean..."></textarea>
-
-    <!-- Case Converters -->
-    <div class="section-title">Case Conversions:</div>
-    <div class="btn-group">
-        <button class="btn" onclick="convertCase('upper')">UPPERCASE</button>
-        <button class="btn" onclick="convertCase('lower')">lowercase</button>
-        <button class="btn" onclick="convertCase('title')">Title Case</button>
-        <button class="btn" onclick="convertCase('sentence')">Sentence case</button>
-        <button class="btn" onclick="convertCase('camel')">camelCase</button>
-        <button class="btn" onclick="convertCase('pascal')">PascalCase</button>
-        <button class="btn" onclick="convertCase('snake')">snake_case</button>
-        <button class="btn" onclick="convertCase('slug')">URL Slug-case</button>
-        <button class="btn" onclick="convertCase('alt')">aLtErNaTiNg cAsE</button>
-        <button class="btn" onclick="convertCase('invert')">InVeRt cAsE</button>
+    <!-- Top Advertisement Slot -->
+    <div class="ad-placeholder">
+        <span>Responsive Advertisement Space (Google AdSense)</span>
     </div>
 
-    <!-- Text Cleaners -->
-    <div class="section-title">Text Cleaners & Sorting:</div>
-    <div class="btn-group">
-        <button class="btn" onclick="cleanText('spaces')">🧹 Remove Extra Spaces</button>
-        <button class="btn" onclick="cleanText('blank')">📄 Remove Blank Lines</button>
-        <button class="btn" onclick="cleanText('duplicates')">📋 Remove Duplicates</button>
-        <button class="btn" onclick="cleanText('stripLineBreaks')">🔗 Remove Line Breaks</button>
-        <button class="btn" onclick="cleanText('sortAZ')">🔠 Sort Lines (A-Z)</button>
+    <div class="container" id="reportArea">
+        <div class="header">
+            <h1>🔤 Text Case Converter & Cleaner</h1>
+        </div>
+        <p class="description">Type or paste text below to convert case formatting or clean duplicate lines and extra spaces in 1 click.</p>
+
+        <!-- Real-time Stats -->
+        <div class="stats-bar">
+            <span>Words: <b id="wordCount">0</b></span>
+            <span>Characters: <b id="charCount">0</b></span>
+            <span>Sentences: <b id="sentenceCount">0</b></span>
+            <span>Lines: <b id="lineCount">0</b></span>
+        </div>
+
+        <!-- Text Area -->
+        <textarea id="inputText" placeholder="Type or paste your text here to format or clean..."></textarea>
+
+        <!-- Case Converters -->
+        <div class="section-title">Case Conversions:</div>
+        <div class="btn-group">
+            <button class="btn" onclick="convertCase('upper')">UPPERCASE</button>
+            <button class="btn" onclick="convertCase('lower')">lowercase</button>
+            <button class="btn" onclick="convertCase('title')">Title Case</button>
+            <button class="btn" onclick="convertCase('sentence')">Sentence case</button>
+            <button class="btn" onclick="convertCase('camel')">camelCase</button>
+            <button class="btn" onclick="convertCase('pascal')">PascalCase</button>
+            <button class="btn" onclick="convertCase('snake')">snake_case</button>
+            <button class="btn" onclick="convertCase('slug')">URL Slug-case</button>
+            <button class="btn" onclick="convertCase('alt')">aLtErNaTiNg cAsE</button>
+            <button class="btn" onclick="convertCase('invert')">InVeRt cAsE</button>
+        </div>
+
+        <!-- Text Cleaners -->
+        <div class="section-title">Text Cleaners & Sorting:</div>
+        <div class="btn-group">
+            <button class="btn" onclick="cleanText('spaces')">🧹 Remove Extra Spaces</button>
+            <button class="btn" onclick="cleanText('blank')">📄 Remove Blank Lines</button>
+            <button class="btn" onclick="cleanText('duplicates')">📋 Remove Duplicates</button>
+            <button class="btn" onclick="cleanText('stripLineBreaks')">🔗 Remove Line Breaks</button>
+            <button class="btn" onclick="cleanText('sortAZ')">🔠 Sort Lines (A-Z)</button>
+        </div>
+
+        <!-- Action Bar -->
+        <div class="action-bar">
+            <button id="copyBtn" class="btn btn-primary">📋 Copy Output</button>
+            <button id="downloadTxtBtn" class="btn">📥 Download (.TXT)</button>
+            <button id="downloadPdfBtn" class="btn">📄 Save PDF Report</button>
+            <button id="printBtn" class="btn">🖨️ Print</button>
+            <button id="shareBtn" class="btn btn-share">🔗 Share Tool</button>
+            <button id="clearBtn" class="btn">🗑️ Clear All</button>
+        </div>
     </div>
 
-    <!-- Action Bar -->
-    <div class="action-bar">
-        <button id="copyBtn" class="btn btn-primary">📋 Copy Output</button>
-        <button id="downloadTxtBtn" class="btn">📥 Download (.TXT)</button>
-        <button id="downloadPdfBtn" class="btn">📄 Save PDF Report</button>
-        <button id="printBtn" class="btn">🖨️ Print</button>
-        <button id="shareBtn" class="btn btn-share">🔗 Share Tool</button>
-        <button id="clearBtn" class="btn">🗑️ Clear All</button>
+    <!-- Bottom Advertisement Slot -->
+    <div class="ad-placeholder">
+        <span>Responsive Advertisement Space (Google AdSense)</span>
     </div>
+
+    <!-- Helpful Tutorial Video Carousel -->
+    <div style="margin: 30px 0;">
+        <h3 style="font-size: 1.2rem; color: var(--text-color); margin-bottom: 12px;"><i class="fa-solid fa-video" style="color: var(--primary-color);"></i> Recommended Text Case Converter Tutorials</h3>
+        <Carousel>
+          <Video source="youtube" query="how to use text case converter tools online" count="3"/>
+        </Carousel>
+    </div>
+
+    <!-- AdSense Friendly SEO Content Section -->
+    <div class="seo-content-card">
+        <h2>About Text Case Converter & Cleaner</h2>
+        <p>OmniKitHub's free online Text Case Converter and Cleaner allows writers, programmers, students, and editors to format letter capitalization, clean up messy white spaces, eliminate duplicate lines, and generate URL slugs instantly.</p>
+        
+        <h3>Key Features & Capabilities</h3>
+        <ul>
+            <li><strong>Multiple Case Formats:</strong> Instantly convert text to UPPERCASE, lowercase, Title Case, Sentence case, camelCase, PascalCase, snake_case, and URL slugs.</li>
+            <li><strong>Advanced Text Cleaners:</strong> Remove extra white spaces, delete blank lines, strip unwanted line breaks, and filter out duplicate lines.</li>
+            <li><strong>Live Text Statistics:</strong> Real-time word, character, sentence, and line count tracking as you type or paste text.</li>
+            <li><strong>Instant Export & Download:</strong> Copy formatted text to clipboard, download as a .TXT file, or export directly to a PDF report.</li>
+        </ul>
+    </div>
+
 </div>
 
+<!-- Footer Section -->
+<footer class="footer">
+    <div class="container footer-container" style="max-width: 100% !important;">
+        <div class="footer-brand">
+            <a href="../index.html" class="logo">
+                <i class="fa-solid fa-toolbox logo-icon"></i>
+                <span class="logo-text">OmniKit<span class="highlight">Hub</span></span>
+            </a>
+            <p>Your ultimate free online toolkit for daily developer, text, media, PDF, and web tasks.</p>
+        </div>
+        
+        <div class="footer-links">
+            <h4>Legal & Pages</h4>
+            <ul>
+                <li><a href="../pages/about.html">About Us</a></li>
+                <li><a href="../pages/contact.html">Contact Us</a></li>
+                <li><a href="../pages/privacy-policy.html">Privacy Policy</a></li>
+                <li><a href="../pages/terms.html">Terms of Service</a></li>
+            </ul>
+        </div>
+    </div>
+    <div class="footer-bottom">
+        <div class="container">
+            <p>&copy; 2026 OmniKitHub.com. All rights reserved.</p>
+        </div>
+    </div>
+</footer>
+
+<script src="../script.js"></script>
 <script>
     const inputText = document.getElementById('inputText');
     const wordCount = document.getElementById('wordCount');
     const charCount = document.getElementById('charCount');
     const sentenceCount = document.getElementById('sentenceCount');
     const lineCount = document.getElementById('lineCount');
-    const themeToggle = document.getElementById('themeToggle');
+    const themeToggle = document.getElementById('theme-toggle');
 
     function analyzeText() {
         const text = inputText.value;
