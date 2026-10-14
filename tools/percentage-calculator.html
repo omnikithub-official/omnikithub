@@ -3,25 +3,80 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Percentage Calculator - OmniKitHub</title>
+    <title>Percentage Calculator Online Free | OmniKitHub</title>
     <meta name="description" content="Free online percentage calculator. Calculate percentage increases, decreases, discounts, and markups instantly.">
     <meta name="keywords" content="percentage calculator, calculate percentage, discount calculator, percentage change, online math tool">
+    <meta name="robots" content="index, follow">
+    <link rel="canonical" href="https://omnikithub.com/tools/percentage-calculator.html">
+
+    <!-- Open Graph Tags -->
+    <meta property="og:title" content="Percentage Calculator - OmniKitHub">
+    <meta property="og:description" content="Quick percentage increases, decreases, discounts, and markups mathematical solutions.">
+    <meta property="og:url" content="https://omnikithub.com/tools/percentage-calculator.html">
+    <meta property="og:type" content="website">
+
+    <!-- External CSS & Icons -->
     <link rel="stylesheet" href="../style.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+    <!-- Schema.org Markup -->
+    <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@type": "WebApplication",
+      "name": "Percentage Calculator",
+      "url": "https://omnikithub.com/tools/percentage-calculator.html",
+      "applicationCategory": "UtilitiesApplication",
+      "operatingSystem": "All",
+      "offers": {
+        "@type": "Offer",
+        "price": "0",
+        "priceCurrency": "USD"
+      }
+    }
+    </script>
+
     <style>
-        .tool-container {
+        :root {
+            --bg-color: #f4f6f9;
+            --card-bg: #ffffff;
+            --text-color: #1e293b;
+            --border-color: #cbd5e1;
+            --primary-color: #2563eb;
+            --primary-hover: #1d4ed8;
+        }
+
+        body.dark-mode {
+            --bg-color: #0f172a;
+            --card-bg: #1e293b;
+            --text-color: #f8fafc;
+            --border-color: #334155;
+            --primary-color: #3b82f6;
+            --primary-hover: #60a5fa;
+        }
+
+        * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; }
+        body { background-color: var(--bg-color); color: var(--text-color); display: flex; flex-direction: column; min-height: 100vh; transition: all 0.3s ease; }
+
+        .main-wrapper {
+            flex: 1;
             max-width: 850px;
-            margin: 40px auto;
-            background: var(--bg-surface);
-            border: 1px solid var(--card-border);
+            width: 100%;
+            margin: 20px auto;
+            padding: 0 20px;
+        }
+
+        .tool-container {
+            background: var(--card-bg);
+            border: 1px solid var(--border-color);
             border-radius: 16px;
             padding: 30px;
-            box-shadow: var(--card-shadow);
+            box-shadow: 0 4px 20px rgba(0,0,0,0.08);
         }
 
         .calc-card {
-            background: var(--bg-primary);
-            border: 1px solid var(--card-border);
+            background: rgba(0,0,0,0.01);
+            border: 1px solid var(--border-color);
             border-radius: 12px;
             padding: 20px;
             margin-bottom: 20px;
@@ -34,16 +89,16 @@
             flex-wrap: wrap;
             font-size: 1.05rem;
             font-weight: 600;
-            color: var(--text-primary);
+            color: var(--text-color);
         }
 
         .form-control {
             width: 110px;
             padding: 8px 12px;
             border-radius: 8px;
-            border: 1px solid var(--card-border);
-            background: var(--bg-surface);
-            color: var(--text-primary);
+            border: 1px solid var(--border-color);
+            background: var(--card-bg);
+            color: var(--text-color);
             font-size: 1rem;
             font-weight: 700;
             outline: none;
@@ -53,13 +108,40 @@
         .result-badge {
             padding: 8px 16px;
             border-radius: 8px;
-            background: var(--accent-color);
+            background: var(--primary-color);
             color: #ffffff;
             font-weight: 800;
             font-size: 1.1rem;
             display: inline-block;
             margin-left: auto;
         }
+
+        /* Ad Slots & SEO Card Styling */
+        .ad-placeholder {
+            border: 1px dashed #cbd5e1;
+            background: rgba(0,0,0,0.01);
+            padding: 15px;
+            border-radius: 10px;
+            text-align: center;
+            color: #64748b;
+            font-size: 13px;
+            margin: 20px 0;
+        }
+
+        .seo-content-card {
+            background: var(--card-bg);
+            border-radius: 16px;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.08);
+            padding: 30px;
+            margin-top: 30px;
+            border: 1px solid var(--border-color);
+            line-height: 1.7;
+        }
+
+        .seo-content-card h2 { font-size: 1.4rem; color: var(--primary-color); margin-bottom: 12px; }
+        .seo-content-card h3 { font-size: 1.1rem; color: var(--text-color); margin: 15px 0 8px 0; }
+        .seo-content-card p, .seo-content-card li { font-size: 0.95rem; margin-bottom: 8px; color: #64748b; }
+        .seo-content-card ul { padding-left: 20px; margin-bottom: 10px; }
 
         @media (max-width: 600px) {
             .calc-row { flex-direction: column; align-items: flex-start; }
@@ -69,8 +151,9 @@
 </head>
 <body class="light-theme">
 
+    <!-- Navigation Header -->
     <header class="navbar">
-        <div class="container nav-container">
+        <div class="container nav-container" style="max-width: 100% !important; padding: 0 !important;">
             <a href="../index.html" class="logo">
                 <i class="fa-solid fa-toolbox logo-icon"></i>
                 <span class="logo-text">OmniKit<span class="highlight">Hub</span></span>
@@ -83,88 +166,150 @@
         </div>
     </header>
 
-    <main class="container">
-        <div class="tool-container">
-            <h1 style="font-size: 1.8rem; margin-bottom: 8px;">Percentage Calculator</h1>
-            <p style="color: var(--text-secondary); margin-bottom: 24px;">Quick percentage increases, decreases, discounts, and markups mathematical solutions.</p>
+<div class="main-wrapper">
 
-            <!-- Mode 1 -->
-            <div class="calc-card">
-                <div class="calc-row">
-                    <span>What is</span>
-                    <input type="number" id="p1-val1" class="form-control" value="15" oninput="calcMode1()">
-                    <span>% of</span>
-                    <input type="number" id="p1-val2" class="form-control" value="200" oninput="calcMode1()">
-                    <span>?</span>
-                    <span id="p1-res" class="result-badge">30</span>
-                </div>
-            </div>
+    <!-- Top Advertisement Slot -->
+    <div class="ad-placeholder">
+        <span>Responsive Advertisement Space (Google AdSense)</span>
+    </div>
 
-            <!-- Mode 2 -->
-            <div class="calc-card">
-                <div class="calc-row">
-                    <input type="number" id="p2-val1" class="form-control" value="25" oninput="calcMode2()">
-                    <span>is what % of</span>
-                    <input type="number" id="p2-val2" class="form-control" value="500" oninput="calcMode2()">
-                    <span>?</span>
-                    <span id="p2-res" class="result-badge">5%</span>
-                </div>
-            </div>
+    <div class="tool-container">
+        <h1 style="font-size: 1.8rem; margin-bottom: 8px; color: var(--primary-color);">Percentage Calculator</h1>
+        <p style="color: #64748b; margin-bottom: 24px;">Quick percentage increases, decreases, discounts, and markups mathematical solutions.</p>
 
-            <!-- Mode 3 -->
-            <div class="calc-card">
-                <div class="calc-row">
-                    <span>What is the percentage change from</span>
-                    <input type="number" id="p3-val1" class="form-control" value="100" oninput="calcMode3()">
-                    <span>to</span>
-                    <input type="number" id="p3-val2" class="form-control" value="150" oninput="calcMode3()">
-                    <span>?</span>
-                    <span id="p3-res" class="result-badge">+50%</span>
-                </div>
+        <!-- Mode 1 -->
+        <div class="calc-card">
+            <div class="calc-row">
+                <span>What is</span>
+                <input type="number" id="p1-val1" class="form-control" value="15" oninput="calcMode1()">
+                <span>% of</span>
+                <input type="number" id="p1-val2" class="form-control" value="200" oninput="calcMode1()">
+                <span>?</span>
+                <span id="p1-res" class="result-badge">30</span>
             </div>
         </div>
-    </main>
 
-    <footer class="footer">
-        <div class="footer-bottom">
-            <div class="container">
-                <p>&copy; 2026 OmniKitHub.com. All rights reserved.</p>
+        <!-- Mode 2 -->
+        <div class="calc-card">
+            <div class="calc-row">
+                <input type="number" id="p2-val1" class="form-control" value="25" oninput="calcMode2()">
+                <span>is what % of</span>
+                <input type="number" id="p2-val2" class="form-control" value="500" oninput="calcMode2()">
+                <span>?</span>
+                <span id="p2-res" class="result-badge">5%</span>
             </div>
         </div>
-    </footer>
 
-    <script src="../script.js"></script>
-    <script>
-        function calcMode1() {
-            const v1 = parseFloat(document.getElementById('p1-val1').value) || 0;
-            const v2 = parseFloat(document.getElementById('p1-val2').value) || 0;
-            const res = (v1 / 100) * v2;
-            document.getElementById('p1-res').innerText = Number.isInteger(res) ? res : res.toFixed(2);
+        <!-- Mode 3 -->
+        <div class="calc-card">
+            <div class="calc-row">
+                <span>What is the percentage change from</span>
+                <input type="number" id="p3-val1" class="form-control" value="100" oninput="calcMode3()">
+                <span>to</span>
+                <input type="number" id="p3-val2" class="form-control" value="150" oninput="calcMode3()">
+                <span>?</span>
+                <span id="p3-res" class="result-badge">+50%</span>
+            </div>
+        </div>
+    </div>
+
+    <!-- Bottom Advertisement Slot -->
+    <div class="ad-placeholder">
+        <span>Responsive Advertisement Space (Google AdSense)</span>
+    </div>
+
+    <!-- Helpful Tutorial Video Carousel -->
+    <div style="margin: 30px 0;">
+        <h3 style="font-size: 1.2rem; color: var(--text-color); margin-bottom: 12px;"><i class="fa-solid fa-video" style="color: var(--primary-color);"></i> Recommended Percentage Calculation Tutorials</h3>
+        <Carousel>
+          <Video source="youtube" query="how to calculate percentages easily math tutorial" count="3"/>
+        </Carousel>
+    </div>
+
+    <!-- SEO Content Section -->
+    <div class="seo-content-card">
+        <h2>About Percentage Calculator</h2>
+        <p>OmniKitHub's free online Percentage Calculator lets you quickly solve various percentage equations, including finding percentages of numbers, ratios, and percentage increases or decreases.</p>
+        
+        <h3>Calculation Modes Included</h3>
+        <ul>
+            <li><strong>Find Percentage of a Number:</strong> Calculate what X percent of Y is instantly.</li>
+            <li><strong>Find Percentage Ratio:</strong> Determine what percentage one number is of another.</li>
+            <li><strong>Percentage Change:</strong> Compute growth, increase, or decrease rates between two figures.</li>
+        </ul>
+    </div>
+
+</div>
+
+<!-- Footer Section -->
+<footer class="footer">
+    <div class="container footer-container" style="max-width: 100% !important;">
+        <div class="footer-brand">
+            <a href="../index.html" class="logo">
+                <i class="fa-solid fa-toolbox logo-icon"></i>
+                <span class="logo-text">OmniKit<span class="highlight">Hub</span></span>
+            </a>
+            <p>Your ultimate free online toolkit for daily developer, text, media, PDF, and web tasks.</p>
+        </div>
+        
+        <div class="footer-links">
+            <h4>Legal & Pages</h4>
+            <ul>
+                <li><a href="../pages/about.html">About Us</a></li>
+                <li><a href="../pages/contact.html">Contact Us</a></li>
+                <li><a href="../pages/privacy-policy.html">Privacy Policy</a></li>
+                <li><a href="../pages/terms.html">Terms of Service</a></li>
+            </ul>
+        </div>
+    </div>
+    <div class="footer-bottom">
+        <div class="container">
+            <p>&copy; 2026 OmniKitHub.com. All rights reserved.</p>
+        </div>
+    </div>
+</footer>
+
+<script src="../script.js"></script>
+<script>
+    const themeToggle = document.getElementById('theme-toggle');
+
+    function calcMode1() {
+        const v1 = parseFloat(document.getElementById('p1-val1').value) || 0;
+        const v2 = parseFloat(document.getElementById('p1-val2').value) || 0;
+        const res = (v1 / 100) * v2;
+        document.getElementById('p1-res').innerText = Number.isInteger(res) ? res : res.toFixed(2);
+    }
+
+    function calcMode2() {
+        const v1 = parseFloat(document.getElementById('p2-val1').value) || 0;
+        const v2 = parseFloat(document.getElementById('p2-val2').value) || 1;
+        const res = (v1 / v2) * 100;
+        document.getElementById('p2-res').innerText = (Number.isInteger(res) ? res : res.toFixed(2)) + '%';
+    }
+
+    function calcMode3() {
+        const v1 = parseFloat(document.getElementById('p3-val1').value) || 0;
+        const v2 = parseFloat(document.getElementById('p3-val2').value) || 0;
+        if (v1 === 0) {
+            document.getElementById('p3-res').innerText = '0%';
+            return;
         }
+        const res = ((v2 - v1) / v1) * 100;
+        const sign = res > 0 ? '+' : '';
+        document.getElementById('p3-res').innerText = sign + (Number.isInteger(res) ? res : res.toFixed(2)) + '%';
+    }
 
-        function calcMode2() {
-            const v1 = parseFloat(document.getElementById('p2-val1').value) || 0;
-            const v2 = parseFloat(document.getElementById('p2-val2').value) || 1;
-            const res = (v1 / v2) * 100;
-            document.getElementById('p2-res').innerText = (Number.isInteger(res) ? res : res.toFixed(2)) + '%';
-        }
+    // Dark Mode Toggle
+    themeToggle.addEventListener('click', () => {
+        document.body.classList.toggle('dark-mode');
+        themeToggle.innerText = document.body.classList.contains('dark-mode') ? '☀️ Light Mode' : '🌙 Dark Mode';
+    });
 
-        function calcMode3() {
-            const v1 = parseFloat(document.getElementById('p3-val1').value) || 0;
-            const v2 = parseFloat(document.getElementById('p3-val2').value) || 0;
-            if (v1 === 0) {
-                document.getElementById('p3-res').innerText = '0%';
-                return;
-            }
-            const res = ((v2 - v1) / v1) * 100;
-            const sign = res > 0 ? '+' : '';
-            document.getElementById('p3-res').innerText = sign + (Number.isInteger(res) ? res : res.toFixed(2)) + '%';
-        }
+    // Initial Calculations
+    calcMode1();
+    calcMode2();
+    calcMode3();
+</script>
 
-        // Initial Calculations
-        calcMode1();
-        calcMode2();
-        calcMode3();
-    </script>
 </body>
 </html>
