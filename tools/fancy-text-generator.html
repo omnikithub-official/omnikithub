@@ -15,6 +15,10 @@
     <meta property="og:url" content="https://omnikithub.com/tools/fancy-text-generator.html">
     <meta property="og:type" content="website">
 
+    <!-- External CSS & Icons -->
+    <link rel="stylesheet" href="../style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
     <!-- Schema.org Markup -->
     <script type="application/ld+json">
     {
@@ -52,29 +56,27 @@
         }
 
         * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; }
-        body { background-color: var(--bg-color); color: var(--text-color); padding: 20px; display: flex; justify-content: center; transition: all 0.3s ease; }
+        body { background-color: var(--bg-color); color: var(--text-color); display: flex; flex-direction: column; min-height: 100vh; transition: all 0.3s ease; }
+
+        .main-wrapper {
+            flex: 1;
+            max-width: 950px;
+            width: 100%;
+            margin: 20px auto;
+            padding: 0 20px;
+        }
 
         .container {
-            max-width: 950px;
             width: 100%;
             background: var(--card-bg);
             border-radius: 12px;
             box-shadow: 0 4px 20px rgba(0,0,0,0.08);
             padding: 30px;
+            border: 1px solid var(--border-color);
         }
 
         .header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px; }
-        .header h1 { color: var(--primary-color); font-size: 26px; }
-
-        .theme-btn {
-            background: transparent;
-            border: 1px solid var(--border-color);
-            color: var(--text-color);
-            padding: 6px 12px;
-            border-radius: 20px;
-            cursor: pointer;
-            font-size: 13px;
-        }
+        .header h1 { color: var(--primary-color); font-size: 24px; }
 
         .description { color: #64748b; font-size: 14px; margin-bottom: 25px; }
 
@@ -192,6 +194,33 @@
             border: none;
         }
 
+        /* Ad Slots & SEO Card Styling */
+        .ad-placeholder {
+            border: 1px dashed #cbd5e1;
+            background: rgba(0,0,0,0.01);
+            padding: 15px;
+            border-radius: 10px;
+            text-align: center;
+            color: #64748b;
+            font-size: 13px;
+            margin: 20px 0;
+        }
+
+        .seo-content-card {
+            background: var(--card-bg);
+            border-radius: 12px;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.08);
+            padding: 30px;
+            margin-top: 30px;
+            border: 1px solid var(--border-color);
+            line-height: 1.7;
+        }
+
+        .seo-content-card h2 { font-size: 1.4rem; color: var(--primary-color); margin-bottom: 12px; }
+        .seo-content-card h3 { font-size: 1.1rem; color: var(--text-color); margin: 15px 0 8px 0; }
+        .seo-content-card p, .seo-content-card li { font-size: 0.95rem; margin-bottom: 8px; color: #64748b; }
+        .seo-content-card ul { padding-left: 20px; margin-bottom: 10px; }
+
         /* Toast Alert */
         .toast {
             position: fixed;
@@ -204,47 +233,126 @@
             font-weight: 600;
             display: none;
             box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+            z-index: 1000;
         }
     </style>
 </head>
-<body>
+<body class="light-theme">
 
-<div class="container">
-    <div class="header">
-        <h1>✨ Fancy Text & Font Generator (50+ Styles)</h1>
-        <button id="themeToggle" class="theme-btn">🌙 Dark Mode</button>
+    <!-- Navigation Header -->
+    <header class="navbar">
+        <div class="container nav-container" style="max-width: 100% !important; padding: 0 !important;">
+            <a href="../index.html" class="logo">
+                <i class="fa-solid fa-toolbox logo-icon"></i>
+                <span class="logo-text">OmniKit<span class="highlight">Hub</span></span>
+            </a>
+            <div class="nav-actions">
+                <button id="theme-toggle" class="icon-btn" aria-label="Toggle Theme">
+                    <i class="fa-solid fa-moon"></i>
+                </button>
+            </div>
+        </div>
+    </header>
+
+<div class="main-wrapper">
+
+    <!-- Top Advertisement Slot -->
+    <div class="ad-placeholder">
+        <span>Responsive Advertisement Space (Google AdSense)</span>
     </div>
-    <p class="description">Type your text below to instantly generate 50+ aesthetic fonts, cursive styles, glitch effects, gaming nicknames, and symbols for Instagram bios, Facebook, TikTok, and Gaming profiles.</p>
 
-    <!-- Text Input -->
-    <textarea id="inputText" placeholder="Type or paste your text here (e.g. OmniKitHub Stylish Text)..."></textarea>
+    <div class="container">
+        <div class="header">
+            <h1>✨ Fancy Text & Font Generator (50+ Styles)</h1>
+        </div>
+        <p class="description">Type your text below to instantly generate 50+ aesthetic fonts, cursive styles, glitch effects, gaming nicknames, and symbols for Instagram bios, Facebook, TikTok, and Gaming profiles.</p>
 
-    <!-- Category Filters -->
-    <div class="filter-tabs">
-        <button class="tab-btn active" onclick="filterCategory('all')">🌟 All Styles (50+)</button>
-        <button class="tab-btn" onclick="filterCategory('social')">📱 FB & Insta Bio</button>
-        <button class="tab-btn" onclick="filterCategory('gaming')">🎮 Gaming & Cool</button>
-        <button class="tab-btn" onclick="filterCategory('symbols')">♥ Symbols & Decor</button>
+        <!-- Text Input -->
+        <textarea id="inputText" placeholder="Type or paste your text here (e.g. OmniKitHub Stylish Text)..."></textarea>
+
+        <!-- Category Filters -->
+        <div class="filter-tabs">
+            <button class="tab-btn active" onclick="filterCategory('all')">🌟 All Styles (50+)</button>
+            <button class="tab-btn" onclick="filterCategory('social')">📱 FB & Insta Bio</button>
+            <button class="tab-btn" onclick="filterCategory('gaming')">🎮 Gaming & Cool</button>
+            <button class="tab-btn" onclick="filterCategory('symbols')">♥ Symbols & Decor</button>
+        </div>
+
+        <!-- Generated Font Results List -->
+        <div id="resultsList" class="results-list"></div>
+
+        <!-- Action Toolbar -->
+        <div class="action-bar">
+            <button id="downloadTxtBtn" class="btn-sec">📥 Download All (.TXT)</button>
+            <button id="shareBtn" class="btn-sec btn-share">🔗 Share Tool</button>
+            <button id="clearBtn" class="btn-sec">🗑️ Clear Input</button>
+        </div>
     </div>
 
-    <!-- Generated Font Results List -->
-    <div id="resultsList" class="results-list"></div>
-
-    <!-- Action Toolbar -->
-    <div class="action-bar">
-        <button id="downloadTxtBtn" class="btn-sec">📥 Download All (.TXT)</button>
-        <button id="shareBtn" class="btn-sec btn-share">🔗 Share Tool</button>
-        <button id="clearBtn" class="btn-sec">🗑️ Clear Input</button>
+    <!-- Bottom Advertisement Slot -->
+    <div class="ad-placeholder">
+        <span>Responsive Advertisement Space (Google AdSense)</span>
     </div>
+
+    <!-- AdSense Friendly SEO Content Section -->
+    <div class="seo-content-card">
+        <h2>About Fancy Text & Font Generator</h2>
+        <p>OmniKitHub's Fancy Text Generator is a free online tool designed to convert ordinary alphanumeric text into over 50 unique cool fonts, aesthetic Unicode symbols, cursive lettering, and stylish gaming nicknames instantly.</p>
+        
+        <h3>Key Features & Categories</h3>
+        <ul>
+            <li><strong>Instagram & Facebook Bio Fonts:</strong> Create bold serif, sans-serif, italic, and cursive scripts to make your social media profiles stand out.</li>
+            <li><strong>Gaming & Esports Nicknames:</strong> Generate custom clan tags, sniper crosshairs, wings, and gothic lettering for PUBG, Free Fire, and modern games.</li>
+            <li><strong>Aesthetic Symbols & Decor:</strong> Decorate your text with hearts, stars, fire, butterflies, and decorative frames.</li>
+            <li><strong>Instant Copy & Download:</strong> Copy any style with a single click or download all generated variants into a text file.</li>
+        </ul>
+
+        <h3>How to Use the Font Generator</h3>
+        <ol>
+            <li>Type or paste your desired word, name, or status message into the input box.</li>
+            <li>Browse through the instantly generated list or filter by category (Social, Gaming, or Symbols).</li>
+            <li>Click <strong>Copy</strong> next to your favorite style and paste it anywhere you like!</li>
+        </ol>
+    </div>
+
 </div>
+
+<!-- Footer Section -->
+<footer class="footer">
+    <div class="container footer-container" style="max-width: 100% !important;">
+        <div class="footer-brand">
+            <a href="../index.html" class="logo">
+                <i class="fa-solid fa-toolbox logo-icon"></i>
+                <span class="logo-text">OmniKit<span class="highlight">Hub</span></span>
+            </a>
+            <p>Your ultimate free online toolkit for daily developer, text, media, PDF, and web tasks.</p>
+        </div>
+        
+        <div class="footer-links">
+            <h4>Legal & Pages</h4>
+            <ul>
+                <li><a href="../pages/about.html">About Us</a></li>
+                <li><a href="../pages/contact.html">Contact Us</a></li>
+                <li><a href="../pages/privacy-policy.html">Privacy Policy</a></li>
+                <li><a href="../pages/terms.html">Terms of Service</a></li>
+            </ul>
+        </div>
+    </div>
+    <div class="footer-bottom">
+        <div class="container">
+            <p>&copy; 2026 OmniKitHub.com. All rights reserved.</p>
+        </div>
+    </div>
+</footer>
 
 <div id="toast" class="toast">Copied to clipboard!</div>
 
+<script src="../script.js"></script>
 <script>
     const inputText = document.getElementById('inputText');
     const resultsList = document.getElementById('resultsList');
     const toast = document.getElementById('toast');
-    const themeToggle = document.getElementById('themeToggle');
+    const themeToggle = document.getElementById('theme-toggle');
 
     let currentCategory = 'all';
 
@@ -256,13 +364,13 @@
     const fontGenerators = [
         // Social / FB & Insta Bio Category
         { name: 'Bold Serif', cat: 'social', gen: t => mapStyle(t, {'A':'𝐀','B':'𝐁','C':'𝐂','D':'𝐃','E':'𝐄','F':'𝐅','G':'𝐆','H':'𝐇','I':'𝐈','J':'𝐉','K':'𝐊','L':'𝐋','M':'𝐌','N':'𝐍','O':'𝐎','P':'𝐏','Q':'𝐉','R':'𝐑','S':'𝐒','T':'𝐓','U':'𝐔','V':'𝐕','W':'𝐖','X':'𝐗','Y':'𝐘','Z':'𝐙','a':'𝐚','b':'𝐛','c':'𝐜','d':'𝐝','e':'𝐞','f':'𝐟','g':'𝐠','h':'𝐡','i':'𝐢','j':'𝐣','k':'𝐤','l':'𝐥','m':'𝐦','n':'𝐧','o':'𝐨','p':'𝐩','q':'𝐪','r':'𝐫','s':'𝐬','t':'𝐭','u':'𝐮','v':'𝐯','w':'𝐰','x':'𝐱','y':'𝐲','z':'𝐳'}) },
-        { name: 'Bold Sans', cat: 'social', gen: t => mapStyle(t, {'A':'𝝖','B':'𝝗','C':'𝝘','D':'𝝙','E':'𝝚','F':'𝝛','G':'𝝜','H':'𝝝','I':'𝝞','J':'𝝟','K':'𝝠','L':'𝝡','M':'𝝢','N':'𝝣','O':'𝝤','P':'𝝥','Q':'𝝦','R':'𝝧','S':'𝝨','T':'𝝩','U':'𝝪','V':'𝝫','W':'𝝬','X':'𝝭','Y':'𝝮','Z':'𝝯','a':'𝗮','b':'𝗯','c':'𝗰','d':'𝗱','e':'𝗲','f':'𝗳','g':'𝗴','h':'𝗵','i':'𝗶','j':'𝗷','k':'𝗸','l':'𝗹','m':'𝗺','n':'𝗻','o':'𝗼','p':'𝗽','q':'Programs','r':'𝗿','s':'𝘀','t':'𝘁','u':'𝘂','v':'𝘃','w':'𝘄','x':'𝘅','y':'𝘆','z':'𝘇'}) },
+        { name: 'Bold Sans', cat: 'social', gen: t => mapStyle(t, {'A':'𝝖','B':'𝝗','C':'𝝘','D':'𝝙','E':'𝝚','F':'𝝛','G':'𝝜','H':'𝝝','I':'𝝞','J':'𝝟','K':'𝝠','L':'𝝡','M':'𝝢','N':'𝝣','O':'𝝤','P':'𝝥','Q':'𝝦','R':'𝝧','S':'𝝨','T':'𝝩','U':'𝝪','V':'𝝫','W':'𝝬','X':'𝝭','Y':'𝝮','Z':'𝝯','a':'𝗮','b':'𝗯','c':'𝗰','d':'𝗱','e':'𝗲','f':'𝗳','g':'𝗴','h':'𝗵','i':'𝗶','j':'𝗷','k':'𝗸','l':'𝗹','m':'𝗺','n':'𝗻','o':'𝗼','p':'𝗽','q':'𝗾','r':'𝗿','s':'𝘀','t':'𝘁','u':'𝘂','v':'𝘃','w':'𝘄','x':'𝘅','y':'𝘆','z':'𝘇'}) },
         { name: 'Italic Serif', cat: 'social', gen: t => mapStyle(t, {'A':'𝐴','B':'𝐵','C':'𝐶','D':'𝐷','E':'𝐸','F':'𝐹','G':'𝐺','H':'𝐻','I':'𝐼','J':'𝐽','K':'𝐾','L':'𝐿','M':'𝑀','N':'𝑁','O':'𝑂','P':'𝑃','Q':'𝑄','R':'𝑅','S':'𝑆','T':'𝑇','U':'𝑈','V':'𝑉','W':'𝑾','X':'𝑋','Y':'𝑌','Z':'𝑍','a':'𝑎','b':'𝑏','c':'𝑐','d':'𝑑','e':'𝑒','f':'𝑓','g':'𝑔','h':'ℎ','i':'𝑖','j':'𝑗','k':'𝑘','l':'𝑙','m':'𝑚','n':'𝑛','o':'𝑜','p':'𝑝','q':'𝑞','r':'𝑟','s':'𝑠','t':'𝑡','u':'𝑢','v':'𝑣','w':'𝑤','x':'𝑥','y':'𝑦','z':'𝑧'}) },
         { name: 'Bold Italic', cat: 'social', gen: t => mapStyle(t, {'A':'𝑨','B':'𝑩','C':'𝑪','D':'𝑫','E':'𝑬','F':'𝑭','G':'𝑮','H':'𝑯','I':'𝑰','J':'𝑵','K':'𝑲','L':'𝑳','M':'𝑴','N':'𝑵','O':'𝑶','P':'𝑷','Q':'𝑸','R':'𝑹','S':'𝑺','T':'𝑻','U':'𝑼','V':'𝑽','W':'𝑾','X':'𝑿','Y':'𝒀','Z':'𝒁','a':'𝒂','b':'𝒃','c':'𝒄','d':'𝒅','e':'𝒆','f':'𝒇','g':'𝒈','h':'𝒉','i':'𝒊','j':'𝒋','k':'𝒌','l':'𝒍','m':'𝒎','n':'𝒏','o':'𝒐','p':'𝒑','q':'𝒒','r':'𝒓','s':'𝒔','t':'𝒕','u':'𝒖','v':'𝒗','w':'𝒘','x':'𝒙','y':'𝒚','z':'𝒛'}) },
         { name: 'Cursive Script', cat: 'social', gen: t => mapStyle(t, {'A':'𝒜','B':'ℬ','C':'𝒞','D':'𝒟','E':'ℰ','F':'ℱ','G':'𝒢','H':'ℋ','I':'ℐ','J':'𝒥','K':'𝒦','L':'ℒ','M':'ℳ','N':'𝒩','O':'𝒪','P':'𝒫','Q':'𝒬','R':'ℛ','S':'𝒮','T':'𝒯','U':'𝒰','V':'𝒱','W':'𝒲','X':'𝒳','Y':'𝒴','Z':'𝒵','a':'𝒶','b':'𝒷','c':'𝒸','d':'𝒹','e':'ℯ','f':'𝒻','g':'ℊ','h':'𝒽','i':'𝒾','j':'𝒿','k':'𝓀','l':'𝓁','m':'𝓂','n':'𝓃','o':'ℴ','p':'𝓅','q':'𝓆','r':'𝓇','s':'𝓈','t':'𝓉','u':'𝓊','v':'𝓋','w':'𝓌','x':'𝓍','y':'𝓎','z':'𝓏'}) },
         { name: 'Bold Cursive', cat: 'social', gen: t => mapStyle(t, {'A':'𝓐','B':'𝓑','C':'𝓒','D':'𝓓','E':'𝓔','F':'𝓕','G':'𝓖','H':'𝓗','I':'𝓘','J':'𝓙','K':'𝓚','L':'𝓛','M':'𝓜','N':'𝓝','O':'𝓞','P':'𝓟','Q':'𝓌','R':'𝓡','S':'𝓢','T':'𝓣','U':'𝓤','V':'𝓥','W':'𝓦','X':'𝓧','Y':'𝓨','Z':'𝓩','a':'𝓪','b':'𝓫','c':'𝓬','d':'𝓭','e':'𝓮','f':'𝓯','g':'𝓰','h':'𝓱','i':'𝓲','j':'𝓳','k':'𝓴','l':'𝓵','m':'𝓶','n':'𝓷','o':'𝓸','p':'𝓹','q':'𝓺','r':'𝓻','s':'𝓼','t':'𝓽','u':'𝓾','v':'𝓿','w':'𝔀','x':'𝔁','y':'𝔂','z':'𝔃'}) },
         { name: 'Bubble Circles', cat: 'social', gen: t => mapStyle(t, {'A':'Ⓐ','B':'Ⓑ','C':'Ⓒ','D':'Ⓓ','E':'Ⓔ','F':'Ⓕ','G':'Ⓖ','H':'Ⓗ','I':'Ⓘ','J':'Ⓙ','K':'Ⓚ','L':'Ⓛ','M':'Ⓜ','N':'Ⓝ','O':'Ⓞ','P':'Ⓟ','Q':'Ⓠ','R':'Ⓡ','S':'Ⓢ','T':'Ⓣ','U':'Ⓤ','V':'Ⓥ','W':'Ⓦ','X':'Ⓧ','Y':'Ⓨ','Z':'Ⓩ','a':'ⓐ','b':'ⓑ','c':'ⓒ','d':'ⓓ','e':'ⓔ','f':'ⓕ','g':'ⓖ','h':'ⓗ','i':'ⓘ','j':'ⓙ','k':'ⓚ','l':'ⓛ','m':'ⓜ','n':'ⓝ','o':'ⓞ','p':'ⓟ','q':'ⓠ','r':'ⓡ','s':'ⓢ','t':'ⓣ','u':'ⓤ','v':'ⓥ','w':'ⓦ','x':'ⓧ','y':'ⓨ','z':'ⓩ'}) },
-        { name: 'Filled Circles', cat: 'social', gen: t => mapStyle(t, {'A':'🅐','B':'🅑','C':'🅒','D':'🅓','E':'🅔','F':'🅟','G':'🅘','H':'🅨','I':'🅘','J':'🅵','K':'🅚','L':'🅛','M':'🅜','N':'🅝','O':'🅞','P':'🅟','Q':'🅠','R':'🅡','S':'🅢','T':'🅣','U':'🅤','V':'🅥','W':'🅯','X':'🅧','Y':'🅨','Z':'🅩','a':'🅐','b':'🅑','c':'🅒','d':'🅓','e':'🅔','f':'🅟','g':'🅘','h':'🅨','i':'🅘','j':'🅵','k':'🅚','l':'🅛','m':'🅜','n':'🅝','o':'🅞','p':'𝅵','q':'🅠','r':'🅡','s':'🅢','t':'🅣','u':'🅤','v':'𝅘𝅥𝅲','w':'🅯','x':'🅧','y':'🅨','z':'🅩'}) },
+        { name: 'Filled Circles', cat: 'social', gen: t => mapStyle(t, {'A':'🅐','B':'🅑','C':'🅒','D':'🅓','E':'🅔','F':'🅟','G':'🅘','H':'🅨','I':'🅘','J':'🅵','K':'🅚','L':'🅛','M':'🅜','N':'🅝','O':'🅞','P':'🅟','Q':'🅠','R':'🅡','S':'🅢','T':'🅣','U':'🅤','V':'🅥','W':'🅯','X':'🅧','Y':'🅨','Z':'𝅩','a':'🅐','b':'🅑','c':'🅒','d':'🅓','e':'🅔','f':'🅟','g':'🅘','h':'🅨','i':'🅘','j':'🅵','k':'🅚','l':'🅛','m':'🅜','n':'🅝','o':'🅞','p':'𝅵','q':'🅠','r':'🅡','s':'🅢','t':'🅣','u':'🅤','v':'𝅘𝅥𝅲','w':'🅯','x':'🅧','y':'🅨','z':'𝅩'}) },
         { name: 'Square Box', cat: 'social', gen: t => mapStyle(t, {'A':'🄰','B':'🄱','C':'🄲','D':'🄳','E':'🄴','F':'🄵','G':'🄷','H':'🄷','I':'🄸','J':'🄹','K':'🄺','L':'🄻','M':'🄼','N':'🄽','O':'🄾','P':'🄿','Q':'🅀','R':'🅁','S':'🅂','T':'🅃','U':'🅄','V':'🅅','W':'7','X':'🅈','Y':'🅈','Z':'🅑','a':'🄰','b':'🄱','c':'🄲','d':'🄳','e':'🄴','f':'🄵','g':'🄷','h':'🄷','i':'🄸','j':'🄹','k':'🄺','l':'🄻','m':'🄼','n':'🄽','o':'🄾','p':'🄿','q':'🅀','r':'🅁','s':'🅂','t':'🅃','u':'🅄','v':'🅅','w':'7','x':'🅈','y':'🅈','z':'🅑'}) },
         { name: 'Filled Square', cat: 'social', gen: t => mapStyle(t, {'A':'🅰','B':'🅱','C':'🅂','D':'🅳','E':'🅴','F':'🅵','G':'🅶','H':'🅷','I':'🅸','J':'🅹','K':'🅺','L':'🅻','M':'🅰','N':'🅽','O':'🅾','P':'🅿','Q':'🅀','R':'🆁','S':'🅂','T':'🆃','U':'🆄','V':'🆏','W':'🆆','X':'🆇','Y':'🆈','Z':'🆉','a':'🅰','b':'🅱','c':'🅂','d':'🅳','e':'🅴','f':'🅵','g':'🅶','h':'🅷','i':'🅸','j':'🅹','k':'🅺','l':'🅻','m':'🅰','n':'🅽','o':'🅾','p':'🅿','q':'🅀','r':'🆁','s':'🅂','t':'🆃','u':'🆄','v':'🆏','w':'🆆','x':'🆇','y':'🆈','z':'🆉'}) },
         { name: 'Small Capital', cat: 'social', gen: t => mapStyle(t, {'a':'ᴀ','b':'ʙ','c':'ᴄ','d':'ᴅ','e':'ᴇ','f':'ғ','g':'ɢ','h':'ʜ','i':'ɪ','j':'ᴊ','k':'ᴋ','l':'ʟ','m':'ᴍ','n':'ɴ','o':'ᴏ','p':'ᴘ','q':'ǫ','r':'ʀ','s':'s','t':'ᴛ','u':'ᴜ','v':'ᴠ','w':'ᴡ','x':'x','y':'ʏ','z':'ᴢ'}) },
@@ -276,7 +384,7 @@
         { name: 'Double Struck', cat: 'gaming', gen: t => mapStyle(t, {'A':'𝔸','B':'𝔹','C':'ℂ','D':'𝔻','E':'𝔼','F':'𝔽','G':'𝔾','H':'ℍ','I':'𝕀','J':'𝕁','K':'𝕂','L':'𝕃','M':'𝕄','N':'ℕ','O':'𝕆','P':'ℙ','Q':'ℚ','R':'ℝ','S':'𝕊','T':'𝕋','U':'𝕌','V':'𝕍','W':'𝕎','X':'𝕏','Y':'𝕐','Z':'ℤ','a':'𝕒','b':'𝕓','c':'𝕔','d':'𝕕','e':'𝕖','f':'𝕗','g':'𝕘','h':'𝕙','i':'𝕚','j':'𝕛','k':'𝕜','l':'𝕝','m':'𝕞','n':'𝕟','o':'𝕠','p':'𝕡','q':'𝕢','r':'𝕣','s':'𝕤','t':'𝕥','u':'𝕦','v':'𝕔','w':'𝕨','x':'𝕩','y':'𝕪','z':'𝕫'}) },
         { name: 'Old English Gothic', cat: 'gaming', gen: t => mapStyle(t, {'A':'𝔄','B':'𝔅','C':'ℭ','D':'𝔇','E':'𝔈','F':'𝔉','G':'𝔤','H':'ℌ','I':'ℑ','J':'𝔍','K':'𝔏','L':'𝔟','M':'𝔐','N':'𝔑','O':'𝔒','P':'𝔓','Q':'𝔔','R':'ℜ','S':'𝔖','T':'𝔗','U':'𝔘','V':'𝔙','W':'𝔚','X':'𝔛','Y':'𝔜','Z':'ℨ','a':'𝔞','b':'𝔟','c':'𝔠','d':'𝔡','e':'𝔢','f':'𝔣','g':'𝔤','h':'𝔮','i':'𝔦','j':'𝔟','k':'𝔨','l':'𝔩','m':'𝔪','n':'𝔫','o':'𝔬','p':'𝔟','q':'𝔮','r':'𝔯','s':'𝔰','t':'𝔱','u':'𝔲','v':'𝔳','w':'𝔴','x':'𝔵','y':'𝔶','z':'𝔷'}) },
         { name: 'Bold Gothic', cat: 'gaming', gen: t => mapStyle(t, {'A':'𝕬','B':'𝕱','C':'𝕮','D':'𝕯','E':'𝕰','F':'𝕱','G':'𝕘','H':'𝕩','I':'𝕴','J':'𝕵','K':'𝕶','L':'𝕷','M':'𝕸','N':'𝕹','O':'𝕺','P':'𝕻','Q':'𝕼','R':'𝕽','S':'𝕾','T':'𝕿','U':'𝖀','V':'𝖁','W':'𝖂','X':'𝖃','Y':'𝖄','Z':'𝖅','a':'𝖆','b':'𝖇','c':'𝖈','d':'𝖉','e':'𝖊','f':'𝖋','g':'𝖌','h':'𝖍','i':'𝖎','j':'𝖟','k':'𝖐','l':'𝖑','m':'𝖒','n':'𝖓','o':'𝖔','p':'𝖞','q':'𝖖','r':'𝖗','s':'𝖘','t':'𝖙','u':'𝖚','v':'𝖛','w':'𝖜','x':'𝖝','y':'𝖞','z':'𝖟'}) },
-        { name: 'Monospace Code', cat: 'gaming', gen: t => mapStyle(t, {'A':'𝙰','B':'𝙱','C':'𝙲','D':'𝙳','E':'𝙴','F':'𝙵','G':'𝙶','H':'𝙷','I':'𝙸','J':'𝙹','K':'𝙺','L':'𝙻','M':'𝙼','N':'𝙽','O':'𝙾','P':'𝙿','Q':'𝙌','R':'𝚁','S':'𝚂','T':'𝚃','U':'𝚄','V':'𝚅','W':'𝚆','X':'𝚇','Y':'𝚈','Z':'𝚉','a':'𝚊','b':'𝚋','c':'𝚌','d':'𝚍','e':'𝚎','f':'𝚏','g':'𝚐','h':'𝚑','i':'𝚒','j':'𝚓','k':'𝚔','l':'𝚕','m':'𝚖','n':'𝚗','o':'𝚘','p':'𝚙','q':'𝚚','r':'𝚛','s':'𝚜','t':'𝚝','u':'𝚞','v':'𝚟','w':'𝚠','x':'𝚡','y':'𝚢','z':'𝚣'}) },
+        { name: 'Monospace Code', cat: 'gaming', gen: t => mapStyle(t, {'A':'𝙰','B':'𝙱','C':'𝙲','D':'𝙳','E':'𝙴','F':'𝙵','G':'𝙶','H':'𝙷','I':'𝙸','J':'𝙹','K':'𝙺','L':'𝙻','M':'𝙼','N':'𝙽','O':'𝙾','P':'𝙿','Q':'𝌌','R':'𝚁','S':'𝚂','T':'𝚃','U':'𝚄','V':'𝚅','W':'𝚆','X':'𝚇','Y':'𝚈','Z':'𝚉','a':'𝚊','b':'𝚋','c':'𝚌','d':'𝚍','e':'𝚎','f':'𝚏','g':'𝚐','h':'𝚑','i':'𝚒','j':'𝚓','k':'𝚔','l':'𝚕','m':'𝚖','n':'𝚗','o':'𝚘','p':'𝚙','q':'𝚚','r':'𝚛','s':'𝚜','t':'𝚝','u':'𝚞','v':'𝚟','w':'𝚠','x':'𝚡','y':'𝚢','z':'𝚣'}) },
         { name: 'Upside Down Flip', cat: 'gaming', gen: t => mapStyle(t.toLowerCase(), {'a':'ɐ','b':'q','c':'ɔ','d':'p','e':'ǝ','f':'ɟ','g':'ƃ','h':'ɥ','i':'ı','j':'ɾ','k':'ʞ','l':'l','m':'ɯ','n':'u','o':'o','p':'d','q':'b','r':'ɹ','s':'s','t':'ʇ','u':'n','v':'ʌ','w':'ʍ','x':'x','y':'ʎ','z':'z'}).split('').reverse().join('') },
         { name: 'Gaming Wings Frame 1', cat: 'gaming', gen: t => `꧁༺ ${t} ༻꧂` },
         { name: 'Gaming Wings Frame 2', cat: 'gaming', gen: t => `꧁𓊈 ${t} 𓊉꧂` },
@@ -284,7 +392,7 @@
         { name: 'Gaming Crown King', cat: 'gaming', gen: t => `👑 ${t} 👑` },
         { name: 'Gaming Sword Shield', cat: 'gaming', gen: t => `⚔️ ${t} ⚔️` },
         { name: 'PUBG Clan Style', cat: 'gaming', gen: t => `★彡 [${t}] 彡★` },
-        { name: 'Free Fire Boss', cat: 'gaming', gen: t => `꧁🇸🇬 ${t} 🇸🇬꧂` },
+        { name: 'Free Fire Boss', cat: 'gaming', gen: t => `꧁🇧🇩 ${t} 🇧🇩꧂` },
         { name: 'Katana Samurai', cat: 'gaming', gen: t => `🗡️ ${t} 🗡️` },
 
         // Symbols & Decorator Category
@@ -345,16 +453,10 @@
 
     function filterCategory(cat) {
         currentCategory = cat;
-        document.querySelectorAll('.tab-btn').forEach(btn => btn.classList.remove('active'));
+        document.querySelectorAll('.filter-tabs .tab-btn').forEach(btn => btn.classList.remove('active'));
         event.target.classList.add('active');
         renderFonts();
     }
-
-    // Dark Mode Toggle
-    themeToggle.addEventListener('click', () => {
-        document.body.classList.toggle('dark-mode');
-        themeToggle.innerText = document.body.classList.contains('dark-mode') ? '☀️ Light Mode' : '🌙 Dark Mode';
-    });
 
     // Action Buttons
     document.getElementById('clearBtn').addEventListener('click', () => {
