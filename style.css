@@ -1,465 +1,966 @@
 /* ==========================================================================
+
    OmniKitHub.com - Global Stylesheet
+
    Version: 1.0 (Final & Production Ready)
+
    ========================================================================== */
 
+
+
 /* 1. CSS Variables for Light & Dark Themes */
+
 :root {
+
     --bg-primary: #f8fafc;
+
     --bg-surface: #ffffff;
+
     --bg-nav: rgba(255, 255, 255, 0.9);
+
     --text-primary: #0f172a;
+
     --text-secondary: #475569;
+
     --text-muted: #94a3b8;
+
     --accent-color: #2563eb;
+
     --accent-hover: #1d4ed8;
+
     --accent-light: #eff6ff;
+
     --card-border: #e2e8f0;
+
     --card-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05), 0 2px 4px -2px rgba(0, 0, 0, 0.05);
+
     --card-hover-shadow: 0 10px 15px -3px rgba(37, 99, 235, 0.1), 0 4px 6px -4px rgba(37, 99, 235, 0.1);
+
     --badge-bg: #f1f5f9;
+
     --badge-text: #334155;
+
     --ad-bg: #f8fafc;
+
     --ad-border: #cbd5e1;
-    --footer-bg: #ffffff;
-    --footer-text: #475569;
-    --footer-heading: #0f172a;
+
+    --footer-bg: #0f172a;
+
+    --footer-text: #94a3b8;
+
+    --footer-heading: #f8fafc;
+
     --transition-speed: 0.25s;
+
 }
+
+
 
 /* Dark Theme Overrides */
+
 [data-theme="dark"],
+
 body.dark-theme {
+
     --bg-primary: #0b0f19;
+
     --bg-surface: #111827;
+
     --bg-nav: rgba(17, 24, 39, 0.9);
+
     --text-primary: #f9fafb;
+
     --text-secondary: #9ca3af;
+
     --text-muted: #6b7280;
+
     --accent-color: #3b82f6;
+
     --accent-hover: #60a5fa;
+
     --accent-light: rgba(59, 130, 246, 0.1);
+
     --card-border: #1f2937;
+
     --card-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.3);
+
     --card-hover-shadow: 0 10px 20px -3px rgba(59, 130, 246, 0.2);
+
     --badge-bg: #1f2937;
+
     --badge-text: #e5e7eb;
+
     --ad-bg: #111827;
+
     --ad-border: #374151;
-    --footer-bg: #111827;
+
+    --footer-bg: #030712;
+
     --footer-text: #9ca3af;
+
     --footer-heading: #f9fafb;
+
 }
+
+
 
 /* 2. Base Reset */
-*, *::before, *::after {
+
+{
     margin: 0;
+
     padding: 0;
+
     box-sizing: border-box;
+
     font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+
 }
+
+
 
 body {
+
     background-color: var(--bg-primary);
+
     color: var(--text-primary);
+
     line-height: 1.6;
+
     transition: background-color var(--transition-speed) ease, color var(--transition-speed) ease;
+
     display: flex;
+
     flex-direction: column;
+
     min-height: 100vh;
-    max-width: 1320px;
-    margin: 0 auto !important;
-    padding: 0 20px;
+
 }
+
+
 
 a {
+
     text-decoration: none;
+
     color: inherit;
+
 }
+
+
 
 .container {
+
     width: 100%;
+
     max-width: 1200px;
+
     margin: 0 auto;
+
     padding: 0 20px;
+
+   /* Global Boxed Layout Fix */
+
+body {
+
+    max-width: 1320px;
+
+    margin: 0 auto !important;
+
+    padding: 0 20px;
+
+    box-sizing: border-box;
+
 }
+
+}
+
+
 
 /* 3. Navigation Header */
+
 .navbar {
+
     position: sticky;
+
     top: 0;
+
     z-index: 1000;
+
     background-color: var(--bg-nav);
+
     backdrop-filter: blur(10px);
+
     border-bottom: 1px solid var(--card-border);
+
     padding: 16px 0;
+
     transition: background-color var(--transition-speed) ease, border-color var(--transition-speed) ease;
+
 }
+
+
 
 .nav-container {
+
     display: flex;
+
     align-items: center;
+
     justify-content: space-between;
+
 }
+
+
 
 .logo {
+
     display: flex;
+
     align-items: center;
+
     gap: 10px;
+
     font-size: 1.5rem;
+
     font-weight: 800;
+
     letter-spacing: -0.5px;
+
 }
+
+
 
 .logo-icon {
+
     color: var(--accent-color);
+
     font-size: 1.6rem;
+
 }
+
+
 
 .highlight {
+
     color: var(--accent-color);
+
 }
+
+
 
 .icon-btn {
+
     background: var(--badge-bg);
+
     border: 1px solid var(--card-border);
+
     color: var(--text-primary);
+
     width: 42px;
+
     height: 42px;
+
     border-radius: 50%;
+
     cursor: pointer;
+
     display: flex;
+
     align-items: center;
+
     justify-content: center;
+
     font-size: 1.1rem;
+
     transition: all var(--transition-speed) ease;
+
 }
+
+
 
 .icon-btn:hover {
+
     background: var(--accent-color);
+
     color: #ffffff;
+
     border-color: var(--accent-color);
+
     transform: rotate(15deg);
+
 }
+
+
 
 /* 4. Hero Section & Live Search */
+
 .hero-section {
+
     padding: 60px 0 40px;
+
     text-align: center;
+
 }
+
+
 
 .hero-title {
+
     font-size: 2.5rem;
+
     font-weight: 800;
+
     letter-spacing: -0.8px;
+
     margin-bottom: 12px;
+
     color: var(--text-primary);
+
 }
+
+
 
 .hero-subtitle {
+
     font-size: 1.125rem;
+
     color: var(--text-secondary);
+
     max-width: 700px;
+
     margin: 0 auto 32px;
+
 }
+
+
 
 .search-box {
+
     position: relative;
+
     max-width: 650px;
+
     margin: 0 auto;
+
 }
+
+
 
 .search-icon {
+
     position: absolute;
+
     left: 20px;
+
     top: 50%;
+
     transform: translateY(-50%);
+
     color: var(--text-muted);
+
     font-size: 1.2rem;
+
 }
+
+
 
 .search-box input {
+
     width: 100%;
+
     padding: 16px 20px 16px 54px;
+
     font-size: 1rem;
+
     border-radius: 50px;
+
     border: 2px solid var(--card-border);
+
     background-color: var(--bg-surface);
+
     color: var(--text-primary);
+
     outline: none;
+
     box-shadow: var(--card-shadow);
+
     transition: all var(--transition-speed) ease;
+
 }
+
+
 
 .search-box input:focus {
+
     border-color: var(--accent-color);
+
     box-shadow: 0 0 0 4px var(--accent-light);
+
 }
+
+
 
 /* 5. Ad Space Styling */
+
 .ad-wrapper {
+
     margin: 30px auto;
+
 }
+
+
 
 .ad-placeholder {
+
     width: 100%;
+
     min-height: 90px;
+
     background-color: var(--ad-bg);
+
     border: 1px dashed var(--ad-border);
+
     border-radius: 12px;
+
     display: flex;
+
     align-items: center;
+
     justify-content: center;
+
     color: var(--text-muted);
+
     font-size: 0.875rem;
+
     font-weight: 600;
+
     letter-spacing: 0.5px;
+
     text-transform: uppercase;
+
 }
+
+
 
 /* 6. Tools Grid Section & Filters */
+
 .tools-section {
+
     padding: 20px 0 60px;
+
     flex-grow: 1;
+
 }
+
+
 
 .section-header {
+
     display: flex;
+
     flex-direction: column;
+
     gap: 20px;
+
     margin-bottom: 30px;
+
 }
+
+
 
 .section-header h2 {
+
     font-size: 1.75rem;
+
     font-weight: 700;
+
 }
+
+
 
 .category-filter {
+
     display: flex;
+
     flex-wrap: wrap;
+
     gap: 10px;
+
 }
+
+
 
 .filter-btn {
+
     padding: 8px 18px;
+
     border-radius: 30px;
+
     border: 1px solid var(--card-border);
+
     background: var(--bg-surface);
+
     color: var(--text-secondary);
+
     font-size: 0.9rem;
+
     font-weight: 600;
+
     cursor: pointer;
+
     transition: all var(--transition-speed) ease;
+
 }
+
+
 
 .filter-btn:hover,
+
 .filter-btn.active {
+
     background: var(--accent-color);
+
     color: #ffffff;
+
     border-color: var(--accent-color);
+
 }
+
+
 
 .tools-grid {
+
     display: grid;
+
     grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+
     gap: 24px;
+
 }
+
+
 
 .tool-card {
+
     background-color: var(--bg-surface);
+
     border: 1px solid var(--card-border);
+
     border-radius: 16px;
+
     padding: 24px;
+
     display: flex;
+
     flex-direction: column;
+
     position: relative;
+
     box-shadow: var(--card-shadow);
+
     transition: all var(--transition-speed) ease;
+
 }
+
+
 
 .tool-card:hover {
+
     transform: translateY(-5px);
+
     box-shadow: var(--card-hover-shadow);
+
     border-color: var(--accent-color);
+
 }
+
+
 
 .card-icon {
+
     width: 48px;
+
     height: 48px;
+
     background-color: var(--accent-light);
+
     color: var(--accent-color);
+
     border-radius: 12px;
+
     display: flex;
+
     align-items: center;
+
     justify-content: center;
+
     font-size: 1.4rem;
+
     margin-bottom: 16px;
+
 }
+
+
 
 .card-badge {
+
     position: absolute;
+
     top: 24px;
+
     right: 24px;
+
     background-color: var(--badge-bg);
+
     color: var(--badge-text);
+
     font-size: 0.75rem;
+
     font-weight: 700;
+
     padding: 4px 10px;
+
     border-radius: 20px;
+
 }
+
+
 
 .tool-card h3 {
+
     font-size: 1.15rem;
+
     font-weight: 700;
+
     margin-bottom: 8px;
+
     color: var(--text-primary);
+
 }
+
+
 
 .tool-card p {
+
     font-size: 0.9rem;
+
     color: var(--text-secondary);
+
     line-height: 1.5;
+
 }
+
+
 
 /* 7. SEO Info Section */
+
 .seo-info-section {
+
     padding: 40px 0;
+
     border-top: 1px solid var(--card-border);
+
     margin-top: 20px;
+
 }
+
+
 
 .seo-info-section h2 {
+
     font-size: 1.5rem;
+
     font-weight: 700;
+
     margin-bottom: 12px;
+
 }
+
+
 
 .seo-info-section p {
+
     color: var(--text-secondary);
+
     margin-bottom: 24px;
+
 }
+
+
 
 .features-list {
+
     display: grid;
+
     grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+
     gap: 20px;
+
 }
+
+
 
 .feature-item {
+
     display: flex;
+
     gap: 16px;
+
     align-items: flex-start;
+
 }
+
+
 
 .feature-item i {
+
     font-size: 1.5rem;
+
     color: var(--accent-color);
+
     margin-top: 4px;
+
 }
+
+
 
 .feature-item h4 {
+
     font-size: 1rem;
+
     font-weight: 700;
+
     margin-bottom: 4px;
+
 }
+
+
 
 .feature-item p {
+
     font-size: 0.875rem;
+
     color: var(--text-secondary);
+
     margin-bottom: 0;
+
 }
+
+
 
 /* 8. Footer Section */
+
+/* 8. Footer Section */
+
 .footer {
-    background-color: var(--footer-bg);
-    color: var(--footer-text);
-    border-top: 1px solid var(--card-border);
-    padding: 50px 0 20px;
-    margin-top: auto;
-    transition: background-color var(--transition-speed) ease, color var(--transition-speed) ease, border-color var(--transition-speed) ease;
+
+    background-color: var(--card-bg, #ffffff);
+
+    color: var(--text-color, #333333);
+
+    border-top: 1px solid var(--border-color, #e2e8f0);
+
+    padding: 40px 20px 20px;
+
+    margin-top: 50px;
+
+    transition: background 0.3s ease, color 0.3s ease;
+
 }
+
+
+
+body.dark-mode .footer {
+
+    background-color: var(--card-bg, #1e293b);
+
+    color: var(--text-color, #f8fafc);
+
+    border-color: var(--border-color, #334155);
+
+}
+
+
 
 .footer-container {
+
     max-width: 1200px;
+
     margin: 0 auto;
+
     display: flex;
+
     justify-content: space-between;
+
     flex-wrap: wrap;
+
     gap: 30px;
-    padding: 0 20px;
+
 }
+
+
 
 .footer-brand {
+
     max-width: 350px;
+
 }
+
+
 
 .footer-brand p {
-    color: var(--footer-text);
-    font-size: 0.9rem;
+
+    color: #64748b;
+
+    font-size: 14px;
+
     margin-top: 12px;
+
     line-height: 1.6;
+
 }
+
+
+
+body.dark-mode .footer-brand p {
+
+    color: #94a3b8;
+
+}
+
+
 
 .footer-links h4 {
-    font-size: 1rem;
-    color: var(--footer-heading);
+
+    font-size: 16px;
+
+    color: var(--text-color);
+
     margin-bottom: 15px;
-    font-weight: 700;
+
 }
+
+
 
 .footer-links ul {
+
     list-style: none;
+
 }
+
+
 
 .footer-links ul li {
+
     margin-bottom: 8px;
+
 }
+
+
 
 .footer-links ul li a {
-    color: var(--footer-text);
+
+    color: #64748b;
+
     text-decoration: none;
-    font-size: 0.9rem;
-    transition: color 0.2s ease;
+
+    font-size: 14px;
+
+    transition: color 0.2s;
+
 }
+
+
+
+body.dark-mode .footer-links ul li a {
+
+    color: #94a3b8;
+
+}
+
+
 
 .footer-links ul li a:hover {
-    color: var(--accent-color);
+
+    color: var(--primary-color, #2563eb);
+
 }
+
+
 
 .footer-bottom {
+
     max-width: 1200px;
-    margin: 40px auto 0;
-    padding: 20px 20px 0;
-    border-top: 1px solid var(--card-border);
+
+    margin: 30px auto 0;
+
+    padding-top: 20px;
+
+    border-top: 1px solid var(--border-color, #e2e8f0);
+
     text-align: center;
-    font-size: 0.85rem;
-    color: var(--text-muted);
+
+    font-size: 13px;
+
+    color: #64748b;
+
 }
 
+
+
+body.dark-mode .footer-bottom {
+
+    border-color: var(--border-color, #334155);
+
+    color: #94a3b8;
+
+}
+
+
+
 /* 9. Responsive Breakpoints */
+
 @media (max-width: 768px) {
+
     .hero-title {
+
         font-size: 1.85rem;
+
     }
+
+
 
     .hero-subtitle {
+
         font-size: 1rem;
+
     }
 
+
+
     .footer-container {
-        flex-direction: column;
-        gap: 20px;
+
+        grid-template-columns: 1fr;
+
     }
 
     .section-header {
+
         align-items: flex-start;
+
     }
 
     .category-filter {
+
         overflow-x: auto;
+
         white-space: nowrap;
+
         width: 100%;
+
         padding-bottom: 8px;
+
     }
-}
+
+} 
