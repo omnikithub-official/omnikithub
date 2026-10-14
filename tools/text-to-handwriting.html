@@ -15,6 +15,10 @@
     <meta property="og:url" content="https://omnikithub.com/tools/text-to-handwriting.html">
     <meta property="og:type" content="website">
 
+    <!-- External CSS & Icons -->
+    <link rel="stylesheet" href="../style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
     <!-- Google Fonts for Realistic Handwriting -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -48,6 +52,7 @@
             --text-color: #333;
             --border-color: #e2e8f0;
             --primary-color: #2563eb;
+            --primary-hover: #1d4ed8;
         }
 
         body.dark-mode {
@@ -56,31 +61,30 @@
             --text-color: #f8fafc;
             --border-color: #334155;
             --primary-color: #3b82f6;
+            --primary-hover: #60a5fa;
         }
 
         * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; }
-        body { background-color: var(--bg-color); color: var(--text-color); padding: 20px; display: flex; justify-content: center; }
-        
-        .container {
+        body { background-color: var(--bg-color); color: var(--text-color); display: flex; flex-direction: column; min-height: 100vh; transition: all 0.3s ease; }
+
+        .main-wrapper {
+            flex: 1;
             max-width: 1200px;
             width: 100%;
+            margin: 20px auto;
+            padding: 0 20px;
+        }
+        
+        .container-box {
             background: var(--card-bg);
             border-radius: 12px;
             box-shadow: 0 4px 20px rgba(0,0,0,0.08);
-            padding: 25px;
+            padding: 30px;
+            border: 1px solid var(--border-color);
         }
 
         .header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px; }
         .header h1 { color: var(--primary-color); font-size: 26px; }
-        
-        .theme-btn {
-            background: transparent;
-            border: 1px solid var(--border-color);
-            color: var(--text-color);
-            padding: 6px 12px;
-            border-radius: 20px;
-            cursor: pointer;
-        }
 
         .description { color: #64748b; font-size: 14px; margin-bottom: 20px; }
 
@@ -101,7 +105,7 @@
         }
 
         .form-group { display: flex; flex-direction: column; gap: 6px; }
-        .form-group label { font-size: 13px; font-weight: 600; color: #475569; }
+        .form-group label { font-size: 13px; font-weight: 600; color: var(--text-color); }
 
         textarea {
             width: 100%;
@@ -115,6 +119,7 @@
             outline: none;
             resize: vertical;
         }
+        textarea:focus { border-color: var(--primary-color); }
 
         .grid-options {
             display: grid;
@@ -129,6 +134,7 @@
             background: var(--card-bg);
             color: var(--text-color);
             font-size: 14px;
+            outline: none;
         }
 
         /* Preview Paper Styling */
@@ -200,101 +206,208 @@
             font-size: 14px;
         }
 
-        .btn-primary { background: #2563eb; color: white; }
-        .btn-primary:hover { background: #1d4ed8; }
-        .btn-secondary { background: #f1f5f9; color: #334155; border: 1px solid #cbd5e1; }
+        .btn-primary { background: var(--primary-color); color: white; }
+        .btn-primary:hover { background: var(--primary-hover); }
+        .btn-secondary { background: var(--card-bg); color: var(--text-color); border: 1px solid var(--border-color); }
+        .btn-secondary:hover { background: var(--border-color); }
         .btn-success { background: #10b981; color: white; }
         .btn-success:hover { background: #059669; }
 
         .status-info { font-size: 13px; color: #64748b; margin-top: 8px; }
 
+        /* Ad Slots & SEO Card Styling */
+        .ad-placeholder {
+            border: 1px dashed var(--border-color);
+            background: rgba(0,0,0,0.01);
+            padding: 15px;
+            border-radius: 10px;
+            text-align: center;
+            color: #64748b;
+            font-size: 13px;
+            margin: 20px 0;
+        }
+
+        .seo-content-card {
+            background: var(--card-bg);
+            border-radius: 12px;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.08);
+            padding: 30px;
+            margin-top: 30px;
+            border: 1px solid var(--border-color);
+            line-height: 1.7;
+        }
+
+        .seo-content-card h2 { font-size: 1.4rem; color: var(--primary-color); margin-bottom: 12px; }
+        .seo-content-card h3 { font-size: 1.1rem; color: var(--text-color); margin: 15px 0 8px 0; }
+        .seo-content-card p, .seo-content-card li { font-size: 0.95rem; margin-bottom: 8px; color: #64748b; }
+        .seo-content-card ul { padding-left: 20px; margin-bottom: 10px; }
+
         @media print {
             body * { visibility: hidden; }
             .paper-outer, .paper-outer * { visibility: visible; }
-            .paper-outer { position: absolute; left: 0; top: 0; width: 100%; shadow: none; }
+            .paper-outer { position: absolute; left: 0; top: 0; width: 100%; box-shadow: none; }
         }
     </style>
 </head>
-<body>
+<body class="light-theme">
 
-<div class="container">
-    <div class="header">
-        <h1>✍️ Text to Handwriting Converter</h1>
-        <button id="themeToggle" class="theme-btn">🌙 Dark Mode</button>
+    <!-- Navigation Header -->
+    <header class="navbar">
+        <div class="container nav-container" style="max-width: 100% !important; padding: 0 !important;">
+            <a href="../index.html" class="logo">
+                <i class="fa-solid fa-toolbox logo-icon"></i>
+                <span class="logo-text">OmniKit<span class="highlight">Hub</span></span>
+            </a>
+            <div class="nav-actions">
+                <button id="theme-toggle" class="icon-btn" aria-label="Toggle Theme">
+                    <i class="fa-solid fa-moon"></i>
+                </button>
+            </div>
+        </div>
+    </header>
+
+<div class="main-wrapper">
+
+    <!-- Top Advertisement Slot -->
+    <div class="ad-placeholder">
+        <span>Responsive Advertisement Space (Google AdSense)</span>
     </div>
-    <p class="description">Convert assignment text into realistic handwritten pages. Customize handwriting font, ink color, and page type for instant PDF download or print.</p>
 
-    <div class="workspace">
-        <!-- Controls Panel -->
-        <div class="controls-panel">
-            <div class="form-group">
-                <label>Enter Assignment / Content Text:</label>
-                <textarea id="inputText" placeholder="Type or paste your assignment text here..."></textarea>
+    <div class="container-box">
+        <div class="header">
+            <h1>✍️ Text to Handwriting Converter</h1>
+        </div>
+        <p class="description">Convert assignment text into realistic handwritten pages. Customize handwriting font, ink color, and page type for instant PDF download or print.</p>
+
+        <div class="workspace">
+            <!-- Controls Panel -->
+            <div class="controls-panel">
+                <div class="form-group">
+                    <label>Enter Assignment / Content Text:</label>
+                    <textarea id="inputText" placeholder="Type or paste your assignment text here...">Welcome to OmniKitHub! Convert your typed essays and assignments into realistic handwritten notes instantly.</textarea>
+                </div>
+
+                <div class="grid-options">
+                    <div class="form-group">
+                        <label>Handwriting Font Style:</label>
+                        <select id="fontStyle">
+                            <option value="'Caveat', cursive">Caveat (Natural Cursive)</option>
+                            <option value="'Indie Flower', cursive">Indie Flower (Casual)</option>
+                            <option value="'Kalam', cursive" selected>Kalam (Clean Student)</option>
+                            <option value="'Dancing Script', cursive">Dancing Script (Elegant)</option>
+                            <option value="'Shadows Into Light', cursive">Shadows (Free Hand)</option>
+                        </select>
+                    </div>
+
+                    <div class="form-group">
+                        <label>Ink Color:</label>
+                        <select id="inkColor">
+                            <option value="#000080" selected>Royal Blue Ink</option>
+                            <option value="#1a1a1a">Dark Black Ink</option>
+                            <option value="#b91c1c">Red Gel Ink</option>
+                            <option value="#15803d">Green Ink</option>
+                        </select>
+                    </div>
+
+                    <div class="form-group">
+                        <label>Paper Background Type:</label>
+                        <select id="paperType">
+                            <option value="paper-ruled" selected>Ruled Line Notebook</option>
+                            <option value="paper-blank">Blank Plain Paper</option>
+                            <option value="paper-grid">Grid Graph Paper</option>
+                        </select>
+                    </div>
+
+                    <div class="form-group">
+                        <label>Font Size:</label>
+                        <select id="fontSize">
+                            <option value="20px">Small (20px)</option>
+                            <option value="23px" selected>Medium (23px)</option>
+                            <option value="26px">Large (26px)</option>
+                        </select>
+                    </div>
+                </div>
+
+                <div class="status-info">
+                    Words: <span id="wordCount">0</span> | Characters: <span id="charCount">0</span>
+                </div>
             </div>
 
-            <div class="grid-options">
-                <div class="form-group">
-                    <label>Handwriting Font Style:</label>
-                    <select id="fontStyle">
-                        <option value="'Caveat', cursive">Caveat (Natural Cursive)</option>
-                        <option value="'Indie Flower', cursive">Indie Flower (Casual)</option>
-                        <option value="'Kalam', cursive" selected>Kalam (Clean Student)</option>
-                        <option value="'Dancing Script', cursive">Dancing Script (Elegant)</option>
-                        <option value="'Shadows Into Light', cursive">Shadows (Free Hand)</option>
-                    </select>
+            <!-- Live Page Preview Panel -->
+            <div class="preview-panel">
+                <div id="paperPreview" class="paper-outer paper-ruled">
+                    <div id="handwritingOutput">Your handwritten assignment text will preview here live...</div>
                 </div>
-
-                <div class="form-group">
-                    <label>Ink Color:</label>
-                    <select id="inkColor">
-                        <option value="#000080" selected>Royal Blue Ink</option>
-                        <option value="#1a1a1a">Dark Black Ink</option>
-                        <option value="#b91c1c">Red Gel Ink</option>
-                        <option value="#15803d">Green Ink</option>
-                    </select>
-                </div>
-
-                <div class="form-group">
-                    <label>Paper Background Type:</label>
-                    <select id="paperType">
-                        <option value="paper-ruled" selected>Ruled Line Notebook</option>
-                        <option value="paper-blank">Blank Plain Paper</option>
-                        <option value="paper-grid">Grid Graph Paper</option>
-                    </select>
-                </div>
-
-                <div class="form-group">
-                    <label>Font Size:</label>
-                    <select id="fontSize">
-                        <option value="20px">Small (20px)</option>
-                        <option value="23px" selected>Medium (23px)</option>
-                        <option value="26px">Large (26px)</option>
-                    </select>
-                </div>
-            </div>
-
-            <div class="status-info">
-                Words: <span id="wordCount">0</span> | Characters: <span id="charCount">0</span>
             </div>
         </div>
 
-        <!-- Live Page Preview Panel -->
-        <div class="preview-panel">
-            <div id="paperPreview" class="paper-outer paper-ruled">
-                <div id="handwritingOutput">Your handwritten assignment text will preview here live...</div>
-            </div>
+        <!-- Action Bar -->
+        <div class="action-bar">
+            <button id="downloadPdfBtn" class="btn btn-primary">📄 Download PDF</button>
+            <button id="downloadImgBtn" class="btn btn-secondary">🖼️ Save Image (PNG)</button>
+            <button id="printBtn" class="btn btn-secondary">🖨️ Print Assignment</button>
+            <button id="shareBtn" class="btn btn-success">🔗 Share Anywhere</button>
         </div>
     </div>
 
-    <!-- Action Bar -->
-    <div class="action-bar">
-        <button id="downloadPdfBtn" class="btn btn-primary">📄 Download PDF</button>
-        <button id="downloadImgBtn" class="btn btn-secondary">🖼️ Save Image (PNG)</button>
-        <button id="printBtn" class="btn btn-secondary">🖨️ Print Assignment</button>
-        <button id="shareBtn" class="btn btn-success">🔗 Share Anywhere</button>
+    <!-- Bottom Advertisement Slot -->
+    <div class="ad-placeholder">
+        <span>Responsive Advertisement Space (Google AdSense)</span>
     </div>
+
+    <!-- Helpful Tutorial Video Carousel -->
+    <div style="margin: 30px 0;">
+        <h3 style="font-size: 1.2rem; color: var(--text-color); margin-bottom: 12px;"><i class="fa-solid fa-video" style="color: var(--primary-color);"></i> Recommended Text to Handwriting Tutorials</h3>
+        <Carousel>
+          <Video source="youtube" query="how to make text to handwriting generator website javascript" count="3"/>
+        </Carousel>
+    </div>
+
+    <!-- AdSense Friendly SEO Content Section -->
+    <div class="seo-content-card">
+        <h2>About Text to Handwriting Converter</h2>
+        <p>OmniKitHub's free online Text to Handwriting Converter empowers students and teachers to transform typed text, essays, and notes into realistic handwritten assignments effortlessly.</p>
+        
+        <h3>Key Features & Customization Options</h3>
+        <ul>
+            <li><strong>Realistic Handwriting Fonts:</strong> Choose from popular student-style script fonts like Kalam, Caveat, Indie Flower, and Shadows Into Light.</li>
+            <li><strong>Paper Backgrounds:</strong> Select between ruled notebook paper, blank plain paper, and grid graph paper backgrounds.</li>
+            <li><strong>Custom Ink Colors:</strong> Personalize your notes with royal blue, dark black, red gel, or green ink shades.</li>
+            <li><strong>Instant Export & Printing:</strong> Download your generated assignment sheets as clean PDF documents, high-resolution PNG images, or print directly.</li>
+        </ul>
+    </div>
+
 </div>
 
+<!-- Footer Section -->
+<footer class="footer">
+    <div class="container footer-container" style="max-width: 100% !important;">
+        <div class="footer-brand">
+            <a href="../index.html" class="logo">
+                <i class="fa-solid fa-toolbox logo-icon"></i>
+                <span class="logo-text">OmniKit<span class="highlight">Hub</span></span>
+            </a>
+            <p>Your ultimate free online toolkit for daily developer, text, media, PDF, and web tasks.</p>
+        </div>
+        
+        <div class="footer-links">
+            <h4>Legal & Pages</h4>
+            <ul>
+                <li><a href="../pages/about.html">About Us</a></li>
+                <li><a href="../pages/contact.html">Contact Us</a></li>
+                <li><a href="../pages/privacy-policy.html">Privacy Policy</a></li>
+                <li><a href="../pages/terms.html">Terms of Service</a></li>
+            </ul>
+        </div>
+    </div>
+    <div class="footer-bottom">
+        <div class="container">
+            <p>&copy; 2026 OmniKitHub.com. All rights reserved.</p>
+        </div>
+    </div>
+</footer>
+
+<script src="../script.js"></script>
 <script>
     const inputText = document.getElementById('inputText');
     const handwritingOutput = document.getElementById('handwritingOutput');
@@ -305,7 +418,7 @@
     const fontSize = document.getElementById('fontSize');
     const wordCount = document.getElementById('wordCount');
     const charCount = document.getElementById('charCount');
-    const themeToggle = document.getElementById('themeToggle');
+    const themeToggle = document.getElementById('theme-toggle');
 
     // Live Preview Updates
     function updatePreview() {
