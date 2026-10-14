@@ -15,6 +15,10 @@
     <meta property="og:url" content="https://omnikithub.com/tools/resume-builder.html">
     <meta property="og:type" content="website">
 
+    <!-- External CSS & Icons -->
+    <link rel="stylesheet" href="../style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
     <!-- html2pdf Library for High Quality PDF Generation -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
 
@@ -57,11 +61,17 @@
         }
 
         * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; }
-        body { background-color: var(--bg-color); color: var(--text-color); padding: 20px; transition: all 0.3s ease; }
+        body { background-color: var(--bg-color); color: var(--text-color); display: flex; flex-direction: column; min-height: 100vh; transition: all 0.3s ease; }
+
+        .main-wrapper {
+            flex: 1;
+            max-width: 1250px;
+            width: 100%;
+            margin: 20px auto;
+            padding: 0 20px;
+        }
 
         .app-container {
-            max-width: 1250px;
-            margin: 0 auto;
             display: grid;
             grid-template-columns: 1fr 1fr;
             gap: 25px;
@@ -82,16 +92,6 @@
         .header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 15px; }
         .header h1 { font-size: 24px; color: var(--primary-color); }
 
-        .theme-btn {
-            background: transparent;
-            border: 1px solid var(--border-color);
-            color: var(--text-color);
-            padding: 6px 12px;
-            border-radius: 20px;
-            cursor: pointer;
-            font-size: 13px;
-        }
-
         .section-title {
             font-size: 15px;
             font-weight: 700;
@@ -103,7 +103,7 @@
         }
 
         .form-group { margin-bottom: 12px; }
-        .form-group label { display: block; font-size: 13px; font-weight: 600; margin-bottom: 5px; }
+        .form-group label { display: block; font-size: 13px; font-weight: 600; margin-bottom: 5px; color: var(--text-color); }
 
         input[type="text"], input[type="email"], textarea, input[type="file"], select {
             width: 100%;
@@ -198,160 +198,266 @@
         .btn-primary:hover { background: var(--primary-hover); }
         .btn-share { background: #10b981; color: white; border: none; }
 
+        /* Ad Slots & SEO Card Styling */
+        .ad-placeholder {
+            border: 1px dashed #cbd5e1;
+            background: rgba(0,0,0,0.01);
+            padding: 15px;
+            border-radius: 10px;
+            text-align: center;
+            color: #64748b;
+            font-size: 13px;
+            margin: 20px 0;
+        }
+
+        .seo-content-card {
+            background: var(--card-bg);
+            border-radius: 12px;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.08);
+            padding: 30px;
+            margin-top: 30px;
+            border: 1px solid var(--border-color);
+            line-height: 1.7;
+        }
+
+        .seo-content-card h2 { font-size: 1.4rem; color: var(--primary-color); margin-bottom: 12px; }
+        .seo-content-card h3 { font-size: 1.1rem; color: var(--text-color); margin: 15px 0 8px 0; }
+        .seo-content-card p, .seo-content-card li { font-size: 0.95rem; margin-bottom: 8px; color: #64748b; }
+        .seo-content-card ul { padding-left: 20px; margin-bottom: 10px; }
+
         @media print {
             body * { visibility: hidden; }
             #cvPaper, #cvPaper * { visibility: visible; }
             #cvPaper { position: absolute; left: 0; top: 0; width: 100%; box-shadow: none; padding: 0; }
-            .editor-card, .header, .action-bar { display: none; }
+            .editor-card, .header, .action-bar, .ad-placeholder, .footer { display: none !important; }
         }
     </style>
 </head>
-<body>
+<body class="light-theme">
 
-<div class="app-container">
-    <!-- Left Editor -->
-    <div class="editor-card">
-        <div class="header">
-            <h1>📄 Pro Resume Builder</h1>
-            <button id="themeToggle" class="theme-btn">🌙 Dark Mode</button>
-        </div>
-
-        <div class="section-title">1. Design & Style Customizer</div>
-        <div class="customizer-grid">
-            <div class="form-group">
-                <label>Theme Color:</label>
-                <select id="colorPicker">
-                    <option value="#2563eb">Classic Blue</option>
-                    <option value="#0f172a">Dark Slate</option>
-                    <option value="#059669">Emerald Green</option>
-                    <option value="#7c3aed">Royal Purple</option>
-                    <option value="#dc2626">Crimson Red</option>
-                </select>
-            </div>
-            <div class="form-group">
-                <label>Font Style:</label>
-                <select id="fontPicker">
-                    <option value="Arial, sans-serif">Arial</option>
-                    <option value="'Times New Roman', serif">Times New Roman</option>
-                    <option value="'Courier New', monospace">Courier New</option>
-                    <option value="Georgia, serif">Georgia</option>
-                </select>
-            </div>
-            <div class="form-group">
-                <label>Photo Shape:</label>
-                <select id="shapePicker">
-                    <option value="50%">Circle (Gol)</option>
-                    <option value="8px">Square (Rounded)</option>
-                </select>
+    <!-- Navigation Header -->
+    <header class="navbar">
+        <div class="container nav-container" style="max-width: 100% !important; padding: 0 !important;">
+            <a href="../index.html" class="logo">
+                <i class="fa-solid fa-toolbox logo-icon"></i>
+                <span class="logo-text">OmniKit<span class="highlight">Hub</span></span>
+            </a>
+            <div class="nav-actions">
+                <button id="theme-toggle" class="icon-btn" aria-label="Toggle Theme">
+                    <i class="fa-solid fa-moon"></i>
+                </button>
             </div>
         </div>
+    </header>
 
-        <div class="section-title">2. Personal & Contact Information</div>
-        <div class="form-group">
-            <label>Profile Photo:</label>
-            <input type="file" id="photoInput" accept="image/*">
-        </div>
-        <div class="form-group">
-            <label>Full Name:</label>
-            <input type="text" id="nameInput" value="John Doe">
-        </div>
-        <div class="form-group">
-            <label>Professional Title / Role:</label>
-            <input type="text" id="roleInput" value="Software Engineer & Web Developer">
-        </div>
-        <div class="form-group">
-            <label>Email & Phone Number:</label>
-            <input type="text" id="contactInput" value="john.doe@email.com | +880 1234 567890">
-        </div>
-        <div class="form-group">
-            <label>Present Address:</label>
-            <input type="text" id="presentAddressInput" value="House 42, Road 7, Dhanmondi, Dhaka - 1205">
-        </div>
-        <div class="form-group">
-            <label>Permanent Address:</label>
-            <input type="text" id="permanentAddressInput" value="Village: Sonapur, PO: Amtali, Barguna">
-        </div>
-        <div class="form-group">
-            <label>LinkedIn & GitHub / Portfolio URL:</label>
-            <input type="text" id="socialInput" value="linkedin.com/in/johndoe | github.com/johndoe">
-        </div>
+<div class="main-wrapper">
 
-        <div class="section-title">3. Professional Summary</div>
-        <div class="form-group">
-            <textarea id="summaryInput">Dedicated and results-driven computer science professional with strong expertise in web development, front-end optimization, and software tools.</textarea>
-        </div>
-
-        <div class="section-title">4. Work Experience</div>
-        <div class="form-group">
-            <textarea id="expInput">• Senior Web Developer at TechFirm (2024 - Present)
-- Led front-end design and optimized web tools.
-• Junior Software Engineer at SoftCode (2022 - 2024)
-- Built interactive web applications and API features.</textarea>
-        </div>
-
-        <div class="section-title">5. Education & Technical Skills</div>
-        <div class="form-group">
-            <textarea id="eduInput">B.Sc. in Computer Science & Engineering (2022-2026)
-Skills: HTML5, CSS3, JavaScript, WordPress, Git, Vercel, Cloudflare, SEO Optimization.</textarea>
-        </div>
-
-        <div class="section-title">6. References & Signature</div>
-        <div class="form-group">
-            <label>References:</label>
-            <textarea id="refInput">Dr. Alex Morgan - Professor, CSE Department
-Email: alex.morgan@university.edu | Phone: +880 1987 654321</textarea>
-        </div>
-        <div class="form-group">
-            <label>Signature Image (Optional):</label>
-            <input type="file" id="signInput" accept="image/*">
-        </div>
-
-        <div class="action-bar">
-            <button id="downloadPdfBtn" class="btn btn-primary">📥 Download Resume PDF</button>
-            <button id="printBtn" class="btn">🖨️ Print CV</button>
-            <button id="shareBtn" class="btn btn-share">🔗 Share Tool</button>
-            <button id="clearBtn" class="btn">🗑️ Clear All</button>
-        </div>
+    <!-- Top Advertisement Slot -->
+    <div class="ad-placeholder">
+        <span>Responsive Advertisement Space (Google AdSense)</span>
     </div>
 
-    <!-- Right Live Preview -->
-    <div class="preview-card">
-        <h3 style="margin-bottom: 15px; color: var(--primary-color);">Live CV Preview & Customization</h3>
-        
-        <div class="cv-paper" id="cvPaper">
-            <div class="cv-top" id="cvTopBorder">
-                <div>
-                    <div class="cv-name" id="prevName">John Doe</div>
-                    <div class="cv-role" id="prevRole" style="color: var(--primary-color);">Software Engineer & Web Developer</div>
-                    <div class="cv-contact" id="prevContact">
-                        📧 john.doe@email.com | 📞 +880 1234 567890<br>
-                        🏠 <b>Present:</b> House 42, Road 7, Dhanmondi, Dhaka - 1205<br>
-                        🏡 <b>Permanent:</b> Village: Sonapur, PO: Amtali, Barguna<br>
-                        🌐 linkedin.com/in/johndoe | github.com/johndoe
-                    </div>
+    <div class="app-container">
+        <!-- Left Editor -->
+        <div class="editor-card">
+            <div class="header">
+                <h1>📄 Pro Resume Builder</h1>
+            </div>
+
+            <div class="section-title">1. Design & Style Customizer</div>
+            <div class="customizer-grid">
+                <div class="form-group">
+                    <label>Theme Color:</label>
+                    <select id="colorPicker">
+                        <option value="#2563eb">Classic Blue</option>
+                        <option value="#0f172a">Dark Slate</option>
+                        <option value="#059669">Emerald Green</option>
+                        <option value="#7c3aed">Royal Purple</option>
+                        <option value="#dc2626">Crimson Red</option>
+                    </select>
                 </div>
-                <img id="prevPhoto" class="cv-photo" alt="Profile Photo">
+                <div class="form-group">
+                    <label>Font Style:</label>
+                    <select id="fontPicker">
+                        <option value="Arial, sans-serif">Arial</option>
+                        <option value="'Times New Roman', serif">Times New Roman</option>
+                        <option value="'Courier New', monospace">Courier New</option>
+                        <option value="Georgia, serif">Georgia</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label>Photo Shape:</label>
+                    <select id="shapePicker">
+                        <option value="50%">Circle (Gol)</option>
+                        <option value="8px">Square (Rounded)</option>
+                    </select>
+                </div>
             </div>
 
-            <div class="cv-section-heading">Professional Summary</div>
-            <div class="cv-text" id="prevSummary">Dedicated and results-driven computer science professional...</div>
+            <div class="section-title">2. Personal & Contact Information</div>
+            <div class="form-group">
+                <label>Profile Photo:</label>
+                <input type="file" id="photoInput" accept="image/*">
+            </div>
+            <div class="form-group">
+                <label>Full Name:</label>
+                <input type="text" id="nameInput" value="John Doe">
+            </div>
+            <div class="form-group">
+                <label>Professional Title / Role:</label>
+                <input type="text" id="roleInput" value="Software Engineer & Web Developer">
+            </div>
+            <div class="form-group">
+                <label>Email & Phone Number:</label>
+                <input type="text" id="contactInput" value="john.doe@email.com | +880 1234 567890">
+            </div>
+            <div class="form-group">
+                <label>Present Address:</label>
+                <input type="text" id="presentAddressInput" value="House 42, Road 7, Dhanmondi, Dhaka - 1205">
+            </div>
+            <div class="form-group">
+                <label>Permanent Address:</label>
+                <input type="text" id="permanentAddressInput" value="Village: Sonapur, PO: Amtali, Barguna">
+            </div>
+            <div class="form-group">
+                <label>LinkedIn & GitHub / Portfolio URL:</label>
+                <input type="text" id="socialInput" value="linkedin.com/in/johndoe | github.com/johndoe">
+            </div>
 
-            <div class="cv-section-heading">Work Experience</div>
-            <div class="cv-text" id="prevExp">• Senior Web Developer at TechFirm...</div>
+            <div class="section-title">3. Professional Summary</div>
+            <div class="form-group">
+                <textarea id="summaryInput">Dedicated and results-driven computer science professional with strong expertise in web development, front-end optimization, and software tools.</textarea>
+            </div>
 
-            <div class="cv-section-heading">Education & Skills</div>
-            <div class="cv-text" id="prevEdu">B.Sc. in Computer Science & Engineering...</div>
+            <div class="section-title">4. Work Experience</div>
+            <div class="form-group">
+                <textarea id="expInput">• Senior Web Developer at TechFirm (2024 - Present)
+- Led front-end design and optimized web tools.
+- Junior Software Engineer at SoftCode (2022 - 2024)
+- Built interactive web applications and API features.</textarea>
+            </div>
 
-            <div class="cv-section-heading">References</div>
-            <div class="cv-text" id="prevRef">Dr. Alex Morgan - Professor...</div>
+            <div class="section-title">5. Education & Technical Skills</div>
+            <div class="form-group">
+                <textarea id="eduInput">B.Sc. in Computer Science & Engineering (2022-2026)
+Skills: HTML5, CSS3, JavaScript, WordPress, Git, Vercel, Cloudflare, SEO Optimization.</textarea>
+            </div>
 
-            <div class="cv-section-heading">Signature</div>
-            <img id="prevSign" class="cv-signature-img" alt="Digital Signature">
-            <div id="signTextName" style="font-size: 13px; font-weight: bold; margin-top: 5px;">John Doe</div>
+            <div class="section-title">6. References & Signature</div>
+            <div class="form-group">
+                <label>References:</label>
+                <textarea id="refInput">Dr. Alex Morgan - Professor, CSE Department
+Email: alex.morgan@university.edu | Phone: +880 1987 654321</textarea>
+            </div>
+            <div class="form-group">
+                <label>Signature Image (Optional):</label>
+                <input type="file" id="signInput" accept="image/*">
+            </div>
+
+            <div class="action-bar">
+                <button id="downloadPdfBtn" class="btn btn-primary">📥 Download Resume PDF</button>
+                <button id="printBtn" class="btn">🖨️ Print CV</button>
+                <button id="shareBtn" class="btn btn-share">🔗 Share Tool</button>
+                <button id="clearBtn" class="btn">🗑️ Clear All</button>
+            </div>
+        </div>
+
+        <!-- Right Live Preview -->
+        <div class="preview-card">
+            <h3 style="margin-bottom: 15px; color: var(--primary-color);">Live CV Preview & Customization</h3>
+            
+            <div class="cv-paper" id="cvPaper">
+                <div class="cv-top" id="cvTopBorder">
+                    <div>
+                        <div class="cv-name" id="prevName">John Doe</div>
+                        <div class="cv-role" id="prevRole" style="color: var(--primary-color);">Software Engineer & Web Developer</div>
+                        <div class="cv-contact" id="prevContact">
+                            📧 john.doe@email.com | 📞 +880 1234 567890<br>
+                            🏠 <b>Present:</b> House 42, Road 7, Dhanmondi, Dhaka - 1205<br>
+                            🏡 <b>Permanent:</b> Village: Sonapur, PO: Amtali, Barguna<br>
+                            🌐 linkedin.com/in/johndoe | github.com/johndoe
+                        </div>
+                    </div>
+                    <img id="prevPhoto" class="cv-photo" alt="Profile Photo">
+                </div>
+
+                <div class="cv-section-heading">Professional Summary</div>
+                <div class="cv-text" id="prevSummary">Dedicated and results-driven computer science professional...</div>
+
+                <div class="cv-section-heading">Work Experience</div>
+                <div class="cv-text" id="prevExp">• Senior Web Developer at TechFirm...</div>
+
+                <div class="cv-section-heading">Education & Skills</div>
+                <div class="cv-text" id="prevEdu">B.Sc. in Computer Science & Engineering...</div>
+
+                <div class="cv-section-heading">References</div>
+                <div class="cv-text" id="prevRef">Dr. Alex Morgan - Professor...</div>
+
+                <div class="cv-section-heading">Signature</div>
+                <img id="prevSign" class="cv-signature-img" alt="Digital Signature">
+                <div id="signTextName" style="font-size: 13px; font-weight: bold; margin-top: 5px;">John Doe</div>
+            </div>
         </div>
     </div>
+
+    <!-- Bottom Advertisement Slot -->
+    <div class="ad-placeholder">
+        <span>Responsive Advertisement Space (Google AdSense)</span>
+    </div>
+
+    <!-- Helpful Tutorial Video Carousel -->
+    <div style="margin: 30px 0;">
+        <h3 style="font-size: 1.2rem; color: var(--text-color); margin-bottom: 12px;"><i class="fa-solid fa-video" style="color: var(--primary-color);"></i> Recommended ATS Resume & CV Building Guides</h3>
+        <Carousel>
+          <Video source="youtube" query="how to create an ATS friendly resume cv online" count="3"/>
+        </Carousel>
+    </div>
+
+    <!-- AdSense Friendly SEO Content Section -->
+    <div class="seo-content-card">
+        <h2>About Pro ATS Resume & CV Builder</h2>
+        <p>OmniKitHub's free ATS Resume Builder helps job seekers, students, and professionals design clean, modern, and Applicant Tracking System (ATS) compliant resumes. Customize colors, fonts, photo shapes, and separate address details instantly.</p>
+        
+        <h3>Key Features & Capabilities</h3>
+        <ul>
+            <li><strong>ATS-Friendly Layout:</strong> Clean formatting and clear headings ensure maximum compatibility with automated corporate hiring filters.</li>
+            <li><strong>Live Style Customizer:</strong> Personalize your CV with selectable theme palettes, font families, and photo border styles.</li>
+            <li><strong>Detailed Sections:</strong> Add present and permanent addresses, work experience, education, technical skills, references, and digital signatures.</li>
+            <li><strong>Instant High-Quality PDF Export:</strong> Download or print your professional resume ready for job applications.</li>
+        </ul>
+    </div>
+
 </div>
 
+<!-- Footer Section -->
+<footer class="footer">
+    <div class="container footer-container" style="max-width: 100% !important;">
+        <div class="footer-brand">
+            <a href="../index.html" class="logo">
+                <i class="fa-solid fa-toolbox logo-icon"></i>
+                <span class="logo-text">OmniKit<span class="highlight">Hub</span></span>
+            </a>
+            <p>Your ultimate free online toolkit for daily developer, text, media, PDF, and web tasks.</p>
+        </div>
+        
+        <div class="footer-links">
+            <h4>Legal & Pages</h4>
+            <ul>
+                <li><a href="../pages/about.html">About Us</a></li>
+                <li><a href="../pages/contact.html">Contact Us</a></li>
+                <li><a href="../pages/privacy-policy.html">Privacy Policy</a></li>
+                <li><a href="../pages/terms.html">Terms of Service</a></li>
+            </ul>
+        </div>
+    </div>
+    <div class="footer-bottom">
+        <div class="container">
+            <p>&copy; 2026 OmniKitHub.com. All rights reserved.</p>
+        </div>
+    </div>
+</footer>
+
+<script src="../script.js"></script>
 <script>
     const nameInput = document.getElementById('nameInput');
     const roleInput = document.getElementById('roleInput');
@@ -383,7 +489,7 @@ Email: alex.morgan@university.edu | Phone: +880 1987 654321</textarea>
     const photoInput = document.getElementById('photoInput');
     const signInput = document.getElementById('signInput');
     const prevSign = document.getElementById('prevSign');
-    const themeToggle = document.getElementById('themeToggle');
+    const themeToggle = document.getElementById('theme-toggle');
 
     function updatePreview() {
         prevName.innerText = nameInput.value || 'YOUR NAME';
@@ -448,7 +554,7 @@ Email: alex.morgan@university.edu | Phone: +880 1987 654321</textarea>
         }
     });
 
-    // Dark Mode
+    // Dark Mode Toggle
     themeToggle.addEventListener('click', () => {
         document.body.classList.toggle('dark-mode');
         themeToggle.innerText = document.body.classList.contains('dark-mode') ? '☀️ Light Mode' : '🌙 Dark Mode';
