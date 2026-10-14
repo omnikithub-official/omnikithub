@@ -3,75 +3,84 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Online Screen & Window Recorder - OmniKitHub</title>
-    <meta name="description" content="Record your computer screen, browser tab, or application window online for free directly from your browser without extensions.">
-    <meta name="keywords" content="screen recorder online, record screen free, browser screen capture, video recorder web app">
+    <title>Online Screen & Voice Recorder - Free, No Download | OmniKitHub</title>
+    <meta name="description" content="Record your screen, a window or a browser tab with microphone and system audio, or record voice only. Free online recorder with pause, timer and instant download. No install, no upload.">
+    <meta name="keywords" content="online screen recorder, screen recorder with audio, free screen recorder, voice recorder online, record browser tab, record screen no download, window recorder, microphone recorder">
+    <meta name="robots" content="index, follow, max-image-preview:large">
+    <link rel="canonical" href="https://omnikithub.com/tools/screen-voice-recorder.html">
+
+    <meta property="og:type" content="website">
+    <meta property="og:site_name" content="OmniKitHub">
+    <meta property="og:title" content="Online Screen & Voice Recorder - Free, No Download | OmniKitHub">
+    <meta property="og:description" content="Record your screen, window or tab with audio, or record voice only. Free, private, no extensions.">
+    <meta property="og:url" content="https://omnikithub.com/tools/screen-voice-recorder.html">
+    <meta name="twitter:card" content="summary">
+    <meta name="twitter:title" content="Online Screen & Voice Recorder | OmniKitHub">
+    <meta name="twitter:description" content="Free browser-based screen and voice recorder. Recordings stay on your device.">
+
+    <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@graph": [
+        {
+          "@type": "WebApplication",
+          "name": "Online Screen & Voice Recorder",
+          "url": "https://omnikithub.com/tools/screen-voice-recorder.html",
+          "applicationCategory": "MultimediaApplication",
+          "operatingSystem": "Any",
+          "description": "Free browser-based tool to record your screen, a window or a tab with microphone and system audio, or to record voice only.",
+          "offers": { "@type": "Offer", "price": "0", "priceCurrency": "USD" },
+          "publisher": { "@type": "Organization", "name": "OmniKitHub", "url": "https://omnikithub.com" }
+        },
+        {
+          "@type": "FAQPage",
+          "mainEntity": [
+            { "@type": "Question", "name": "How do I record my screen online?", "acceptedAnswer": { "@type": "Answer", "text": "Choose Screen recording, click Start recording, pick a tab, window or your entire screen in the browser prompt, and record. Click Stop when you are done, then download the video." } },
+            { "@type": "Question", "name": "Is my recording uploaded anywhere?", "acceptedAnswer": { "@type": "Answer", "text": "No. The recording is created in your browser and stays on your device until you download it." } },
+            { "@type": "Question", "name": "Can I record system audio?", "acceptedAnswer": { "@type": "Answer", "text": "Yes, in Chrome and Edge on Windows you can share system audio, and on any desktop system you can share tab audio. Tick the share audio box in the browser prompt. Sharing a whole screen on Mac does not include system audio." } },
+            { "@type": "Question", "name": "Does screen recording work on mobile?", "acceptedAnswer": { "@type": "Answer", "text": "Mobile browsers do not allow web pages to record the screen. The voice recorder mode works on phones." } }
+          ]
+        }
+      ]
+    }
+    </script>
+
     <link rel="stylesheet" href="../style.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
     <style>
-        .tool-container {
-            max-width: 900px;
-            margin: 40px auto;
-            background: var(--bg-surface);
-            border: 1px solid var(--card-border);
-            border-radius: 16px;
-            padding: 30px;
-            box-shadow: var(--card-shadow);
-            text-align: center;
-        }
-
-        .recorder-box {
-            background: var(--bg-primary);
-            border: 1px solid var(--card-border);
-            border-radius: 16px;
-            padding: 30px 20px;
-            margin-bottom: 25px;
-        }
-
-        .timer-display {
-            font-size: 3rem;
-            font-weight: 800;
-            color: var(--accent-color);
-            margin: 15px 0;
-            font-family: monospace;
-        }
-
-        .control-btns {
-            display: flex;
-            justify-content: center;
-            gap: 15px;
-            margin-top: 20px;
-            flex-wrap: wrap;
-        }
-
-        .record-btn {
-            padding: 14px 28px;
-            border-radius: 30px;
-            border: none;
-            font-weight: 700;
-            font-size: 1rem;
-            cursor: pointer;
-            display: inline-flex;
-            align-items: center;
-            gap: 8px;
-            transition: all var(--transition-speed) ease;
-        }
-
-        .btn-start { background: #2563eb; color: #fff; }
-        .btn-start:hover { background: #1d4ed8; }
-        .btn-stop { background: #ef4444; color: #fff; }
-        .btn-stop:hover { background: #dc2626; }
-        .btn-download { background: var(--accent-color); color: #fff; }
-        .btn-download:hover { background: var(--accent-hover); }
-
-        video {
-            width: 100%;
-            max-height: 400px;
-            border-radius: 12px;
-            margin-top: 20px;
-            background: #000;
-            display: none;
-        }
+        .tool-container { max-width: 900px; margin: 40px auto; background: var(--bg-surface); border: 1px solid var(--card-border); border-radius: 16px; padding: 30px; box-shadow: var(--card-shadow); }
+        .mode-selector { display: flex; gap: 12px; margin-bottom: 20px; }
+        .mode-btn { flex: 1; padding: 12px; border-radius: 30px; border: 1px solid var(--card-border); background: var(--bg-primary); color: var(--text-secondary); font-weight: 700; cursor: pointer; display: flex; align-items: center; justify-content: center; gap: 8px; transition: all var(--transition-speed) ease; }
+        .mode-btn.active { background: var(--accent-color); color: #fff; border-color: var(--accent-color); }
+        .opts { display: flex; flex-wrap: wrap; gap: 12px 22px; align-items: center; margin-bottom: 20px; color: var(--text-secondary); font-size: .92rem; }
+        .opts label { display: flex; align-items: center; gap: 7px; }
+        .opts select { padding: 7px 10px; border-radius: 8px; border: 1px solid var(--card-border); background: var(--bg-primary); color: var(--text-primary); }
+        .stage { position: relative; background: #000; border-radius: 12px; overflow: hidden; margin-bottom: 14px; min-height: 120px; display: none; }
+        .stage video { width: 100%; max-height: 420px; display: block; background: #000; }
+        #badge { position: absolute; top: 12px; left: 12px; padding: 5px 12px; border-radius: 999px; background: rgba(0, 0, 0, .65); color: #fff; font-weight: 700; font-size: .9rem; display: none; align-items: center; gap: 8px; }
+        #badge i { color: #ef4444; font-size: .6rem; }
+        #badge.paused i { color: #f59e0b; }
+        #count { position: absolute; inset: 0; display: none; align-items: center; justify-content: center; color: #fff; font-size: 5rem; font-weight: 800; background: rgba(0, 0, 0, .55); }
+        .meter { height: 8px; background: var(--card-border); border-radius: 99px; overflow: hidden; margin-bottom: 14px; display: none; }
+        .meter div { height: 100%; width: 0; background: var(--accent-color); transition: width .08s; }
+        .btn-row { display: flex; flex-wrap: wrap; gap: 10px; }
+        .action-btn { padding: 12px 22px; border-radius: 8px; border: 1px solid var(--accent-color); background: var(--accent-color); color: #fff; font-weight: 700; font-size: .98rem; cursor: pointer; display: inline-flex; align-items: center; gap: 8px; transition: background var(--transition-speed) ease; }
+        .action-btn:hover:not(:disabled) { background: var(--accent-hover); }
+        .action-btn:disabled { opacity: .5; cursor: not-allowed; }
+        .action-btn.ghost { background: var(--bg-primary); color: var(--text-primary); border-color: var(--card-border); }
+        .action-btn.stop { background: #dc2626; border-color: #dc2626; }
+        .action-btn:focus-visible, .mode-btn:focus-visible { outline: 2px solid var(--accent-color); outline-offset: 2px; }
+        #status { min-height: 22px; margin: 12px 0 0; font-size: .92rem; color: var(--text-secondary); }
+        #status.error { color: #dc2626; }
+        #result { display: none; margin-top: 20px; padding: 20px; border-radius: 14px; background: var(--bg-primary); border: 1px solid var(--card-border); }
+        #result video { width: 100%; max-height: 420px; border-radius: 10px; background: #000; margin: 10px 0 14px; }
+        .info { max-width: 900px; margin: 0 auto 50px; color: var(--text-secondary); line-height: 1.7; }
+        .info h2 { color: var(--text-primary); font-size: 1.3rem; margin: 26px 0 8px; }
+        .info h3 { color: var(--text-primary); font-size: 1rem; margin: 16px 0 4px; }
+        #toast { position: fixed; left: 50%; bottom: 28px; transform: translateX(-50%); background: var(--text-primary); color: var(--bg-primary); padding: 10px 18px; border-radius: 999px; font-weight: 600; font-size: .9rem; opacity: 0; pointer-events: none; transition: opacity .2s; z-index: 9999; }
+        #toast.show { opacity: 1; }
+        @media (max-width: 600px) { .tool-container { margin: 20px 12px; padding: 18px; } .btn-row .action-btn { flex: 1 1 45%; justify-content: center; } }
     </style>
 </head>
 <body class="light-theme">
@@ -92,118 +101,245 @@
 
     <main class="container">
         <div class="tool-container">
-            <h1 style="font-size: 1.8rem; margin-bottom: 8px;">Online Screen & Window Recorder</h1>
-            <p style="color: var(--text-secondary); margin-bottom: 24px;">Record your computer screen or application window instantly with high quality.</p>
+            <h1 style="font-size: 1.8rem; margin-bottom: 8px;">Online Screen & Voice Recorder</h1>
+            <p style="color: var(--text-secondary); margin-bottom: 24px;">Record your screen, a window or a browser tab, with or without your microphone, or record voice only. Nothing is uploaded: your recording stays on your device.</p>
 
-            <div class="recorder-box">
-                <div style="font-weight: 600; color: var(--text-primary);">Screen Recording Monitor</div>
-                <div id="timer" class="timer-display">00:00</div>
-                <div id="status-text" style="color: var(--text-secondary); font-size: 0.95rem;">Ready to record your screen</div>
-
-                <video id="video-playback" controls></video>
+            <div class="mode-selector">
+                <button id="m-screen" class="mode-btn active" onclick="setMode('screen')"><i class="fa-solid fa-display"></i> Screen recording</button>
+                <button id="m-voice" class="mode-btn" onclick="setMode('voice')"><i class="fa-solid fa-microphone"></i> Voice only</button>
             </div>
 
-            <div class="control-btns">
-                <button id="start-btn" class="record-btn btn-start" onclick="startScreenRecording()"><i class="fa-solid fa-desktop"></i> Start Screen Recording</button>
-                <button id="stop-btn" class="record-btn btn-stop" onclick="stopScreenRecording()" disabled><i class="fa-solid fa-stop"></i> Stop Recording</button>
-                <button id="download-btn" class="record-btn btn-download" style="display: none;" onclick="downloadVideo()"><i class="fa-solid fa-download"></i> Download Video</button>
+            <div class="opts">
+                <label id="o-mic"><input type="checkbox" id="use-mic"> Include microphone</label>
+                <label id="o-sys"><input type="checkbox" id="use-sys" checked> Include tab / system audio</label>
+                <label id="o-q">Quality
+                    <select id="quality"><option value="2500000">Standard</option><option value="5000000" selected>High</option><option value="8000000">Ultra</option></select>
+                </label>
+                <label id="o-fps">Frame rate
+                    <select id="fps"><option value="15">15 fps</option><option value="30" selected>30 fps</option><option value="60">60 fps</option></select>
+                </label>
+            </div>
+
+            <div class="stage" id="stage">
+                <video id="live" muted autoplay playsinline></video>
+                <div id="badge"><i class="fa-solid fa-circle"></i><span id="timer">00:00</span></div>
+                <div id="count"></div>
+            </div>
+            <div class="meter" id="meter"><div id="meter-bar"></div></div>
+
+            <div class="btn-row">
+                <button id="b-start" class="action-btn"><i class="fa-solid fa-circle-dot"></i> Start recording</button>
+                <button id="b-pause" class="action-btn ghost" disabled><i class="fa-solid fa-pause"></i> Pause</button>
+                <button id="b-stop" class="action-btn stop" disabled><i class="fa-solid fa-stop"></i> Stop</button>
+            </div>
+            <div id="status" role="status" aria-live="polite"></div>
+
+            <div id="result">
+                <strong id="res-title">Your recording is ready</strong>
+                <video id="player" controls playsinline></video>
+                <div class="btn-row">
+                    <button class="action-btn" onclick="downloadRec()"><i class="fa-solid fa-download"></i> Download</button>
+                    <button class="action-btn ghost" onclick="shareTool()"><i class="fa-solid fa-share-nodes"></i> Share tool</button>
+                    <button class="action-btn ghost" onclick="recordAgain()"><i class="fa-solid fa-rotate-left"></i> Record again</button>
+                </div>
             </div>
         </div>
+
+        <section class="info">
+            <h2>How to record your screen online</h2>
+            <p>Choose <strong>Screen recording</strong>, decide whether to include your microphone and tab or system audio, then click <strong>Start recording</strong>. Your browser will ask what to share: a browser tab, a window or the entire screen. After a 3-second countdown the recording starts. Click <strong>Stop</strong> when you finish, then preview and download it.</p>
+            <h2>How to record your voice</h2>
+            <p>Choose <strong>Voice only</strong> and click Start recording. Allow microphone access when your browser asks. The level bar shows that your voice is being picked up.</p>
+            <h2>Frequently asked questions</h2>
+            <h3>Is it free, and is my recording uploaded?</h3>
+            <p>It is free with no sign-up. The recording is made in your browser and never leaves your device unless you share the downloaded file yourself.</p>
+            <h3>Can I record system audio?</h3>
+            <p>In Chrome and Edge you can record audio from a shared tab on any desktop system, and system audio on Windows. Tick the share audio box in the browser's sharing prompt. Sharing a whole screen on a Mac does not include system audio.</p>
+            <h3>Does it work on phones?</h3>
+            <p>Mobile browsers do not allow websites to record the screen, so screen recording works on desktop browsers only. Voice only mode works on phones.</p>
+            <h3>What file format do I get?</h3>
+            <p>Usually WebM in Chrome, Edge and Firefox, and MP4 in Safari. WebM plays in most browsers and in VLC. If you need MP4, convert the file with a video converter.</p>
+        </section>
     </main>
 
     <footer class="footer">
         <div class="footer-bottom">
-            <div class="container">
-                <p>&copy; 2026 OmniKitHub.com. All rights reserved.</p>
-            </div>
+            <div class="container"><p>&copy; 2026 OmniKitHub.com. All rights reserved.</p></div>
         </div>
     </footer>
 
+    <div id="toast"></div>
+
     <script src="../script.js"></script>
     <script>
-        let mediaRecorder;
-        let recordedChunks = [];
-        let videoBlob = null;
-        let timerInterval;
-        let secondsElapsed = 0;
+        const $ = id => document.getElementById(id);
+        let mode = 'screen', rec = null, chunks = [], streams = [], actx = null, raf = 0, tick = 0;
+        let seconds = 0, state = 'idle', outBlob = null, outUrl = null, outExt = 'webm', mime = '';
 
-        const startBtn = document.getElementById('start-btn');
-        const stopBtn = document.getElementById('stop-btn');
-        const downloadBtn = document.getElementById('download-btn');
-        const timerEl = document.getElementById('timer');
-        const statusText = document.getElementById('status-text');
-        const videoPlayback = document.getElementById('video-playback');
+        function toast(m) { const t = $('toast'); t.textContent = m; t.classList.add('show'); clearTimeout(toast.t); toast.t = setTimeout(() => t.classList.remove('show'), 2200); }
+        function setStatus(m, err) { const s = $('status'); s.textContent = m; s.classList.toggle('error', !!err); }
+        function fmt(s) { return String(Math.floor(s / 60)).padStart(2, '0') + ':' + String(s % 60).padStart(2, '0'); }
+        function fmtSize(b) { return b > 1048576 ? (b / 1048576).toFixed(1) + ' MB' : Math.max(1, Math.round(b / 1024)) + ' KB'; }
 
-        async function startScreenRecording() {
-            recordedChunks = [];
+        const canScreen = !!(navigator.mediaDevices && navigator.mediaDevices.getDisplayMedia);
+        const canMic = !!(navigator.mediaDevices && navigator.mediaDevices.getUserMedia) && typeof MediaRecorder !== 'undefined';
+
+        function setMode(m) {
+            if (state !== 'idle') return;
+            mode = m;
+            $('m-screen').classList.toggle('active', m === 'screen');
+            $('m-voice').classList.toggle('active', m === 'voice');
+            ['o-mic', 'o-sys', 'o-q', 'o-fps'].forEach(id => $(id).style.display = (m === 'voice' && id !== 'o-mic') ? 'none' : '');
+            $('o-mic').style.display = m === 'voice' ? 'none' : '';
+            if (m === 'screen' && !canScreen) setStatus('Screen recording is not supported in this browser or device. Use a desktop version of Chrome, Edge or Firefox, or try Voice only mode.', true);
+            else setStatus('');
+        }
+
+        function pickMime(isVideo) {
+            const list = isVideo
+                ? ['video/webm;codecs=vp9,opus', 'video/webm;codecs=vp8,opus', 'video/webm', 'video/mp4']
+                : ['audio/webm;codecs=opus', 'audio/webm', 'audio/mp4', 'audio/ogg;codecs=opus'];
+            return list.find(t => MediaRecorder.isTypeSupported(t)) || '';
+        }
+        function cleanup() {
+            streams.forEach(s => s.getTracks().forEach(t => t.stop())); streams = [];
+            if (actx) { actx.close().catch(() => {}); actx = null; }
+            cancelAnimationFrame(raf); clearInterval(tick);
+            $('meter').style.display = 'none'; $('meter-bar').style.width = '0';
+            $('live').srcObject = null;
+        }
+        function setButtons() {
+            $('b-start').disabled = state !== 'idle';
+            $('b-pause').disabled = !(state === 'recording' || state === 'paused');
+            $('b-stop').disabled = !(state === 'recording' || state === 'paused');
+            $('b-pause').innerHTML = state === 'paused' ? '<i class="fa-solid fa-play"></i> Resume' : '<i class="fa-solid fa-pause"></i> Pause';
+            document.querySelectorAll('.mode-btn').forEach(b => b.disabled = state !== 'idle');
+        }
+        function friendlyError(e) {
+            if (e && (e.name === 'NotAllowedError' || e.name === 'SecurityError')) return 'Permission was denied or the prompt was closed. Click Start recording and allow access.';
+            if (e && e.name === 'NotFoundError') return 'No microphone was found. Connect one and try again.';
+            if (e && e.name === 'NotReadableError') return 'The microphone or screen is being used by another app. Close it and try again.';
+            return 'Could not start recording: ' + ((e && (e.message || e.name)) || 'unknown error');
+        }
+
+        async function start() {
+            if (!canMic) return setStatus('Recording is not supported in this browser. Try the latest Chrome, Edge, Firefox or Safari.', true);
+            if (mode === 'screen' && !canScreen) return setStatus('Screen recording is not supported on this device. Use a desktop browser, or choose Voice only.', true);
+            $('result').style.display = 'none';
+            let vTracks = [], aSources = [];
             try {
-                const stream = await navigator.mediaDevices.getDisplayMedia({ video: true, audio: true });
-                mediaRecorder = new MediaRecorder(stream);
-
-                mediaRecorder.ondataavailable = e => {
-                    if (e.data.size > 0) recordedChunks.push(e.data);
-                };
-
-                mediaRecorder.onstop = () => {
-                    videoBlob = new Blob(recordedChunks, { type: 'video/webm' });
-                    const videoUrl = URL.createObjectURL(videoBlob);
-                    videoPlayback.src = videoUrl;
-                    videoPlayback.style.display = 'block';
-                    downloadBtn.style.display = 'inline-flex';
-                };
-
-                // Stop recording if user clicks browser's built-in "Stop sharing" button
-                stream.getVideoTracks()[0].onended = () => {
-                    if (mediaRecorder && mediaRecorder.state !== 'inactive') {
-                        stopScreenRecording();
+                if (mode === 'screen') {
+                    const ds = await navigator.mediaDevices.getDisplayMedia({ video: { frameRate: +$('fps').value }, audio: $('use-sys').checked });
+                    streams.push(ds); vTracks = ds.getVideoTracks();
+                    if (ds.getAudioTracks().length) aSources.push(new MediaStream(ds.getAudioTracks()));
+                    else if ($('use-sys').checked) toast('No tab/system audio was shared. Tick "share audio" in the prompt next time');
+                    vTracks[0].addEventListener('ended', () => { if (state !== 'idle') stop(); });
+                }
+                let micStream = null;
+                if (mode === 'voice' || $('use-mic').checked) {
+                    micStream = await navigator.mediaDevices.getUserMedia({ audio: { echoCancellation: true, noiseSuppression: true } });
+                    streams.push(micStream); aSources.push(micStream);
+                }
+                let tracks = vTracks.slice();
+                if (aSources.length) {
+                    actx = new (window.AudioContext || window.webkitAudioContext)();
+                    const dest = actx.createMediaStreamDestination();
+                    aSources.forEach(s => actx.createMediaStreamSource(s).connect(dest));
+                    tracks = tracks.concat(dest.stream.getAudioTracks());
+                    if (micStream) {
+                        const an = actx.createAnalyser(); an.fftSize = 256;
+                        actx.createMediaStreamSource(micStream).connect(an);
+                        const data = new Uint8Array(an.frequencyBinCount);
+                        $('meter').style.display = 'block';
+                        (function loop() { an.getByteFrequencyData(data); const v = data.reduce((a, b) => a + b, 0) / data.length; $('meter-bar').style.width = Math.min(100, v * 1.6) + '%'; raf = requestAnimationFrame(loop); })();
                     }
-                };
+                }
+                if (!tracks.length) throw new Error('Nothing to record. Turn on the microphone or tab audio.');
+                const stream = new MediaStream(tracks);
+                const isVideo = vTracks.length > 0;
+                mime = pickMime(isVideo);
+                const opts = isVideo ? { videoBitsPerSecond: +$('quality').value } : {};
+                if (mime) opts.mimeType = mime;
+                rec = new MediaRecorder(stream, opts);
+                mime = rec.mimeType || mime;
+                outExt = /mp4/.test(mime) ? 'mp4' : (/ogg/.test(mime) ? 'ogg' : 'webm');
+                chunks = [];
+                rec.ondataavailable = e => { if (e.data && e.data.size) chunks.push(e.data); };
+                rec.onstop = finish;
 
-                mediaRecorder.start();
-                startBtn.disabled = true;
-                stopBtn.disabled = false;
-                downloadBtn.style.display = 'none';
-                videoPlayback.style.display = 'none';
-                statusText.innerHTML = '<span style="color: #ef4444;"><i class="fa-solid fa-circle fa-beat"></i> Recording screen...</span>';
-
-                secondsElapsed = 0;
-                timerInterval = setInterval(() => {
-                    secondsElapsed++;
-                    const mins = String(Math.floor(secondsElapsed / 60)).padStart(2, '0');
-                    const secs = String(secondsElapsed % 60).padStart(2, '0');
-                    timerEl.innerText = `${mins}:${secs}`;
-                }, 1000);
-
-            } catch (err) {
-                alert('Screen recording permission denied or cancelled!');
+                $('stage').style.display = isVideo ? 'block' : 'none';
+                if (isVideo) $('live').srcObject = stream;
+                state = 'counting'; setButtons();
+                for (let n = 3; n > 0; n--) {
+                    if (isVideo) { $('count').style.display = 'flex'; $('count').textContent = n; }
+                    setStatus('Starting in ' + n + '...');
+                    await new Promise(r => setTimeout(r, 1000));
+                    if (state !== 'counting') return;
+                }
+                $('count').style.display = 'none';
+                rec.start(1000);
+                state = 'recording'; seconds = 0; $('timer').textContent = '00:00';
+                $('badge').style.display = 'flex'; $('badge').classList.remove('paused');
+                tick = setInterval(() => { if (state === 'recording') { seconds++; $('timer').textContent = fmt(seconds); } }, 1000);
+                setStatus('Recording... Click Stop when you are done.');
+                setButtons();
+            } catch (e) {
+                console.error(e); cleanup(); state = 'idle'; setButtons();
+                $('stage').style.display = 'none'; $('count').style.display = 'none';
+                setStatus(friendlyError(e), true);
             }
         }
 
-        function stopScreenRecording() {
-            if (mediaRecorder && mediaRecorder.state !== 'inactive') {
-                mediaRecorder.stop();
-                mediaRecorder.stream.getTracks().forEach(track => track.stop());
-            }
-            clearInterval(timerInterval);
-            startBtn.disabled = false;
-            stopBtn.disabled = true;
-            statusText.innerText = 'Screen recording completed successfully!';
+        function togglePause() {
+            if (!rec) return;
+            if (state === 'recording') { rec.pause(); state = 'paused'; $('badge').classList.add('paused'); setStatus('Paused.'); }
+            else if (state === 'paused') { rec.resume(); state = 'recording'; $('badge').classList.remove('paused'); setStatus('Recording...'); }
+            setButtons();
         }
-
-        function downloadVideo() {
-            if (!videoBlob) return;
-            const url = URL.createObjectURL(videoBlob);
+        function stop() {
+            if (state === 'counting') { state = 'idle'; cleanup(); $('stage').style.display = 'none'; $('count').style.display = 'none'; setButtons(); setStatus('Cancelled.'); return; }
+            if (rec && rec.state !== 'inactive') rec.stop();
+        }
+        function finish() {
+            const secs = seconds;
+            state = 'idle'; cleanup(); setButtons();
+            $('stage').style.display = 'none'; $('badge').style.display = 'none';
+            if (!chunks.length) return setStatus('Nothing was recorded. Please try again.', true);
+            outBlob = new Blob(chunks, { type: mime || (mode === 'voice' ? 'audio/webm' : 'video/webm') });
+            if (outUrl) URL.revokeObjectURL(outUrl);
+            outUrl = URL.createObjectURL(outBlob);
+            const p = $('player'); p.src = outUrl;
+            p.addEventListener('loadedmetadata', function fix() {
+                // MediaRecorder files often report no length; this makes the seek bar work
+                if (p.duration === Infinity) { p.currentTime = 1e101; p.addEventListener('timeupdate', function back() { p.removeEventListener('timeupdate', back); p.currentTime = 0; }); }
+                p.removeEventListener('loadedmetadata', fix);
+            });
+            $('res-title').textContent = 'Your recording is ready (' + outExt.toUpperCase() + ', ' + fmtSize(outBlob.size) + ', ' + fmt(secs) + ')';
+            $('result').style.display = 'block';
+            setStatus('Done. Preview it below, then download.');
+            $('result').scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+        }
+        function downloadRec() {
+            if (!outBlob) return toast('Record something first');
+            const d = new Date(), pad = n => String(n).padStart(2, '0');
             const a = document.createElement('a');
-            a.style.display = 'none';
-            a.href = url;
-            a.download = 'OmniKitHub-ScreenRecord.webm';
-            document.body.appendChild(a);
-            a.click();
-            setTimeout(() => {
-                document.body.removeChild(a);
-                window.URL.revokeObjectURL(url);
-            }, 100);
+            a.href = outUrl; a.download = 'omnikithub-recording-' + d.getFullYear() + pad(d.getMonth() + 1) + pad(d.getDate()) + '-' + pad(d.getHours()) + pad(d.getMinutes()) + '.' + outExt;
+            document.body.appendChild(a); a.click(); a.remove();
         }
+        function shareTool() {
+            if (navigator.share) navigator.share({ title: document.title, url: location.href }).catch(() => {});
+            else if (navigator.clipboard) navigator.clipboard.writeText(location.href).then(() => toast('Link copied. Paste it anywhere to share'));
+        }
+        function recordAgain() {
+            if (outUrl) { URL.revokeObjectURL(outUrl); outUrl = null; }
+            outBlob = null; $('player').removeAttribute('src'); $('result').style.display = 'none'; setStatus('');
+        }
+
+        $('b-start').addEventListener('click', start);
+        $('b-pause').addEventListener('click', togglePause);
+        $('b-stop').addEventListener('click', stop);
+        window.addEventListener('beforeunload', e => { if (state === 'recording' || state === 'paused') { e.preventDefault(); e.returnValue = ''; } });
+        setMode('screen'); setButtons();
     </script>
 </body>
 </html>
