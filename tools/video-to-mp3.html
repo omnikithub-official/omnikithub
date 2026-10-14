@@ -3,85 +3,78 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Video to MP3 & Audio Extractor - OmniKitHub</title>
-    <meta name="description" content="Extract audio tracks and convert MP4, WEBM, AVI videos to MP3 audio online for free instantly in your browser.">
-    <meta name="keywords" content="video to mp3 converter, extract audio from video, mp4 to mp3 online, audio extractor tool, free sound converter">
+    <title>Video to MP3 Converter & Audio Extractor Online Free | OmniKitHub</title>
+    <meta name="description" content="Convert video to MP3 or WAV online for free. Extract audio from MP4, WebM and MOV, trim the clip and pick the bitrate. No upload: your files stay in your browser.">
+    <meta name="keywords" content="video to mp3, mp4 to mp3 converter, extract audio from video, video to audio converter, video to wav, audio extractor online, convert video to mp3 free, trim audio">
+    <meta name="robots" content="index, follow, max-image-preview:large">
+    <link rel="canonical" href="https://omnikithub.com/tools/video-to-mp3.html">
+
+    <meta property="og:type" content="website">
+    <meta property="og:site_name" content="OmniKitHub">
+    <meta property="og:title" content="Video to MP3 Converter & Audio Extractor - Free Online | OmniKitHub">
+    <meta property="og:description" content="Extract audio from video as MP3 or WAV. Trim, choose quality, and keep your files private.">
+    <meta property="og:url" content="https://omnikithub.com/tools/video-to-mp3.html">
+    <meta name="twitter:card" content="summary">
+    <meta name="twitter:title" content="Video to MP3 Converter & Audio Extractor | OmniKitHub">
+    <meta name="twitter:description" content="Free online video to MP3 converter. Files never leave your device.">
+
+    <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@graph": [
+        {
+          "@type": "WebApplication",
+          "name": "Video to MP3 Converter & Audio Extractor",
+          "url": "https://omnikithub.com/tools/video-to-mp3.html",
+          "applicationCategory": "MultimediaApplication",
+          "operatingSystem": "Any",
+          "description": "Free online tool to extract the audio track from a video file and save it as MP3 or WAV, with trimming and quality options.",
+          "offers": { "@type": "Offer", "price": "0", "priceCurrency": "USD" },
+          "publisher": { "@type": "Organization", "name": "OmniKitHub", "url": "https://omnikithub.com" }
+        },
+        {
+          "@type": "FAQPage",
+          "mainEntity": [
+            { "@type": "Question", "name": "How do I convert a video to MP3?", "acceptedAnswer": { "@type": "Answer", "text": "Choose your video file, pick MP3 and a bitrate, then click Extract audio. When it finishes, click Download." } },
+            { "@type": "Question", "name": "Is my video uploaded to a server?", "acceptedAnswer": { "@type": "Answer", "text": "No. The conversion runs inside your browser, so your video never leaves your device." } },
+            { "@type": "Question", "name": "Which video formats are supported?", "acceptedAnswer": { "@type": "Answer", "text": "MP4, WebM and MOV usually work, along with audio files such as MP3, WAV, M4A and OGG. Support depends on your browser, and some formats like AVI, MKV or WMV may not open." } },
+            { "@type": "Question", "name": "Can I extract only part of the audio?", "acceptedAnswer": { "@type": "Answer", "text": "Yes. Enter a start and end time in seconds to cut out just that part." } }
+          ]
+        }
+      ]
+    }
+    </script>
+
     <link rel="stylesheet" href="../style.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/lamejs/1.2.1/lame.min.js"></script>
+
     <style>
-        .tool-container {
-            max-width: 900px;
-            margin: 40px auto;
-            background: var(--bg-surface);
-            border: 1px solid var(--card-border);
-            border-radius: 16px;
-            padding: 30px;
-            box-shadow: var(--card-shadow);
-            text-align: center;
-        }
-
-        .upload-area {
-            border: 2px dashed var(--accent-color);
-            border-radius: 12px;
-            padding: 40px 20px;
-            text-align: center;
-            background: var(--bg-primary);
-            cursor: pointer;
-            transition: background var(--transition-speed) ease;
-            margin-bottom: 25px;
-        }
-
-        .upload-area:hover { background: var(--badge-bg); }
-
-        .result-card {
-            display: none;
-            background: var(--bg-primary);
-            border: 1px solid var(--card-border);
-            border-radius: 16px;
-            padding: 25px;
-            margin-top: 20px;
-            text-align: center;
-        }
-
-        audio {
-            width: 100%;
-            margin: 20px 0;
-            outline: none;
-        }
-
-        .action-btn {
-            padding: 12px 28px;
-            border-radius: 30px;
-            border: none;
-            background: var(--accent-color);
-            color: #fff;
-            font-weight: 700;
-            font-size: 1rem;
-            cursor: pointer;
-            display: inline-flex;
-            align-items: center;
-            gap: 8px;
-            transition: background var(--transition-speed) ease;
-        }
-
+        .tool-container { max-width: 900px; margin: 40px auto; background: var(--bg-surface); border: 1px solid var(--card-border); border-radius: 16px; padding: 30px; box-shadow: var(--card-shadow); }
+        .upload-area { border: 2px dashed var(--accent-color); border-radius: 12px; padding: 35px 20px; text-align: center; background: var(--bg-primary); cursor: pointer; transition: background var(--transition-speed) ease; margin-bottom: 14px; }
+        .upload-area:hover, .upload-area.drag { background: var(--badge-bg); }
+        .upload-area:focus-visible, .action-btn:focus-visible { outline: 2px solid var(--accent-color); outline-offset: 2px; }
+        #file-info { display: none; margin-bottom: 16px; padding: 12px 16px; border-radius: 10px; background: var(--bg-primary); border: 1px solid var(--card-border); color: var(--text-primary); font-size: .92rem; word-break: break-all; }
+        .opts { display: grid; grid-template-columns: repeat(auto-fit, minmax(170px, 1fr)); gap: 14px; margin-bottom: 20px; }
+        .opts label { display: flex; flex-direction: column; gap: 6px; font-size: .85rem; font-weight: 600; color: var(--text-secondary); }
+        .opts select, .opts input { padding: 10px 12px; border-radius: 8px; border: 1px solid var(--card-border); background: var(--bg-primary); color: var(--text-primary); font-size: .95rem; }
+        .action-btn { padding: 12px 24px; border-radius: 8px; border: 1px solid var(--accent-color); background: var(--accent-color); color: #fff; font-weight: 700; font-size: 1rem; cursor: pointer; display: inline-flex; align-items: center; gap: 8px; transition: background var(--transition-speed) ease; }
         .action-btn:hover { background: var(--accent-hover); }
-
-        .progress-bar-container {
-            width: 100%;
-            background: var(--card-border);
-            border-radius: 10px;
-            height: 10px;
-            margin: 15px 0;
-            overflow: hidden;
-            display: none;
-        }
-
-        .progress-fill {
-            height: 100%;
-            background: var(--accent-color);
-            width: 0%;
-            transition: width 0.2s ease;
-        }
+        .action-btn:disabled { opacity: .6; cursor: not-allowed; }
+        .action-btn.ghost { background: var(--bg-primary); color: var(--text-primary); border-color: var(--card-border); }
+        .action-btn.ghost:hover { border-color: var(--accent-color); }
+        #status { min-height: 22px; margin: 12px 0 6px; font-size: .92rem; color: var(--text-secondary); }
+        #status.error { color: #dc2626; }
+        progress { display: none; width: 100%; height: 10px; margin-bottom: 8px; accent-color: var(--accent-color); }
+        #result { display: none; margin-top: 18px; padding: 20px; border-radius: 14px; background: var(--bg-primary); border: 1px solid var(--card-border); text-align: center; }
+        #result audio { width: 100%; margin: 10px 0 14px; }
+        .btn-row { display: flex; flex-wrap: wrap; gap: 10px; justify-content: center; }
+        .info { max-width: 900px; margin: 0 auto 50px; color: var(--text-secondary); line-height: 1.7; }
+        .info h2 { color: var(--text-primary); font-size: 1.3rem; margin: 26px 0 8px; }
+        .info h3 { color: var(--text-primary); font-size: 1rem; margin: 16px 0 4px; }
+        #toast { position: fixed; left: 50%; bottom: 28px; transform: translateX(-50%); background: var(--text-primary); color: var(--bg-primary); padding: 10px 18px; border-radius: 999px; font-weight: 600; font-size: .9rem; opacity: 0; pointer-events: none; transition: opacity .2s; z-index: 9999; }
+        #toast.show { opacity: 1; }
+        @media (max-width: 600px) { .tool-container { margin: 20px 12px; padding: 18px; } .btn-row .action-btn { flex: 1 1 45%; justify-content: center; } }
     </style>
 </head>
 <body class="light-theme">
@@ -103,126 +96,212 @@
     <main class="container">
         <div class="tool-container">
             <h1 style="font-size: 1.8rem; margin-bottom: 8px;">Video to MP3 & Audio Extractor</h1>
-            <p style="color: var(--text-secondary); margin-bottom: 24px;">Convert video files into high-quality audio tracks instantly without uploading to servers.</p>
+            <p style="color: var(--text-secondary); margin-bottom: 24px;">Pull the sound out of a video and save it as MP3 or WAV. Everything happens in your browser, so your video is never uploaded.</p>
 
-            <div class="upload-area" onclick="document.getElementById('file-input').click()">
-                <i class="fa-solid fa-file-video" style="font-size: 2.8rem; color: var(--accent-color); margin-bottom: 12px;"></i>
-                <div style="font-weight: 700; font-size: 1.1rem; color: var(--text-primary);">Click or Drag Video File Here</div>
-                <div style="font-size: 0.85rem; color: var(--text-secondary); margin-top: 4px;">Supports MP4, WEBM, MOV, AVI formats</div>
-                <input type="file" id="file-input" accept="video/*" style="display: none;">
+            <div id="drop" class="upload-area" role="button" tabindex="0" aria-label="Choose a video or audio file">
+                <i class="fa-solid fa-file-audio" style="font-size: 2.5rem; color: var(--accent-color); margin-bottom: 10px;"></i>
+                <div style="font-weight: 700; font-size: 1.1rem; color: var(--text-primary);">Choose a video or audio file</div>
+                <div style="font-size: .85rem; color: var(--text-secondary); margin-top: 4px;">Click to browse, or drag and drop. MP4, WebM, MOV, MP3, WAV, M4A, OGG</div>
+                <input type="file" id="file-input" accept="video/*,audio/*,.mp4,.webm,.mov,.m4v,.mp3,.wav,.m4a,.ogg,.aac" style="display:none">
+            </div>
+            <div id="file-info"></div>
+
+            <div class="opts">
+                <label>Output format
+                    <select id="fmt"><option value="mp3">MP3</option><option value="wav">WAV (lossless, bigger)</option></select>
+                </label>
+                <label>MP3 quality
+                    <select id="kbps"><option value="96">96 kbps (small)</option><option value="128" selected>128 kbps (standard)</option><option value="192">192 kbps (good)</option><option value="256">256 kbps (high)</option><option value="320">320 kbps (best)</option></select>
+                </label>
+                <label>Channels
+                    <select id="chan"><option value="2">Stereo</option><option value="1">Mono (smaller)</option></select>
+                </label>
+                <label>Start (seconds)
+                    <input type="number" id="t-start" min="0" step="0.1" placeholder="0">
+                </label>
+                <label>End (seconds)
+                    <input type="number" id="t-end" min="0" step="0.1" placeholder="end of file">
+                </label>
             </div>
 
-            <div id="progress-box" class="progress-bar-container">
-                <div id="progress-fill" class="progress-fill"></div>
-            </div>
+            <button id="go" class="action-btn"><i class="fa-solid fa-wand-magic-sparkles"></i> Extract audio</button>
+            <div id="status" role="status" aria-live="polite"></div>
+            <progress id="prog" max="100" value="0"></progress>
 
-            <div id="result-box" class="result-card">
-                <i class="fa-solid fa-circle-check" style="font-size: 2rem; color: #10b981; margin-bottom: 10px;"></i>
-                <h3 style="font-size: 1.1rem; color: var(--text-primary);">Audio Successfully Extracted!</h3>
-                
-                <audio id="audio-preview" controls></audio>
-
-                <div>
-                    <button class="action-btn" onclick="downloadAudio()"><i class="fa-solid fa-download"></i> Download MP3 / WAV Audio</button>
+            <div id="result">
+                <strong id="res-title">Your audio is ready</strong>
+                <audio id="player" controls></audio>
+                <div class="btn-row">
+                    <button class="action-btn" onclick="downloadAudio()"><i class="fa-solid fa-download"></i> Download</button>
+                    <button class="action-btn ghost" onclick="shareTool()"><i class="fa-solid fa-share-nodes"></i> Share tool</button>
+                    <button class="action-btn ghost" onclick="resetAll()"><i class="fa-solid fa-rotate-left"></i> Convert another</button>
                 </div>
             </div>
         </div>
+
+        <section class="info">
+            <h2>How to convert video to MP3</h2>
+            <p>Choose your video, pick MP3 or WAV and the quality, optionally set a start and end time to cut just one part, then click <strong>Extract audio</strong>. Play the result to check it, then download it.</p>
+            <h2>Frequently asked questions</h2>
+            <h3>Is my video uploaded?</h3>
+            <p>No. The conversion runs in your browser and the file never leaves your device.</p>
+            <h3>Which formats work?</h3>
+            <p>MP4, WebM and MOV usually work, as do audio files like MP3, WAV, M4A and OGG. Support depends on your browser, so some AVI, MKV or WMV files may not open. If that happens, try another browser such as Chrome.</p>
+            <h3>Are there size limits?</h3>
+            <p>The audio is decoded in your device's memory, so very large or very long files can be slow or fail, especially on phones. For long videos, use the start and end fields to convert in parts.</p>
+            <h3>MP3 or WAV?</h3>
+            <p>MP3 is much smaller and works everywhere. WAV is uncompressed and keeps full quality, but the file is about ten times bigger.</p>
+        </section>
     </main>
 
     <footer class="footer">
         <div class="footer-bottom">
-            <div class="container">
-                <p>&copy; 2026 OmniKitHub.com. All rights reserved.</p>
-            </div>
+            <div class="container"><p>&copy; 2026 OmniKitHub.com. All rights reserved.</p></div>
         </div>
     </footer>
 
+    <div id="toast"></div>
+
     <script src="../script.js"></script>
     <script>
-        const fileInput = document.getElementById('file-input');
-        const progressBox = document.getElementById('progress-box');
-        const progressFill = document.getElementById('progress-fill');
-        const resultBox = document.getElementById('result-box');
-        const audioPreview = document.getElementById('audio-preview');
+        const $ = id => document.getElementById(id);
+        let file = null, outBlob = null, outName = 'audio', outUrl = null;
 
-        let audioBlobUrl = null;
+        function toast(msg) {
+            const t = $('toast'); t.textContent = msg; t.classList.add('show');
+            clearTimeout(toast.t); toast.t = setTimeout(() => t.classList.remove('show'), 2200);
+        }
+        function setStatus(msg, isErr) { const s = $('status'); s.textContent = msg; s.classList.toggle('error', !!isErr); }
+        function fmtSize(b) { return b > 1048576 ? (b / 1048576).toFixed(1) + ' MB' : Math.max(1, Math.round(b / 1024)) + ' KB'; }
+        function fmtTime(s) { s = Math.round(s); return Math.floor(s / 60) + ':' + String(s % 60).padStart(2, '0'); }
 
-        fileInput.addEventListener('change', async (e) => {
-            const file = e.target.files[0];
-            if (!file) return;
-
-            resultBox.style.display = 'none';
-            progressBox.style.display = 'block';
-            progressFill.style.width = '20%';
-
-            try {
-                const arrayBuffer = await file.arrayBuffer();
-                progressFill.style.width = '60%';
-
-                const audioCtx = new (window.AudioContext || window.webkitAudioContext)();
-                const audioBuffer = await audioCtx.decodeAudioData(arrayBuffer);
-                progressFill.style.width = '90%';
-
-                const wavBlob = audioBufferToWav(audioBuffer);
-                audioBlobUrl = URL.createObjectURL(wavBlob);
-
-                audioPreview.src = audioBlobUrl;
-                progressFill.style.width = '100%';
-
-                setTimeout(() => {
-                    progressBox.style.display = 'none';
-                    resultBox.style.display = 'block';
-                }, 300);
-
-            } catch (err) {
-                alert('Could not extract audio from this video file. Please try another format!');
-                progressBox.style.display = 'none';
-            }
-        });
-
-        function downloadAudio() {
-            if (!audioBlobUrl) return;
-            const a = document.createElement('a');
-            a.href = audioBlobUrl;
-            a.download = 'OmniKitHub-Extracted-Audio.wav';
-            a.click();
+        function loadFile(f) {
+            if (!f) return;
+            const okType = /^(video|audio)\//.test(f.type) || /\.(mp4|webm|mov|m4v|mp3|wav|m4a|ogg|aac)$/i.test(f.name);
+            if (!okType) { setStatus('Please choose a video or audio file.', true); return; }
+            if (f.size > 800 * 1048576) { setStatus('This file is over 800 MB, which is too large to convert in a browser. Trim the video first or use a smaller file.', true); return; }
+            file = f; outName = f.name.replace(/\.[^.]+$/, '') || 'audio';
+            $('file-info').style.display = 'block';
+            $('file-info').textContent = f.name + '  (' + fmtSize(f.size) + ')';
+            $('t-start').value = ''; $('t-end').value = '';
+            $('result').style.display = 'none';
+            setStatus(f.size > 200 * 1048576 ? 'Large file. Conversion may be slow, and may fail on phones.' : '');
+            const m = document.createElement(/^audio\//.test(f.type) ? 'audio' : 'video');
+            m.preload = 'metadata'; const u = URL.createObjectURL(f); m.src = u;
+            m.onloadedmetadata = () => {
+                if (isFinite(m.duration)) $('file-info').textContent += '  |  Length ' + fmtTime(m.duration);
+                URL.revokeObjectURL(u);
+            };
+            m.onerror = () => URL.revokeObjectURL(u);
         }
 
-        // Convert AudioBuffer to WAV Blob
-        function audioBufferToWav(buffer) {
-            const numOfChan = buffer.numberOfChannels;
-            const length = buffer.length * numOfChan * 2 + 44;
-            const out = new DataView(new ArrayBuffer(length));
-            let channels = [], sample = 0, offset = 0, pos = 0;
+        const drop = $('drop'), input = $('file-input');
+        drop.addEventListener('click', () => input.click());
+        drop.addEventListener('keydown', e => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); input.click(); } });
+        input.addEventListener('change', e => { loadFile(e.target.files[0]); input.value = ''; });
+        ['dragenter', 'dragover'].forEach(ev => drop.addEventListener(ev, e => { e.preventDefault(); drop.classList.add('drag'); }));
+        ['dragleave', 'drop'].forEach(ev => drop.addEventListener(ev, e => { e.preventDefault(); drop.classList.remove('drag'); }));
+        drop.addEventListener('drop', e => loadFile(e.dataTransfer.files[0]));
 
-            function setUint16(data) { out.setUint16(pos, data, true); pos += 2; }
-            function setUint32(data) { out.setUint32(pos, data, true); pos += 4; }
+        function ensureLame() {
+            if (window.lamejs) return Promise.resolve(true);
+            return new Promise(res => {
+                const s = document.createElement('script');
+                s.src = 'https://cdn.jsdelivr.net/npm/lamejs@1.2.1/lame.min.js';
+                s.onload = () => res(!!window.lamejs); s.onerror = () => res(false);
+                document.head.appendChild(s);
+            });
+        }
+        function toI16(f32) {
+            const o = new Int16Array(f32.length);
+            for (let i = 0; i < f32.length; i++) { const s = Math.max(-1, Math.min(1, f32[i])); o[i] = s < 0 ? s * 0x8000 : s * 0x7FFF; }
+            return o;
+        }
+        function wavBlob(a, b, rate, mono) {
+            const n = a.length, nc = mono ? 1 : 2, dl = n * nc * 2;
+            const buf = new ArrayBuffer(44 + dl), v = new DataView(buf);
+            const w = (o, s) => { for (let i = 0; i < s.length; i++) v.setUint8(o + i, s.charCodeAt(i)); };
+            w(0, 'RIFF'); v.setUint32(4, 36 + dl, true); w(8, 'WAVEfmt '); v.setUint32(16, 16, true);
+            v.setUint16(20, 1, true); v.setUint16(22, nc, true); v.setUint32(24, rate, true);
+            v.setUint32(28, rate * nc * 2, true); v.setUint16(32, nc * 2, true); v.setUint16(34, 16, true);
+            w(36, 'data'); v.setUint32(40, dl, true);
+            const ia = toI16(a), ib = mono ? null : toI16(b); let o = 44;
+            for (let i = 0; i < n; i++) { v.setInt16(o, ia[i], true); o += 2; if (!mono) { v.setInt16(o, ib[i], true); o += 2; } }
+            return new Blob([buf], { type: 'audio/wav' });
+        }
 
-            setUint32(0x46464952); // "RIFF"
-            setUint32(length - 8);
-            setUint32(0x45564157); // "WAVE"
-            setUint32(0x20746d66); // "fmt "
-            setUint32(16);
-            setUint16(1);
-            setUint16(numOfChan);
-            setUint32(buffer.sampleRate);
-            setUint32(buffer.sampleRate * 2 * numOfChan);
-            setUint16(numOfChan * 2);
-            setUint16(16);
-            setUint32(0x61746164); // "data"
-            setUint32(length - pos - 4);
+        async function convert() {
+            if (!file) { toast('Choose a video or audio file first'); return; }
+            const fmt = $('fmt').value, prog = $('prog'), btn = $('go');
+            btn.disabled = true; $('result').style.display = 'none'; prog.style.display = 'block'; prog.value = 0;
+            try {
+                if (fmt === 'mp3' && !(await ensureLame())) throw new Error('The MP3 encoder failed to load. Refresh the page, or choose WAV.');
+                setStatus('Reading file...');
+                const ab = await file.arrayBuffer();
+                setStatus('Decoding audio...');
+                const AC = window.AudioContext || window.webkitAudioContext;
+                let ctx; try { ctx = new AC({ sampleRate: 44100 }); } catch (e) { ctx = new AC(); }
+                let audio;
+                try { audio = await ctx.decodeAudioData(ab); }
+                catch (e) { throw new Error('Your browser could not read the audio in this file. Try an MP4, WebM, MOV, MP3 or WAV file, or use Chrome.'); }
+                if (ctx.close) ctx.close();
 
-            for (let i = 0; i < buffer.numberOfChannels; i++) channels.push(buffer.getChannelData(i));
+                const rate = audio.sampleRate;
+                if (fmt === 'mp3' && [32000, 44100, 48000].indexOf(rate) < 0) throw new Error('This file\'s sample rate (' + rate + ' Hz) is not supported for MP3. Choose WAV instead.');
+                const start = Math.max(0, parseFloat($('t-start').value) || 0);
+                const end = Math.min(audio.duration, parseFloat($('t-end').value) || audio.duration);
+                if (end <= start) throw new Error('The end time must be after the start time. This file is ' + fmtTime(audio.duration) + ' long.');
+                const i0 = Math.floor(start * rate), i1 = Math.min(audio.length, Math.floor(end * rate));
+                const mono = $('chan').value === '1' || audio.numberOfChannels === 1;
+                let L = audio.getChannelData(0).subarray(i0, i1);
+                let R = audio.numberOfChannels > 1 ? audio.getChannelData(1).subarray(i0, i1) : L;
+                if (mono && audio.numberOfChannels > 1) { const M = new Float32Array(L.length); for (let i = 0; i < M.length; i++) M[i] = (L[i] + R[i]) / 2; L = M; }
 
-            while (offset < buffer.length) {
-                for (let i = 0; i < numOfChan; i++) {
-                    sample = Math.max(-1, Math.min(1, channels[i][offset]));
-                    out.setInt16(pos, sample < 0 ? sample * 0x8000 : sample * 0x7FFF, true);
-                    pos += 2;
+                setStatus('Creating ' + fmt.toUpperCase() + '...');
+                if (fmt === 'wav') {
+                    outBlob = wavBlob(L, R, rate, mono);
+                } else {
+                    const enc = new lamejs.Mp3Encoder(mono ? 1 : 2, rate, +$('kbps').value), parts = [], BS = 1152 * 8, n = L.length;
+                    for (let i = 0, k = 0; i < n; i += BS, k++) {
+                        const l = toI16(L.subarray(i, i + BS));
+                        const out = mono ? enc.encodeBuffer(l) : enc.encodeBuffer(l, toI16(R.subarray(i, i + BS)));
+                        if (out.length) parts.push(out);
+                        if (k % 40 === 0) { prog.value = (i / n) * 100; await new Promise(r => setTimeout(r)); }
+                    }
+                    const last = enc.flush(); if (last.length) parts.push(last);
+                    outBlob = new Blob(parts, { type: 'audio/mpeg' });
                 }
-                offset++;
+                prog.value = 100;
+                if (outUrl) URL.revokeObjectURL(outUrl);
+                outUrl = URL.createObjectURL(outBlob);
+                $('player').src = outUrl;
+                $('res-title').textContent = 'Your audio is ready (' + fmt.toUpperCase() + ', ' + fmtSize(outBlob.size) + ', ' + fmtTime(end - start) + ')';
+                $('result').style.display = 'block';
+                setStatus('Done.');
+            } catch (err) {
+                console.error(err);
+                setStatus(err.message || 'Something went wrong. Please try again.', true);
             }
-            return new Blob([out], { type: 'audio/wav' });
+            btn.disabled = false; prog.style.display = 'none';
+        }
+        $('go').addEventListener('click', convert);
+
+        function downloadAudio() {
+            if (!outBlob) return toast('Extract the audio first');
+            const trimmed = ($('t-start').value || $('t-end').value) ? '-clip' : '';
+            const a = document.createElement('a');
+            a.href = outUrl; a.download = outName + trimmed + '.' + ($('fmt').value === 'wav' ? 'wav' : 'mp3');
+            document.body.appendChild(a); a.click(); a.remove();
+        }
+        function shareTool() {
+            if (navigator.share) navigator.share({ title: document.title, url: location.href }).catch(() => {});
+            else if (navigator.clipboard) navigator.clipboard.writeText(location.href).then(() => toast('Link copied. Paste it anywhere to share'));
+        }
+        function resetAll() {
+            file = null; outBlob = null;
+            if (outUrl) { URL.revokeObjectURL(outUrl); outUrl = null; }
+            $('player').removeAttribute('src'); $('result').style.display = 'none'; $('file-info').style.display = 'none';
+            $('t-start').value = ''; $('t-end').value = ''; setStatus('');
         }
     </script>
 </body>
