@@ -66,7 +66,8 @@
             color: var(--text-color);
             padding: 20px;
             display: flex;
-            justify-content: center;
+            flex-direction: column;
+            align-items: center;
             transition: background-color 0.3s, color 0.3s;
         }
 
@@ -79,6 +80,23 @@
             padding: 30px;
             margin-top: 10px;
         }
+
+        .seo-content-card {
+            max-width: 950px;
+            width: 100%;
+            background: var(--card-bg);
+            border-radius: 12px;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+            padding: 25px;
+            margin-top: 25px;
+            border: 1px solid var(--border-color);
+            line-height: 1.7;
+        }
+
+        .seo-content-card h2 { font-size: 18px; color: var(--primary-color); margin-bottom: 12px; }
+        .seo-content-card h3 { font-size: 15px; color: var(--primary-color); margin: 15px 0 8px 0; }
+        .seo-content-card p, .seo-content-card li { font-size: 13.5px; margin-bottom: 8px; color: var(--text-color); }
+        .seo-content-card ul { padding-left: 20px; margin-bottom: 10px; }
 
         .header {
             display: flex;
@@ -220,6 +238,7 @@
             body * { visibility: hidden; }
             #editor, #editor * { visibility: visible; }
             #editor { position: absolute; left: 0; top: 0; width: 100%; border: none; }
+            .seo-content-card { display: none; }
         }
     </style>
 </head>
@@ -290,6 +309,28 @@
         <button id="printBtn" class="btn-secondary">🖨️ Print</button>
         <button id="shareBtn" class="btn-share">🔗 Share Anywhere</button>
     </div>
+</div>
+
+<!-- AdSense Friendly SEO Content Section -->
+<div class="seo-content-card">
+    <h2>About Free Speech to Text (Voice Typing) Tool</h2>
+    <p>Welcome to OmniKitHub's advanced online Speech-to-Text dictation utility. This tool empowers users to convert spoken words into structured written text instantly using modern speech recognition algorithms. Whether you are typing long academic documents, composing emails, or taking quick notes in Bangla or English, this tool makes the process effortless.</p>
+    
+    <h3>Key Features & Capabilities</h3>
+    <ul>
+        <li><strong>Multi-Language Voice Recognition:</strong> Supports Bangla (Bangladesh/India), Banglish phonetic conversion, and English variants seamlessly.</li>
+        <li><strong>Smart Auto Punctuation:</strong> Automatically detects sentence pauses and inputs accurate punctuation marks like full stops, commas, and question marks.</li>
+        <li><strong>Rich Text Formatting & Audio Playback:</strong> Format text with bold, italic, custom font colors, or listen back to your dictation using built-in text-to-speech synthesis.</li>
+        <li><strong>Instant Export & Sharing:</strong> Download text files, export documents directly to clean PDFs, print physically, or share across platforms instantly.</li>
+    </ul>
+
+    <h3>How to Use Voice Typing Effectively</h3>
+    <ol>
+        <li>Select your preferred spoken language or phonetic input mode from the dropdown menu.</li>
+        <li>Click the <strong>Start Listening</strong> button and grant microphone permission when prompted by your browser.</li>
+        <li>Speak clearly into your microphone; your words will populate in real time inside the editable canvas.</li>
+        <li>Use formatting tools to edit text, then save as PDF, download as TXT, or copy to your clipboard.</li>
+    </ol>
 </div>
 
 <script>
@@ -367,7 +408,7 @@
             'dekha': 'দেখা', 'korte': 'করতে', 'chai': 'চাই', 'kemon': 'কেমন',
             'acho': 'আছো', 'achho': 'আছো', 'dhanyabad': 'ধন্যবাদ', 'dhonnobad': 'ধন্যবাদ',
             'bhalo': 'ভালো', 'valo': 'ভালো', 'na': 'না', 'ha': 'হ্যাঁ', 'han': 'হ্যাঁ',
-            'ki': 'কী', 'kore': 'করে', 'amra': 'আমরা', 'kothay': 'কোথায়'
+            'ki': 'কী', 'kore': 'করে', 'amra': 'আমরা', 'kothay': 'কোথায়'
         };
         return text.toLowerCase().split(' ').map(w => map[w] || w).join(' ');
     }
