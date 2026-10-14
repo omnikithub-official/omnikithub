@@ -3,278 +3,353 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Image / JPG to PDF Converter - OmniKitHub</title>
-    <meta name="description" content="Convert JPG, PNG, and WebP images to PDF online for free. Combine multiple photos into a single PDF document instantly.">
-    <meta name="keywords" content="jpg to pdf converter, image to pdf free, convert photo to pdf, combine images to pdf, online pdf maker">
-    <link rel="stylesheet" href="../style.css">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    
-    <!-- jsPDF & html2canvas -->
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+    <title>Pro Image to PDF Converter Online | OmniKitHub</title>
+    <meta name="description" content="Free online Image to JPG/PNG to PDF converter. Combine multiple photos into a clean, professional PDF document instantly with print and download support.">
+    <meta name="keywords" content="image to pdf converter, jpg to pdf online, png to pdf maker, combine images into pdf, free pdf converter tool, document utility">
+    <meta name="robots" content="index, follow">
+    <link rel="canonical" href="https://omnikithub.com/tools/image-to-pdf.html">
+
+    <!-- Open Graph Tags -->
+    <meta property="og:title" content="Pro Image to PDF Converter - OmniKitHub">
+    <meta property="og:description" content="Convert multiple photos into a clean, combined PDF document instantly with custom margins and print support.">
+    <meta property="og:url" content="https://omnikithub.com/tools/image-to-pdf.html">
+    <meta property="og:type" content="website">
+
+    <!-- html2pdf Library -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
+
+    <!-- Schema.org Markup -->
+    <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@type": "WebApplication",
+      "name": "Pro Image to PDF Converter",
+      "url": "https://omnikithub.com/tools/image-to-pdf.html",
+      "applicationCategory": "UtilityApplication",
+      "operatingSystem": "All",
+      "offers": {
+        "@type": "Offer",
+        "price": "0",
+        "priceCurrency": "USD"
+      }
+    }
+    </script>
 
     <style>
-        .tool-container {
-            max-width: 1000px;
-            margin: 40px auto;
-            background: var(--bg-surface);
-            border: 1px solid var(--card-border);
-            border-radius: 16px;
+        :root {
+            --bg-color: #f4f6f9;
+            --card-bg: #ffffff;
+            --text-color: #1e293b;
+            --border-color: #cbd5e1;
+            --primary-color: #2563eb;
+            --primary-hover: #1d4ed8;
+        }
+
+        body.dark-mode {
+            --bg-color: #0f172a;
+            --card-bg: #1e293b;
+            --text-color: #f8fafc;
+            --border-color: #334155;
+            --primary-color: #3b82f6;
+            --primary-hover: #60a5fa;
+        }
+
+        * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; }
+        body { background-color: var(--bg-color); color: var(--text-color); padding: 20px; transition: all 0.3s ease; }
+
+        .app-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            background: var(--card-bg);
+            border-radius: 12px;
             padding: 30px;
-            box-shadow: var(--card-shadow);
+            box-shadow: 0 4px 20px rgba(0,0,0,0.08);
+            border: 1px solid var(--border-color);
         }
 
-        .upload-area {
-            border: 2px dashed var(--accent-color);
-            border-radius: 12px;
-            padding: 40px 20px;
-            text-align: center;
-            background: var(--bg-primary);
+        .header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px; }
+        .header h1 { font-size: 24px; color: var(--primary-color); }
+
+        .theme-btn {
+            background: transparent;
+            border: 1px solid var(--border-color);
+            color: var(--text-color);
+            padding: 6px 12px;
+            border-radius: 20px;
             cursor: pointer;
-            transition: background var(--transition-speed) ease;
-            margin-bottom: 25px;
+            font-size: 13px;
         }
 
-        .upload-area:hover { background: var(--badge-bg); }
+        .description { color: #64748b; font-size: 14px; margin-bottom: 25px; }
 
-        .controls-row {
+        /* Dropzone */
+        .dropzone {
+            border: 2px dashed var(--primary-color);
+            padding: 35px;
+            text-align: center;
+            border-radius: 10px;
+            background: rgba(37, 99, 235, 0.02);
+            cursor: pointer;
+            margin-bottom: 20px;
+        }
+        .dropzone:hover { background: rgba(37, 99, 235, 0.05); }
+        .dropzone p { font-size: 14px; color: #64748b; margin-top: 8px; }
+
+        /* Controls Bar */
+        .controls-bar {
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-            gap: 15px;
+            grid-template-columns: 1fr 1fr;
+            gap: 20px;
             margin-bottom: 25px;
-            background: var(--bg-primary);
-            padding: 20px;
-            border-radius: 12px;
-            border: 1px solid var(--card-border);
+            background: rgba(0,0,0,0.01);
+            border: 1px solid var(--border-color);
+            padding: 18px;
+            border-radius: 8px;
         }
 
-        .form-group label {
-            display: block;
-            font-weight: 600;
-            font-size: 0.9rem;
-            margin-bottom: 6px;
-            color: var(--text-primary);
+        @media (max-width: 768px) {
+            .controls-bar { grid-template-columns: 1fr; }
         }
 
-        .form-control {
+        .control-group label { display: block; font-size: 13px; font-weight: 600; margin-bottom: 8px; }
+        select {
             width: 100%;
             padding: 10px 12px;
-            border-radius: 8px;
-            border: 1px solid var(--card-border);
-            background: var(--bg-surface);
-            color: var(--text-primary);
+            border: 1px solid var(--border-color);
+            border-radius: 6px;
+            font-size: 13px;
+            background: var(--card-bg);
+            color: var(--text-color);
             outline: none;
         }
 
+        /* Image Preview Container */
         .image-preview-grid {
             display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(130px, 1fr));
+            grid-template-columns: repeat(auto-fill, minmax(140px, 1fr));
             gap: 15px;
             margin-bottom: 25px;
+            min-height: 150px;
+            background: rgba(0,0,0,0.02);
+            border: 1px solid var(--border-color);
+            padding: 15px;
+            border-radius: 8px;
         }
 
-        .img-card {
+        .preview-thumb {
             position: relative;
-            background: var(--bg-primary);
-            border: 1px solid var(--card-border);
-            border-radius: 8px;
+            background: #ffffff;
+            border: 1px solid var(--border-color);
+            border-radius: 6px;
             padding: 8px;
             text-align: center;
         }
 
-        .img-card img {
+        .preview-thumb img {
             width: 100%;
-            height: 110px;
+            height: 100px;
             object-fit: cover;
-            border-radius: 6px;
+            border-radius: 4px;
         }
 
-        .remove-btn {
-            position: absolute;
-            top: 4px;
-            right: 4px;
-            background: #ef4444;
-            color: #fff;
-            border: none;
-            width: 24px;
-            height: 24px;
-            border-radius: 50%;
-            cursor: pointer;
-            font-size: 0.75rem;
+        .preview-thumb p { font-size: 11px; color: #64748b; margin-top: 5px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+
+        /* Hidden PDF Container */
+        #pdfRenderContainer {
+            background: #ffffff;
+            color: #000000;
+            padding: 20px;
+            display: none;
+        }
+        #pdfRenderContainer img {
+            max-width: 100%;
+            display: block;
+            margin: 0 auto 20px auto;
+            page-break-after: always;
+        }
+
+        /* Action Buttons */
+        .action-bar {
             display: flex;
-            align-items: center;
-            justify-content: center;
+            gap: 12px;
+            flex-wrap: wrap;
         }
 
-        .action-btn {
-            width: 100%;
-            padding: 14px;
-            border-radius: 10px;
-            border: none;
-            background: var(--accent-color);
-            color: #fff;
-            font-weight: 700;
-            font-size: 1rem;
+        .btn {
+            padding: 12px 20px;
+            border-radius: 8px;
+            border: 1px solid var(--border-color);
+            background: var(--card-bg);
+            color: var(--text-color);
+            font-weight: 600;
             cursor: pointer;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            gap: 8px;
-            transition: background var(--transition-speed) ease;
+            font-size: 14px;
         }
 
-        .action-btn:hover { background: var(--accent-hover); }
+        .btn-primary { background: var(--primary-color); color: white; border: none; }
+        .btn-primary:hover { background: var(--primary-hover); }
+        .btn-print { background: #d97706; color: white; border: none; }
+        .btn-share { background: #10b981; color: white; border: none; }
+
+        @media print {
+            body * { visibility: hidden; }
+            #pdfRenderContainer, #pdfRenderContainer * { visibility: visible; }
+            #pdfRenderContainer { position: absolute; left: 0; top: 0; width: 100%; display: block !important; }
+            .app-container { display: none; }
+        }
     </style>
 </head>
-<body class="light-theme">
+<body>
 
-    <header class="navbar">
-        <div class="container nav-container">
-            <a href="../index.html" class="logo">
-                <i class="fa-solid fa-toolbox logo-icon"></i>
-                <span class="logo-text">OmniKit<span class="highlight">Hub</span></span>
-            </a>
-            <div class="nav-actions">
-                <button id="theme-toggle" class="icon-btn" aria-label="Toggle Theme">
-                    <i class="fa-solid fa-moon"></i>
-                </button>
-            </div>
+<div class="app-container">
+    <div class="header">
+        <h1>📄 Pro Image to PDF Converter</h1>
+        <button id="themeToggle" class="theme-btn">🌙 Dark Mode</button>
+    </div>
+    <p class="description">Convert photos (JPG, PNG, WebP) into a clean, combined PDF document instantly with custom layout and direct print support.</p>
+
+    <!-- Dropzone -->
+    <div class="dropzone" onclick="document.getElementById('imageInput').click()">
+        <div style="font-size: 32px;">📁</div>
+        <p><b>Click or Drag Multiple Images Here</b><br>Supports JPG, PNG, WebP</p>
+        <input type="file" id="imageInput" accept="image/*" multiple style="display: none;">
+    </div>
+
+    <!-- Controls Bar -->
+    <div class="controls-bar">
+        <div class="control-group">
+            <label>Page Orientation:</label>
+            <select id="orientationSelect">
+                <option value="portrait">Portrait (Vertical)</option>
+                <option value="landscape">Landscape (Horizontal)</option>
+            </select>
         </div>
-    </header>
-
-    <main class="container">
-        <div class="tool-container">
-            <h1 style="font-size: 1.8rem; margin-bottom: 8px;">Image / JPG to PDF Converter</h1>
-            <p style="color: var(--text-secondary); margin-bottom: 24px;">Convert photos (JPG, PNG, WebP) into a clean, combined PDF document instantly.</p>
-
-            <div class="upload-area" onclick="document.getElementById('file-input').click()">
-                <i class="fa-solid fa-file-pdf" style="font-size: 2.5rem; color: var(--accent-color); margin-bottom: 10px;"></i>
-                <div style="font-weight: 700; font-size: 1.1rem; color: var(--text-primary);">Click or Drag Multiple Images Here</div>
-                <div style="font-size: 0.85rem; color: var(--text-secondary); margin-top: 4px;">Supports JPG, JPEG, PNG, WebP</div>
-                <input type="file" id="file-input" accept="image/*" multiple style="display: none;">
-            </div>
-
-            <div class="controls-row">
-                <div class="form-group">
-                    <label>Page Orientation:</label>
-                    <select id="pdf-orientation" class="form-control">
-                        <option value="p">Portrait (Vertical)</option>
-                        <option value="l">Landscape (Horizontal)</option>
-                    </select>
-                </div>
-
-                <div class="form-group">
-                    <label>Page Margin:</label>
-                    <select id="pdf-margin" class="form-control">
-                        <option value="0">No Margin</option>
-                        <option value="10" selected>Small Margin (10mm)</option>
-                        <option value="20">Large Margin (20mm)</option>
-                    </select>
-                </div>
-            </div>
-
-            <div id="preview-grid" class="image-preview-grid">
-                <!-- Uploaded image cards will appear here -->
-            </div>
-
-            <button id="convert-btn" class="action-btn"><i class="fa-solid fa-file-export"></i> Convert & Download PDF</button>
+        <div class="control-group">
+            <label>Page Margin:</label>
+            <select id="marginSelect">
+                <option value="0.3">Small Margin (10mm)</option>
+                <option value="0.5" selected>Standard Margin (15mm)</option>
+                <option value="0.8">Large Margin (20mm)</option>
+            </select>
         </div>
-    </main>
+    </div>
 
-    <footer class="footer">
-        <div class="footer-bottom">
-            <div class="container">
-                <p>&copy; 2026 OmniKitHub.com. All rights reserved.</p>
-            </div>
+    <!-- Preview Grid -->
+    <div class="image-preview-grid" id="previewGrid">
+        <div style="grid-column: 1 / -1; text-align: center; color: #94a3b8; padding: 40px; font-size: 14px;">
+            No images selected yet. Please upload multiple photos above.
         </div>
-    </footer>
+    </div>
 
-    <script src="../script.js"></script>
-    <script>
-        const fileInput = document.getElementById('file-input');
-        const previewGrid = document.getElementById('preview-grid');
-        const pdfOrientation = document.getElementById('pdf-orientation');
-        const pdfMargin = document.getElementById('pdf-margin');
-        const convertBtn = document.getElementById('convert-btn');
+    <!-- Action Bar -->
+    <div class="action-bar">
+        <button id="convertBtn" class="btn btn-primary" style="flex: 1; display: none;">📥 Convert & Download PDF</button>
+        <button id="printBtn" class="btn btn-print" style="display: none;">🖨️ Print PDF</button>
+        <button id="shareBtn" class="btn btn-share">🔗 Share Tool</button>
+        <button id="clearBtn" class="btn">🗑️ Reset All</button>
+    </div>
+</div>
 
-        let imageList = [];
+<!-- Hidden Render Box for PDF Export -->
+<div id="pdfRenderContainer"></div>
 
-        fileInput.addEventListener('change', (e) => {
-            const files = Array.from(e.target.files);
-            files.forEach(file => {
-                const reader = new FileReader();
-                reader.onload = (event) => {
-                    imageList.push(event.target.result);
-                    renderPreviews();
-                };
-                reader.readAsDataURL(file);
-            });
-            fileInput.value = '';
-        });
+<script>
+    const imageInput = document.getElementById('imageInput');
+    const previewGrid = document.getElementById('previewGrid');
+    const convertBtn = document.getElementById('convertBtn');
+    const printBtn = document.getElementById('printBtn');
+    const pdfRenderContainer = document.getElementById('pdfRenderContainer');
+    const orientationSelect = document.getElementById('orientationSelect');
+    const marginSelect = document.getElementById('marginSelect');
+    const themeToggle = document.getElementById('themeToggle');
 
-        function renderPreviews() {
-            previewGrid.innerHTML = '';
-            imageList.forEach((src, idx) => {
-                const card = document.createElement('div');
-                card.className = 'img-card';
-                card.innerHTML = `
-                    <img src="${src}" alt="Page ${idx + 1}">
-                    <button class="remove-btn" onclick="removeImage(${idx})"><i class="fa-solid fa-xmark"></i></button>
-                    <div style="font-size: 0.75rem; color: var(--text-secondary); margin-top: 4px;">Page ${idx + 1}</div>
-                `;
-                previewGrid.appendChild(card);
-            });
+    let uploadedFiles = [];
+
+    imageInput.addEventListener('change', (e) => {
+        const files = Array.from(e.target.files);
+        if (files.length > 0) {
+            uploadedFiles = uploadedFiles.concat(files);
+            renderPreviews();
+        }
+    });
+
+    function renderPreviews() {
+        if (uploadedFiles.length === 0) {
+            previewGrid.innerHTML = `<div style="grid-column: 1 / -1; text-align: center; color: #94a3b8; padding: 40px; font-size: 14px;">No images selected yet. Please upload multiple photos above.</div>`;
+            convertBtn.style.display = 'none';
+            printBtn.style.display = 'none';
+            return;
         }
 
-        window.removeImage = function(index) {
-            imageList.splice(index, 1);
-            renderPreviews();
+        previewGrid.innerHTML = '';
+        pdfRenderContainer.innerHTML = '';
+
+        uploadedFiles.forEach((file, index) => {
+            const reader = new FileReader();
+            reader.onload = (event) => {
+                // Thumbnail
+                const thumb = document.createElement('div');
+                thumb.className = 'preview-thumb';
+                thumb.innerHTML = `<img src="${event.target.result}" alt="Thumb"><p>${file.name}</p>`;
+                previewGrid.appendChild(thumb);
+
+                // PDF Render Image
+                const img = document.createElement('img');
+                img.src = event.target.result;
+                pdfRenderContainer.appendChild(img);
+            };
+            reader.readAsDataURL(file);
+        });
+
+        convertBtn.style.display = 'block';
+        printBtn.style.display = 'block';
+    }
+
+    convertBtn.addEventListener('click', () => {
+        if (uploadedFiles.length === 0) return;
+
+        const opt = {
+            margin: parseFloat(marginSelect.value),
+            filename: 'Combined_Images_OmniKitHub.pdf',
+            image: { type: 'jpeg', quality: 0.98 },
+            html2canvas: { scale: 2 },
+            jsPDF: { unit: 'in', format: 'letter', orientation: orientationSelect.value }
         };
 
-        convertBtn.addEventListener('click', async () => {
-            if (imageList.length === 0) {
-                alert('Please upload at least one image!');
-                return;
-            }
+        html2pdf().set(opt).from(pdfRenderContainer).save();
+    });
 
-            convertBtn.innerHTML = '<i class="fa-solid fa-spinner fa-spin"></i> Generating PDF...';
+    printBtn.addEventListener('click', () => {
+        window.print();
+    });
 
-            setTimeout(() => {
-                const { jsPDF } = window.jspdf;
-                const orientation = pdfOrientation.value;
-                const margin = parseInt(pdfMargin.value);
+    // Dark Mode
+    themeToggle.addEventListener('click', () => {
+        document.body.classList.toggle('dark-mode');
+        themeToggle.innerText = document.body.classList.contains('dark-mode') ? '☀️ Light Mode' : '🌙 Dark Mode';
+    });
 
-                const pdf = new jsPDF(orientation, 'mm', 'a4');
-                const pageWidth = pdf.internal.pageSize.getWidth();
-                const pageHeight = pdf.internal.pageSize.getHeight();
+    document.getElementById('clearBtn').addEventListener('click', () => {
+        uploadedFiles = [];
+        imageInput.value = '';
+        renderPreviews();
+    });
 
-                imageList.forEach((imgData, index) => {
-                    if (index > 0) pdf.addPage();
-
-                    const img = new Image();
-                    img.src = imgData;
-
-                    const printableW = pageWidth - (margin * 2);
-                    const printableH = pageHeight - (margin * 2);
-
-                    let drawW = printableW;
-                    let drawH = (img.height * printableW) / img.width;
-
-                    if (drawH > printableH) {
-                        drawH = printableH;
-                        drawW = (img.width * printableH) / img.height;
-                    }
-
-                    const x = margin + (printableW - drawW) / 2;
-                    const y = margin + (printableH - drawH) / 2;
-
-                    pdf.addImage(imgData, 'JPEG', x, y, drawW, drawH);
+    document.getElementById('shareBtn').addEventListener('click', async () => {
+        if (navigator.share) {
+            try {
+                await navigator.share({
+                    title: 'Pro Image to PDF Converter',
+                    text: 'Combine multiple photos into a clean PDF document instantly!',
+                    url: window.location.href
                 });
+            } catch (err) { console.log(err); }
+        } else {
+            navigator.clipboard.writeText(window.location.href);
+            alert('Tool link copied to clipboard!');
+        }
+    });
+</script>
 
-                pdf.save('OmniKitHub-Converted.pdf');
-                convertBtn.innerHTML = '<i class="fa-solid fa-file-export"></i> Convert & Download PDF';
-            }, 500);
-        });
-    </script>
 </body>
 </html>
