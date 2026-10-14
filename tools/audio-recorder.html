@@ -11,7 +11,7 @@
     <style>
         .tool-container {
             max-width: 850px;
-            margin: 40px auto;
+            margin: 30px auto;
             background: var(--bg-surface);
             border: 1px solid var(--card-border);
             border-radius: 16px;
@@ -70,10 +70,40 @@
             outline: none;
             display: none;
         }
+
+        /* Ad Slots & SEO Card Styling */
+        .ad-placeholder {
+            border: 1px dashed #cbd5e1;
+            background: rgba(0,0,0,0.01);
+            padding: 15px;
+            border-radius: 10px;
+            text-align: center;
+            color: #64748b;
+            font-size: 13px;
+            margin: 20px 0;
+        }
+
+        .seo-content-card {
+            max-width: 850px;
+            margin: 30px auto;
+            background: var(--bg-surface);
+            border: 1px solid var(--card-border);
+            border-radius: 16px;
+            padding: 30px;
+            box-shadow: var(--card-shadow);
+            line-height: 1.7;
+            text-align: left;
+        }
+
+        .seo-content-card h2 { font-size: 1.4rem; color: var(--accent-color); margin-bottom: 12px; }
+        .seo-content-card h3 { font-size: 1.1rem; color: var(--text-primary); margin: 15px 0 8px 0; }
+        .seo-content-card p, .seo-content-card li { font-size: 0.95rem; margin-bottom: 8px; color: var(--text-secondary); }
+        .seo-content-card ul { padding-left: 20px; margin-bottom: 10px; }
     </style>
 </head>
 <body class="light-theme">
 
+    <!-- Navigation Header -->
     <header class="navbar">
         <div class="container nav-container">
             <a href="../index.html" class="logo">
@@ -88,13 +118,21 @@
         </div>
     </header>
 
+    <!-- Top Advertisement Slot -->
+    <div class="container ad-wrapper" style="margin: 20px auto; max-width: 850px;">
+        <div class="ad-placeholder">
+            <span>Responsive Advertisement Space (Google AdSense)</span>
+        </div>
+    </div>
+
+    <!-- Main Tool Container -->
     <main class="container">
         <div class="tool-container">
             <h1 style="font-size: 1.8rem; margin-bottom: 8px;">Online Voice & Audio Recorder</h1>
             <p style="color: var(--text-secondary); margin-bottom: 24px;">Record your voice directly from your microphone and download as an audio file.</p>
 
             <div class="recorder-box">
-                <div style="font-size: 1.1font-weight; font-weight: 600; color: var(--text-primary);">Recording Status</div>
+                <div style="font-weight: 600; color: var(--text-primary);">Recording Status</div>
                 <div id="timer" class="timer-display">00:00</div>
                 <div id="status-text" style="color: var(--text-secondary); font-size: 0.95rem;">Ready to record</div>
 
@@ -109,7 +147,57 @@
         </div>
     </main>
 
+    <!-- Bottom Advertisement Slot -->
+    <div class="container ad-wrapper" style="margin: 20px auto; max-width: 850px;">
+        <div class="ad-placeholder">
+            <span>Responsive Advertisement Space (Google AdSense)</span>
+        </div>
+    </div>
+
+    <!-- AdSense Friendly SEO Content Section -->
+    <section class="container">
+        <div class="seo-content-card">
+            <h2>About Online Voice & Audio Recorder</h2>
+            <p>Welcome to OmniKitHub's free online Voice and Audio Recorder. This browser-based tool allows users to record their voice or surrounding sound instantly using any microphone device without needing external software installation.</p>
+            
+            <h3>Key Features & Capabilities</h3>
+            <ul>
+                <li><strong>Direct Browser Recording:</strong> Captures audio cleanly straight through modern browser MediaRecorder APIs.</li>
+                <li><strong>Real-Time Live Timer:</strong> Tracks exact recording duration with a built-in stopwatch display.</li>
+                <li><strong>Instant Playback & Download:</strong> Preview your recording immediately before saving it securely to your device.</li>
+                <li><strong>100% Privacy Protected:</strong> All audio recordings are processed client-side in your browser memory.</li>
+            </ul>
+
+            <h3>How to Record Voice Online</h3>
+            <ol>
+                <li>Click the red <strong>Start Recording</strong> button and allow microphone permission in your browser prompt.</li>
+                <li>Speak clearly into your mic while monitoring the real-time recording timer.</li>
+                <li>Click <strong>Stop Recording</strong> when finished, listen to the preview, and download your audio file instantly.</li>
+            </ol>
+        </div>
+    </section>
+
+    <!-- Footer Section -->
     <footer class="footer">
+        <div class="container footer-container">
+            <div class="footer-brand">
+                <a href="../index.html" class="logo">
+                    <i class="fa-solid fa-toolbox logo-icon"></i>
+                    <span class="logo-text">OmniKit<span class="highlight">Hub</span></span>
+                </a>
+                <p>Your ultimate free online toolkit for daily developer, text, media, PDF, and web tasks.</p>
+            </div>
+            
+            <div class="footer-links">
+                <h4>Legal & Pages</h4>
+                <ul>
+                    <li><a href="../pages/about.html">About Us</a></li>
+                    <li><a href="../pages/contact.html">Contact Us</a></li>
+                    <li><a href="../pages/privacy-policy.html">Privacy Policy</a></li>
+                    <li><a href="../pages/terms.html">Terms of Service</a></li>
+                </ul>
+            </div>
+        </div>
         <div class="footer-bottom">
             <div class="container">
                 <p>&copy; 2026 OmniKitHub.com. All rights reserved.</p>
