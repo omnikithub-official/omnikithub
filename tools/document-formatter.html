@@ -75,13 +75,24 @@
             .app-container { grid-template-columns: 1fr; }
         }
 
-        .editor-card, .preview-card {
+        .editor-card, .preview-card, .seo-content-card {
             background: var(--card-bg);
             border-radius: 12px;
             padding: 25px;
             box-shadow: 0 4px 20px rgba(0,0,0,0.08);
             border: 1px solid var(--border-color);
         }
+
+        .seo-content-card {
+            grid-column: 1 / -1;
+            margin-top: 25px;
+            line-height: 1.7;
+        }
+
+        .seo-content-card h2 { font-size: 18px; color: var(--primary-color); margin-bottom: 12px; }
+        .seo-content-card h3 { font-size: 15px; color: var(--heading-color); margin: 15px 0 8px 0; }
+        .seo-content-card p, .seo-content-card li { font-size: 13.5px; margin-bottom: 8px; color: var(--text-color); }
+        .seo-content-card ul { padding-left: 20px; margin-bottom: 10px; }
 
         .header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 15px; }
         .header h1 { font-size: 20px; color: var(--primary-color); }
@@ -284,8 +295,8 @@
         @media print {
             body * { visibility: hidden; }
             #docPaper, #docPaper * { visibility: visible; }
-            #docPaper { position: absolute; left: 0; top: 0; width: 100%; box-shadow: none; }
-            .editor-card, .header, .action-bar { display: none; }
+            #docPaper { position: absolute; left: 0; top: 0; width: 100%; box-shadow: none; border: none; }
+            .editor-card, .header, .action-bar, .seo-content-card { display: none; }
             .page-break-divider { page-break-after: always; border: none; }
         }
     </style>
@@ -354,8 +365,8 @@ Lecturer, Department of CSE</textarea>
 Web technologies encompass a wide range of tools and techniques utilized in the process of communication between different types of devices over the internet.
 
 <h3>2. Objective</h3>
-• To design and deploy a responsive, high-performance web platform.
-• To implement secure client-server data communication protocols.
+- To design and deploy a responsive, high-performance web platform.
+- To implement secure client-server data communication protocols.
 
 <h3>3. Implementation & Analysis</h3>
 The development lifecycle followed modular component structures, ensuring cross-browser compatibility and optimized execution speed.</textarea>
@@ -463,6 +474,28 @@ The development lifecycle followed modular component structures, ensuring cross-
                 <img id="prevImg" alt="Diagram / Circuit Preview">
             </div>
         </div>
+    </div>
+
+    <!-- AdSense Friendly SEO Content Section -->
+    <div class="seo-content-card">
+        <h2>About Ultimate Pro Assignment & Report Formatter</h2>
+        <p>Welcome to OmniKitHub's Advanced Assignment and Lab Report Formatter. This professional online web utility is designed specifically for university students, researchers, and academic professionals who need to generate clean, structured, and standard A4-sized documents instantly without complex desktop software.</p>
+        
+        <h3>Key Features & Benefits</h3>
+        <ul>
+            <li><strong>Automated Cover Page Creation:</strong> Easily customize institute names, course codes, teacher information, student details, and experiment serial numbers in a clean academic tabular layout.</li>
+            <li><strong>Smart Word & Page Limitation:</strong> Manage page densities using precise word-per-page calculation models to prevent overflow and ensure precise assignment compliance.</li>
+            <li><strong>AI Humanizer Tool:</strong> Refine academic tone and naturalize robotic writing style seamlessly with one click.</li>
+            <li><strong>Instant PDF Export & Print Ready:</strong> Convert formatted layouts into professional-grade PDF files or direct physical printouts seamlessly.</li>
+        </ul>
+
+        <h3>How to Use This Tool Effectively</h3>
+        <ol>
+            <li>Fill in your university metadata and submission details in the first section.</li>
+            <li>Paste your main assignment body text or report contents into the editor box.</li>
+            <li>Upload relevant circuit diagrams, charts, or images if required.</li>
+            <li>Configure your preferred font style, borders, and margins, then click <strong>Save Assignment PDF</strong> or <strong>Print</strong>.</li>
+        </ol>
     </div>
 </div>
 
@@ -610,13 +643,15 @@ The development lifecycle followed modular component structures, ensuring cross-
 
     // Actions
     document.getElementById('downloadPdfBtn').addEventListener('click', () => {
+        const element = document.getElementById('docPaper');
         const opt = {
-            margin: 0.3,
-            filename: 'Professional_Assignment_Report.pdf',
-            html2canvas: { scale: 2 },
-            jsPDF: { unit: 'in', format: 'letter', orientation: 'portrait' }
+            margin:       0.4,
+            filename:     'Professional_Assignment_Report.pdf',
+            image:        { type: 'jpeg', quality: 0.98 },
+            html2canvas:  { scale: 2, useCORS: true },
+            jsPDF:        { unit: 'in', format: 'a4', orientation: 'portrait' }
         };
-        html2pdf().set(opt).from(docPaper).save();
+        html2pdf().set(opt).from(element).save();
     });
 
     document.getElementById('printBtn').addEventListener('click', () => window.print());
