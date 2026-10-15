@@ -19,6 +19,11 @@
     <link rel="stylesheet" href="../style.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 
+    <!-- Google Fonts (20+ Academic & Handwriting Styles) -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Alex+Brush&family=Amatic+SC:wght@700&family=Caveat:wght@500;600&family=Dancing+Script:wght@500&family=Gloria+Hallelujah&family=Gochi+Hand&family=Great+Vibes&family=Indie+Flower&family=Kalam:wght@400;700&family=Pacifico&family=Patrick+Hand&family=Reenie+Beanie&family=Rock+Salt&family=Sacramento&family=Shadows+Into+Light&family=Georgia&family=Courier+New&family=Times+New Roman&family=Arial&family=Comic+Neue:wght@400;700&display=swap" rel="stylesheet">
+
     <!-- html2pdf Library -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
 
@@ -49,9 +54,11 @@
             --primary-hover: #1d4ed8;
             --doc-font: 'Georgia', serif;
             --line-spacing: 1.6;
+            --letter-spacing: normal;
             --heading-color: #1e3a8a;
             --page-border: 1px solid #94a3b8;
             --page-padding: 40px;
+            --page-bg: #ffffff;
         }
 
         body.dark-mode {
@@ -174,7 +181,7 @@
 
         /* Document Live Paper (A4 Style) */
         .doc-paper {
-            background: #ffffff;
+            background: var(--page-bg);
             color: #000000;
             padding: var(--page-padding);
             border-radius: 4px;
@@ -182,6 +189,18 @@
             min-height: 800px;
             font-family: var(--doc-font);
             border: var(--page-border);
+            position: relative;
+        }
+
+        /* Document Header (Date & Page No) */
+        .doc-header-info {
+            display: flex;
+            justify-content: space-between;
+            font-size: 11px;
+            color: #64748b;
+            margin-bottom: 20px;
+            border-bottom: 1px solid #e2e8f0;
+            padding-bottom: 6px;
         }
 
         /* Cover Page Styling */
@@ -215,6 +234,7 @@
         .doc-content {
             font-size: 13.5px;
             line-height: var(--line-spacing);
+            letter-spacing: var(--letter-spacing);
             text-align: justify;
             white-space: pre-line;
         }
@@ -236,7 +256,7 @@
         }
 
         .page-break-divider span {
-            background: #ffffff;
+            background: var(--page-bg);
             padding: 0 10px;
             font-size: 11px;
             color: #64748b;
@@ -446,6 +466,36 @@ The development lifecycle followed modular component structures, ensuring cross-
                     </select>
                 </div>
                 <div class="form-group">
+                    <label>Paper Background Style:</label>
+                    <select id="bgPicker">
+                        <option value="#ffffff" selected>Clean White Paper</option>
+                        <option value="#fcfbf7">Vintage / Old Paper</option>
+                        <option value="#f8fafc">Soft Slate Tint</option>
+                    </select>
+                </div>
+            </div>
+
+            <div class="settings-grid">
+                <div class="form-group">
+                    <label>Line Spacing:</label>
+                    <select id="lineSpacingPicker">
+                        <option value="1.4">Compact (1.4)</option>
+                        <option value="1.6" selected>Standard (1.6)</option>
+                        <option value="2.0">Double Spaced (2.0)</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label>Letter Spacing:</label>
+                    <select id="letterSpacingPicker">
+                        <option value="normal" selected>Normal</option>
+                        <option value="0.5px">Wide (0.5px)</option>
+                        <option value="1px">Extra Wide (1px)</option>
+                    </select>
+                </div>
+            </div>
+
+            <div class="settings-grid">
+                <div class="form-group">
                     <label>Heading Underline:</label>
                     <select id="underlinePicker">
                         <option value="2px solid #2563eb" selected>Solid Colored Line</option>
@@ -453,16 +503,37 @@ The development lifecycle followed modular component structures, ensuring cross-
                         <option value="none">No Underline</option>
                     </select>
                 </div>
-            </div>
-
-            <div class="form-group">
-                <label>Typography / Font Style:</label>
-                <select id="fontPicker">
-                    <option value="'Georgia', serif" selected>Georgia (Academic Formal)</option>
-                    <option value="'Courier New', monospace">Courier New (Handwritten/Typewriter)</option>
-                    <option value="'Times New Roman', serif">Times New Roman</option>
-                    <option value="Arial, sans-serif">Arial</option>
-                </select>
+                <div class="form-group">
+                    <label>Typography / Font Style (20+ Options):</label>
+                    <select id="fontPicker">
+                        <optgroup label="Academic & Serif">
+                            <option value="'Georgia', serif" selected>Georgia (Academic Formal)</option>
+                            <option value="'Times New Roman', serif">Times New Roman</option>
+                        </optgroup>
+                        <optgroup label="Sans-Serif">
+                            <option value="Arial, sans-serif">Arial</option>
+                            <option value="'Segoe UI', Tahoma, sans-serif">Segoe UI</option>
+                        </optgroup>
+                        <optgroup label="Typewriter & Handcrafted">
+                            <option value="'Courier New', monospace">Courier New (Typewriter)</option>
+                            <option value="'Comic Neue', cursive">Comic Neue (Handwritten)</option>
+                            <option value="'Kalam', cursive">Kalam (Student Script)</option>
+                            <option value="'Caveat', cursive">Caveat (Cursive)</option>
+                            <option value="'Patrick Hand', cursive">Patrick Hand</option>
+                            <option value="'Indie Flower', cursive">Indie Flower</option>
+                            <option value="'Dancing Script', cursive">Dancing Script</option>
+                            <option value="'Shadows Into Light', cursive">Shadows Into Light</option>
+                            <option value="'Gochi Hand', cursive">Gochi Hand</option>
+                            <option value="'Pacifico', cursive">Pacifico</option>
+                            <option value="'Great Vibes', cursive">Great Vibes</option>
+                            <option value="'Reenie Beanie', cursive">Reenie Beanie</option>
+                            <option value="'Rock Salt', cursive">Rock Salt</option>
+                            <option value="'Amatic SC', cursive">Amatic SC</option>
+                            <option value="'Gloria Hallelujah', cursive">Gloria Hallelujah</option>
+                            <option value="'Alex Brush', cursive">Alex Brush</option>
+                        </optgroup>
+                    </select>
+                </div>
             </div>
 
             <div class="action-bar">
@@ -482,6 +553,12 @@ The development lifecycle followed modular component structures, ensuring cross-
             </div>
             
             <div class="doc-paper" id="docPaper">
+                <!-- Header Info (Date & Page Number) -->
+                <div class="doc-header-info">
+                    <span id="prevDate">Date: 15/10/2026</span>
+                    <span>Page: 01</span>
+                </div>
+
                 <!-- Cover Page Preview -->
                 <div class="cover-page">
                     <div class="uni-name" id="prevUni">World University of Bangladesh</div>
@@ -526,10 +603,10 @@ The development lifecycle followed modular component structures, ensuring cross-
         
         <h3>Key Features & Benefits</h3>
         <ul>
+            <li><strong>20+ Professional & Handwriting Fonts:</strong> Select from formal academic serif styles to realistic student handwritten fonts instantly.</li>
             <li><strong>Automated Cover Page Creation:</strong> Easily customize institute names, course codes, teacher information, student details, and experiment serial numbers in a clean academic tabular layout.</li>
             <li><strong>Smart Word & Page Limitation:</strong> Manage page densities using precise word-per-page calculation models to prevent overflow and ensure precise assignment compliance.</li>
-            <li><strong>AI Humanizer Tool:</strong> Refine academic tone and naturalize robotic writing style seamlessly with one click.</li>
-            <li><strong>Instant PDF Export & Print Ready:</strong> Convert formatted layouts into professional-grade PDF files or direct physical printouts seamlessly.</li>
+            <li><strong>Custom Line Spacing & Vintage Backgrounds:</strong> Personalize document formatting with adjustable spacing, letter gaps, and classic vintage paper textures.</li>
         </ul>
 
         <h3>How to Use This Tool Effectively</h3>
@@ -537,7 +614,7 @@ The development lifecycle followed modular component structures, ensuring cross-
             <li>Fill in your university metadata and submission details in the first section.</li>
             <li>Paste your main assignment body text or report contents into the editor box.</li>
             <li>Upload relevant circuit diagrams, charts, or images if required.</li>
-            <li>Configure your preferred font style, borders, and margins, then click <strong>Save Assignment PDF</strong> or <strong>Print</strong>.</li>
+            <li>Configure your preferred font style, line spacing, vintage paper background, and borders, then click <strong>Save Assignment PDF</strong> or <strong>Print</strong>.</li>
         </ol>
     </div>
 
@@ -589,6 +666,7 @@ The development lifecycle followed modular component structures, ensuring cross-
     const prevSubBy = document.getElementById('prevSubBy');
     const prevSubTo = document.getElementById('prevSubTo');
     const prevContent = document.getElementById('prevContent');
+    const prevDate = document.getElementById('prevDate');
 
     const imageInput = document.getElementById('imageInput');
     const prevImg = document.getElementById('prevImg');
@@ -596,6 +674,9 @@ The development lifecycle followed modular component structures, ensuring cross-
     const pageLimitPicker = document.getElementById('pageLimitPicker');
     const borderPicker = document.getElementById('borderPicker');
     const paddingPicker = document.getElementById('paddingPicker');
+    const bgPicker = document.getElementById('bgPicker');
+    const lineSpacingPicker = document.getElementById('lineSpacingPicker');
+    const letterSpacingPicker = document.getElementById('letterSpacingPicker');
     const underlinePicker = document.getElementById('underlinePicker');
     const fontPicker = document.getElementById('fontPicker');
     const docPaper = document.getElementById('docPaper');
@@ -603,6 +684,11 @@ The development lifecycle followed modular component structures, ensuring cross-
     const pageCount = document.getElementById('pageCount');
     const themeToggle = document.getElementById('theme-toggle');
     const humanizeBtn = document.getElementById('humanizeBtn');
+
+    // Auto update current date
+    const today = new Date();
+    const formattedDate = String(today.getDate()).padStart(2, '0') + '/' + String(today.getMonth() + 1).padStart(2, '0') + '/' + today.getFullYear();
+    prevDate.innerText = `Date: ${formattedDate}`;
 
     function updatePreview() {
         prevUni.innerText = uniInput.value;
@@ -698,6 +784,18 @@ The development lifecycle followed modular component structures, ensuring cross-
 
     paddingPicker.addEventListener('change', (e) => {
         docPaper.style.setProperty('--page-padding', e.target.value);
+    });
+
+    bgPicker.addEventListener('change', (e) => {
+        docPaper.style.setProperty('--page-bg', e.target.value);
+    });
+
+    lineSpacingPicker.addEventListener('change', (e) => {
+        docPaper.style.setProperty('--line-spacing', e.target.value);
+    });
+
+    letterSpacingPicker.addEventListener('change', (e) => {
+        docPaper.style.setProperty('--letter-spacing', e.target.value);
     });
 
     underlinePicker.addEventListener('change', (e) => {
