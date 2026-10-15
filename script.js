@@ -334,7 +334,19 @@ function initAutoExportButtons() {
     });
 }
 
-
+// Auto Insert Futuristic Hexagon Favicon across all pages
+(function() {
+    let faviconUrl = "data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><polygon points=%2250,5 95,27 95,73 50,95 5,73 5,27%22 fill=%22%230f172a%22 stroke=%22%2338bdf8%22 stroke-width=%226%22/><text x=%2250%22 y=%2262%22 font-size=%2240%22 font-weight=%22bold%22 fill=%22%2338bdf8%22 text-anchor=%22middle%22 font-family=%22sans-serif%22>OK</text></svg>";
+    
+    let link = document.querySelector("link[rel*='icon']");
+    if (!link) {
+        link = document.createElement('link');
+        document.getElementsByTagName('head')[0].appendChild(link);
+    }
+    link.type = 'image/svg+xml';
+    link.rel = 'icon';
+    link.href = faviconUrl;
+})();
 
 
 
