@@ -335,20 +335,7 @@ function initAutoExportButtons() {
 }
 
 
-// Auto Insert Favicon to All Pages (Robust)
-(function() {
-    let faviconPath = '/favicon.ico';
-    let link = document.querySelector("link[rel*='icon']");
-    
-    if (!link) {
-        link = document.createElement('link');
-        document.getElementsByTagName('head')[0].appendChild(link);
-    }
-    
-    link.type = 'image/x-icon';
-    link.rel = 'shortcut icon';
-    link.href = faviconPath;
-})();
+
 
 
 
