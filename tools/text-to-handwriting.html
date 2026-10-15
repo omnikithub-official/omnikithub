@@ -1,4 +1,3 @@
-
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -20,10 +19,10 @@
     <link rel="stylesheet" href="../style.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 
-    <!-- Google Fonts for Realistic Handwriting (Updated with 10+ Natural Handwriting Styles) -->
+    <!-- Google Fonts for Realistic Handwriting (15 Natural Styles) -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Caveat:wght@500;600&family=Dancing+Script:wght@500&family=Gochi+Hand&family=Great+Vibes&family=Indie+Flower&family=Kalam:wght@400;700&family=Pacifico&family=Patrick+Hand&family=Sacramento&family=Shadows+Into+Light&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Alex+Brush&family=Amatic+SC:wght@700&family=Caveat:wght@500;600&family=Dancing+Script:wght@500&family=Gloria+Hallelujah&family=Gochi+Hand&family=Great+Vibes&family=Indie+Flower&family=Kalam:wght@400;700&family=Pacifico&family=Patrick+Hand&family=Reenie+Beanie&family=Rock+Salt&family=Sacramento&family=Shadows+Into+Light&display=swap" rel="stylesheet">
 
     <!-- Libraries for PDF export & html-to-image -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
@@ -188,6 +187,15 @@
             word-wrap: break-word;
             white-space: pre-wrap;
             outline: none;
+            /* Natural Ink Bleed / Shadow Styling */
+            text-shadow: 0.2px 0.2px 0.3px rgba(0, 0, 0, 0.25);
+            transform: rotate(-0.2deg);
+        }
+
+        /* Natural Humanization Character Span Styling */
+        .hw-char {
+            display: inline-block;
+            transition: transform 0.1s ease;
         }
 
         .action-bar {
@@ -302,6 +310,11 @@
                             <option value="'Sacramento', cursive">Handwriting 8 (Sacramento - Cursive Script)</option>
                             <option value="'Pacifico', cursive">Handwriting 9 (Pacifico - Bold Cursive)</option>
                             <option value="'Great Vibes', cursive">Handwriting 10 (Great Vibes - Calligraphy)</option>
+                            <option value="'Reenie Beanie', cursive">Handwriting 11 (Reenie Beanie - Quick Note)</option>
+                            <option value="'Rock Salt', cursive">Handwriting 12 (Rock Salt - Rough Pen)</option>
+                            <option value="'Amatic SC', cursive">Handwriting 13 (Amatic SC - Tall Print)</option>
+                            <option value="'Gloria Hallelujah', cursive">Handwriting 14 (Gloria Hallelujah - Loose Script)</option>
+                            <option value="'Alex Brush', cursive">Handwriting 15 (Alex Brush - Cursive Pen)</option>
                         </select>
                     </div>
 
@@ -330,6 +343,14 @@
                             <option value="20px">Small (20px)</option>
                             <option value="23px" selected>Medium (23px)</option>
                             <option value="26px">Large (26px)</option>
+                        </select>
+                    </div>
+
+                    <div class="form-group" style="grid-column: span 2;">
+                        <label>Natural Humanization (Letter Jitter & Ink Feel):</label>
+                        <select id="humanizationMode">
+                            <option value="enabled" selected>Natural Jitter Enabled (Realistic)</option>
+                            <option value="disabled">Standard Alignment</option>
                         </select>
                     </div>
                 </div>
@@ -364,11 +385,12 @@
     <!-- AdSense Friendly SEO Content Section -->
     <div class="seo-content-card">
         <h2>About Text to Handwriting Converter</h2>
-        <p>OmniKitHub's free online Text to Handwriting Converter empowers students and teachers to transform typed text, essays, and notes into realistic handwritten assignments effortlessly.</p>
+        <p>OmniKitHub's free online Text to Handwriting Converter empowers students and teachers to transform typed text, essays, and notes into realistic handwritten assignments effortlessly with natural human letter jitter technology.</p>
         
         <h3>Key Features & Customization Options</h3>
         <ul>
-            <li><strong>10+ Realistic Handwriting Fonts:</strong> Choose from popular student-style script fonts like Kalam, Caveat, Patrick Hand, Gochi Hand, and Great Vibes.</li>
+            <li><strong>15+ Realistic Handwriting Fonts:</strong> Choose from popular student-style script fonts like Kalam, Caveat, Patrick Hand, Gochi Hand, Rock Salt, and Great Vibes.</li>
+            <li><strong>Natural Humanization Engine:</strong> Applies subtle letter tilt and vertical offsets to simulate genuine human handwriting.</li>
             <li><strong>Paper Backgrounds:</strong> Select between ruled notebook paper, blank plain paper, and grid graph paper backgrounds.</li>
             <li><strong>Custom Ink Colors:</strong> Personalize your notes with royal blue, dark black, red gel, or green ink shades.</li>
             <li><strong>Instant Export & Printing:</strong> Download your generated assignment sheets as clean PDF documents, high-resolution PNG images, or print directly.</li>
@@ -414,14 +436,44 @@
     const inkColor = document.getElementById('inkColor');
     const paperType = document.getElementById('paperType');
     const fontSize = document.getElementById('fontSize');
+    const humanizationMode = document.getElementById('humanizationMode');
     const wordCount = document.getElementById('wordCount');
     const charCount = document.getElementById('charCount');
     const themeToggle = document.getElementById('theme-toggle');
 
-    // Live Preview Updates
+    // Pseudo-random seed function for persistent jitter based on char index
+    function getJitterTransform(index) {
+        const rot = ((Math.sin(index * 12.9898) * 43758.5453) % 1) * 2 - 1; // -1deg to 1deg
+        const translateY = ((Math.cos(index * 4.1414) * 23421.123) % 1) * 1.2 - 0.6; // -0.6px to 0.6px
+        return `rotate(${rot.toFixed(2)}deg) translateY(${translateY.toFixed(2)}px)`;
+    }
+
+    // Live Preview Updates with Natural Humanization
     function updatePreview() {
         const text = inputText.value;
-        handwritingOutput.innerText = text || 'Your handwritten assignment text will preview here live...';
+        const isHumanized = humanizationMode.value === 'enabled';
+        
+        if (!text) {
+            handwritingOutput.innerText = 'Your handwritten assignment text will preview here live...';
+        } else if (isHumanized) {
+            // Render text with wrapped spans for letter-level humanization
+            let htmlContent = '';
+            for (let i = 0; i < text.length; i++) {
+                const char = text[i];
+                if (char === '\n') {
+                    htmlContent += '<br>';
+                } else if (char === ' ') {
+                    htmlContent += ' ';
+                } else {
+                    const transformStyle = getJitterTransform(i);
+                    htmlContent += `<span class="hw-char" style="transform: ${transformStyle}">${char}</span>`;
+                }
+            }
+            handwritingOutput.innerHTML = htmlContent;
+        } else {
+            handwritingOutput.innerText = text;
+        }
+
         handwritingOutput.style.fontFamily = fontStyle.value;
         handwritingOutput.style.color = inkColor.value;
         handwritingOutput.style.fontSize = fontSize.value;
@@ -440,6 +492,7 @@
     inkColor.addEventListener('change', updatePreview);
     paperType.addEventListener('change', updatePreview);
     fontSize.addEventListener('change', updatePreview);
+    humanizationMode.addEventListener('change', updatePreview);
 
     // Dark Mode Toggle
     themeToggle.addEventListener('click', () => {
