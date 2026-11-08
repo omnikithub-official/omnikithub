@@ -83,7 +83,6 @@ a {
     margin: 0 auto;
     padding: 0 20px;
 }
-
 /* 3. Navigation Header */
 .navbar {
     position: sticky;
@@ -95,13 +94,11 @@ a {
     padding: 16px 0;
     transition: background-color var(--transition-speed) ease, border-color var(--transition-speed) ease;
 }
-
 .nav-container {
     display: flex;
     align-items: center;
     justify-content: space-between;
 }
-
 .logo {
     display: flex;
     align-items: center;
@@ -110,16 +107,13 @@ a {
     font-weight: 800;
     letter-spacing: -0.5px;
 }
-
 .logo-icon {
     color: var(--accent-color);
     font-size: 1.6rem;
 }
-
 .highlight {
     color: var(--accent-color);
 }
-
 .icon-btn {
     background: var(--badge-bg);
     border: 1px solid var(--card-border);
@@ -134,20 +128,17 @@ a {
     font-size: 1.1rem;
     transition: all var(--transition-speed) ease;
 }
-
 .icon-btn:hover {
     background: var(--accent-color);
     color: #ffffff;
     border-color: var(--accent-color);
     transform: rotate(15deg);
 }
-
 /* 4. Hero Section & Live Search */
 .hero-section {
     padding: 60px 0 40px;
     text-align: center;
 }
-
 .hero-title {
     font-size: 2.5rem;
     font-weight: 800;
@@ -155,20 +146,17 @@ a {
     margin-bottom: 12px;
     color: var(--text-primary);
 }
-
 .hero-subtitle {
     font-size: 1.125rem;
     color: var(--text-secondary);
     max-width: 700px;
     margin: 0 auto 32px;
 }
-
 .search-box {
     position: relative;
     max-width: 650px;
     margin: 0 auto;
 }
-
 .search-icon {
     position: absolute;
     left: 20px;
@@ -190,7 +178,6 @@ a {
     box-shadow: var(--card-shadow);
     transition: all var(--transition-speed) ease;
 }
-
 .search-box input:focus {
     border-color: var(--accent-color);
     box-shadow: 0 0 0 4px var(--accent-light);
@@ -216,31 +203,26 @@ a {
     letter-spacing: 0.5px;
     text-transform: uppercase;
 }
-
 /* 6. Tools Grid Section & Filters */
 .tools-section {
     padding: 20px 0 60px;
     flex-grow: 1;
 }
-
 .section-header {
     display: flex;
     flex-direction: column;
     gap: 20px;
     margin-bottom: 30px;
 }
-
 .section-header h2 {
     font-size: 1.75rem;
     font-weight: 700;
 }
-
 .category-filter {
     display: flex;
     flex-wrap: wrap;
     gap: 10px;
 }
-
 .filter-btn {
     padding: 8px 18px;
     border-radius: 30px;
@@ -252,20 +234,17 @@ a {
     cursor: pointer;
     transition: all var(--transition-speed) ease;
 }
-
 .filter-btn:hover,
 .filter-btn.active {
     background: var(--accent-color);
     color: #ffffff;
     border-color: var(--accent-color);
 }
-
 .tools-grid {
     display: grid;
     grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
     gap: 24px;
 }
-
 .tool-card {
     background-color: var(--bg-surface);
     border: 1px solid var(--card-border);
@@ -277,13 +256,11 @@ a {
     box-shadow: var(--card-shadow);
     transition: all var(--transition-speed) ease;
 }
-
 .tool-card:hover {
     transform: translateY(-5px);
     box-shadow: var(--card-hover-shadow);
     border-color: var(--accent-color);
 }
-
 .card-icon {
     width: 48px;
     height: 48px;
